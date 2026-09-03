@@ -1,0 +1,87 @@
+meta {
+  name: Tools auflisten
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{mcpUrl}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json, text/event-stream
+  MCP-Protocol-Version: 2025-06-18
+  x-kunden-id: {{kundenId}}
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/list"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("es sind genau diese Tools", function() {
+    const namen = res.getBody().result.tools.map(function(tool) {
+      return tool.name;
+    }).sort();
+    expect(namen).to.deep.equal([
+      "mein_beitrag_berechnen",
+      "mein_vertrag_lesen",
+      "meine_kontaktdaten_aendern",
+      "meine_schadensfaelle_auflisten",
+      "meinen_tarif_wechseln",
+      "rechnung_extrahieren",
+      "schadensfall_bewerten",
+      "schadensfall_einreichen",
+      "schadensfall_lesen"
+    ]);
+  });
+
+  test("jedes Tool ist beschrieben", function() {
+    res.getBody().result.tools.forEach(function(tool) {
+      expect(tool.description, tool.name).to.have.length.above(200);
+    });
+  });
+
+  test("kein Tool nimmt eine Kundennummer entgegen", function() {
+    res.getBody().result.tools.forEach(function(tool) {
+      const felder = Object.keys((tool.inputSchema || {}).properties || {});
+      expect(felder, tool.name).to.not.include("kundenId");
+    });
+  });
+}
+
+docs {
+  Das, was ein fremdes Modell zu sehen bekommt, bevor es entscheidet, ob und
+  wie es aufruft: Name, Beschreibung und Eingabeschema je Tool.
+
+  Hier liegt der eigentliche Unterschied zu REST. Dort zählt das Schema, und
+  wer die Maske gebaut hat, hat vorher entschieden, welcher Endpunkt drankommt.
+  Hier zählt zusätzlich die Beschreibung — sie ist die ganze Bedienungsanleitung,
+  und sie sagt deshalb auch, was ein Tool *nicht* beantwortet.
+
+  Zwei Dinge lohnen den Blick ins Schema:
+
+  - Kein Tool hat einen Parameter `kundenId`. Die Grenze liegt
+    im Header und nicht in den Argumenten — ein Parameter, den ein Modell
+    setzen kann, wäre keine Grenze.
+  - Bei `schadensfall_einreichen` ist `positionen[].betrag` vom Typ `string`
+    und nicht `number`. Geldbeträge laufen als Dezimalstring über die
+    Schnittstelle, hier wie im REST-Kontrakt.
+
+  Dass alle neun Tools hier auftauchen, ist beim zustandslosen Server keine
+  Selbstverständlichkeit: Spring AI meldet ein Tool nur an, dessen Signatur
+  ohne Rückkanal zum Client auskommt. Ein `@McpTool`, das sich einen
+  `McpSyncRequestContext` geben lässt, fiele stillschweigend aus der Liste —
+  die acht Tools mit Kundenbezug nehmen deshalb einen `McpTransportContext`.
+}

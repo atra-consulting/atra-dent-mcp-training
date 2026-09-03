@@ -1,0 +1,55 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "setup.sh",
+      "detail": "Werkzeuge pruefen, Abhaengigkeiten aller Bausteine installieren",
+      "type": "shell",
+      "command": "./setup.sh",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "start.sh",
+      "detail": "Das Lab starten -- alle acht Bausteine",
+      "type": "shell",
+      "command": "./start.sh",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "group": "lab"
+      }
+    },
+    {
+      "label": "start.sh --debug",
+      "detail": "Das Lab starten und die Debug-Ports oeffnen -- danach 'Debug: Alle'",
+      "type": "shell",
+      "command": "./start.sh --debug",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "group": "lab"
+      }
+    },
+    {
+      "label": "stop.sh",
+      "detail": "Das Lab beenden, wenn Strg+C nicht gereicht hat",
+      "type": "shell",
+      "command": "./stop.sh",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

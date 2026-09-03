@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>consulting.atra</groupId>
+    <artifactId>agenten</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <artifactId>agenten-mcp</artifactId>
+  <name>atra.dent Agenten - MCP-Zugang</name>
+  <description>
+    Die Clientseite von MCP, hinter einer Quelle: drei Verbindungen, die
+    Mandantengrenze ueber x-kunden-id, das Auspacken der Content-Huelle und
+    die Huelle, die jeden Tool-Aufruf meldet und mitschreibt. Keine
+    Allowlist, kein Prompt, keine Fachlichkeit - was ein Agent aufrufen
+    darf, entscheidet der Agent und reicht es als ToolPermission herein.
+  </description>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>consulting.atra</groupId>
+      <artifactId>agenten-a2a</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-starter-mcp-client</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

@@ -1,0 +1,24 @@
+meta {
+  name: 07 - Erstattungsberechnung
+  seq: 7
+}
+
+docs {
+  # Erstattungsberechnung
+
+  Zustandslos, wie Ordner 01 und 02: aus Tarif, Rechnungspositionen und dem
+  bisherigen Verbrauch ergibt sich der auszuzahlende Betrag, ausgewiesen mit
+  der Schrittfolge, die ihn belegt — erstattungsfähiger Betrag, Quote,
+  Sublimit, GKV-Vorleistung, Selbstbehalt, Zahnstaffel/Jahreshöchstgrenze. Es
+  wird nichts gespeichert und kein Schadensfall angelegt; das leistet
+  `schadensfall_einreichen` im Kernsystem.
+
+  Der Rechenkern kennt keinen Kunden. Den bisherigen Verbrauch (`verbrauch`)
+  liefert deshalb der Aufrufer mit — die Quelle dafür ist
+  `GET /kunden/{id}/schadensfaelle` im Kernsystem. Ohne `verbrauch` wird mit
+  0.00 gerechnet, was dem ersten Schadensfall eines Vertrags entspricht.
+
+  Dieselbe Rechnung steht als MCP-Werkzeug `erstattung_berechnen` im
+  Rechenkern zur Verfügung; diese Sammlung zeigt nur den REST-Weg, wie schon
+  in Ordner 01 und 02.
+}

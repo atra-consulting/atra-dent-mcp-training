@@ -1,0 +1,46 @@
+meta {
+  name: Schadensfall lesen
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{basisUrl}}/schadensfaelle/{{schadensfallId}}
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body.id: eq 50010
+  res.body.kundenId: eq 10001
+  res.body.status: eq genehmigt
+  res.body.positionen: length 5
+}
+
+docs {
+  Fall 50010 — Anna Muellers Implantat mit Krone, der lehrreichste Fall im
+  Bestand, weil er beide Leistungsbereiche in einer Rechnung vereint:
+
+  | GOZ | Bereich | Betrag | Leistung |
+  |---|---|---|---|
+  | 9010 | IMP | 780.00 | Implantatinsertion Regio 36 |
+  | 9100 | IMP | 340.00 | Knochenaufbau Regio 36 |
+  | 9050 | IMP | 145.00 | Freilegung und Gingivaformer |
+  | 5040 | ZE | 690.00 | implantatgetragene Vollkrone Regio 36 |
+  | 2197 | ZE | 62.10 | adhäsive Befestigung |
+
+  1265.00 EUR fallen auf `IMP`, 752.10 EUR auf `ZE` — Summe 2017.10, und
+  genau das steht im `rechnungsbetrag`. Die letzten beiden Positionen sind
+  `ZE`, obwohl sie zum selben Implantat gehören: die Krone auf einem Implantat
+  ist Zahnersatz. Genau dafür trägt jede Position ihren Leistungsbereich
+  selbst.
+
+  Der Fall steht auf `genehmigt` mit einem `erstattungsbetrag` von 1130.21 —
+  gesetzt per PATCH, nicht gerechnet. Das Kernsystem kennt weder Quoten noch
+  Staffeln.
+
+  `{{schadensfallId}}` steht in der Umgebung `Lokal`. Interessante Alternativen
+  zum Einsetzen: 50009 (in Prüfung, `erstattungsbetrag` noch `null`), 50011
+  (Jahreshöchstgrenze greift), 50013 (abgelehnt mit Hinweistext).
+}

@@ -1,0 +1,14 @@
+# Der Build-Kontext ist die Repo-Wurzel (docker build -f wissen/Dockerfile .),
+# weil der Maven-Build oas/wissen.yaml braucht. In den Kontext gehoert aber
+# nur, was das Image wirklich verwendet -- alles andere bleibt draussen,
+# allen voran .git, assets/ und die uebrigen Teilprojekte.
+*
+!oas
+!wissen
+
+# Aus wissen/ wieder ausnehmen, was der Image-Bau nicht braucht: Typst
+# laeuft NICHT im Docker-Build (wissen/generated/ kommt fertig herein), und
+# lokale Maven- bzw. Modell-Ablagen haben im Kontext nichts verloren.
+wissen/dokumente
+wissen/dienst/target
+wissen/modell

@@ -1,0 +1,29 @@
+
+rechnungsnummer: "DDS-2026-122581"
+rechnungsdatum: 2026-07-06
+praxis: dds
+patient:
+  name: Clara Weiss
+  anschrift:
+    strasse: Domgasse 3
+    plz: "50667"
+    ort: Koeln
+  geburtsdatum: 1978-07-22
+vorgang:
+  kundennummer: "5583107"
+  vorgangsnummer: "2026/PA/9142"
+positionen:
+  - { datum: 2026-05-12, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-05-12, art: goz, nummer: "4000", zahn: null, leistung: Erstellen eines Parodontalstatus, anzahl: 1, faktor: 2.3, betrag: 27.95 }
+  - { datum: 2026-05-26, art: goz, nummer: "4050", zahn: null, leistung: Entfernung harter und weicher Zahnbeläge, anzahl: 12, faktor: 2.3, betrag: 89.45 }
+  - { datum: 2026-05-26, art: goz, nummer: "4060", zahn: null, leistung: Kontrolle nach Belagentfernung, anzahl: 1, faktor: 2.3, betrag: 13.98 }
+  - { datum: 2026-06-16, art: goz, nummer: "4075", zahn: "26", leistung: "Parodontalchirurgische Therapie an einem mehrwurzeligen Zahn, geschlossenes Vorgehen", anzahl: 1, faktor: 2.3, betrag: 21.36 }
+  - { datum: 2026-06-16, art: goz, nummer: "4070", zahn: "25", leistung: "Parodontalchirurgische Therapie an einem einwurzeligen Zahn oder Implantat, geschlossenes Vorgehen", anzahl: 1, faktor: 2.3, betrag: 14.31 }
+  - { datum: 2026-06-16, art: goz, nummer: "4070", zahn: "24", leistung: "Parodontalchirurgische Therapie an einem einwurzeligen Zahn oder Implantat, geschlossenes Vorgehen", anzahl: 1, faktor: 2.3, betrag: 14.31 }
+  - { datum: 2026-06-16, art: goz, nummer: "4070", zahn: "23", leistung: "Parodontalchirurgische Therapie an einem einwurzeligen Zahn oder Implantat, geschlossenes Vorgehen", anzahl: 1, faktor: 2.3, betrag: 14.31 }
+  - { datum: 2026-06-16, art: goz, nummer: "0090", zahn: "26", leistung: Intraorale Infiltrationsanästhesie, anzahl: 1, faktor: 2.3, betrag: 6.22 }
+  - { datum: 2026-06-16, art: goz, nummer: "0090", zahn: "24", leistung: Intraorale Infiltrationsanästhesie, anzahl: 1, faktor: 2.3, betrag: 6.22 }
+  - { datum: 2026-06-16, art: material, nummer: null, zahn: null, leistung: Antibakterielles Gel, anzahl: 1, faktor: null, betrag: 19.30 }
+zahlung:
+  frist_tage: 14
+  bereits_gezahlt: 0

@@ -1,0 +1,47 @@
+meta {
+  name: Schadensfall auszahlen
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{basisUrl}}/schadensfaelle/{{neueSchadensfallId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": "ausgezahlt"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq ausgezahlt
+}
+
+tests {
+  test("der genehmigte Betrag bleibt beim Statuswechsel stehen", function() {
+    expect(res.getBody().erstattungsbetrag).to.equal("1872.10");
+  });
+}
+
+docs {
+  Der Endstatus des glücklichen Falls. Nur `status` im Rumpf — PATCH lässt
+  alles unberührt, was nicht mitkommt, der `erstattungsbetrag` aus dem
+  vorigen Request steht also weiterhin da.
+
+  Damit ist die Kette
+  `eingereicht → in_pruefung → genehmigt → ausgezahlt` einmal durchlaufen.
+  Von hier führt kein Übergang mehr zurück — `ausgezahlt` ist ein Endzustand.
+  Der nächste Request zeigt den anderen Ausgang, an einem eigenen Fall.
+
+  Eine Zahlung löst das nicht aus. Der Status ist eine Notiz über die
+  Bearbeitung, keine Anweisung an ein Zahlungssystem — solche Anbindung gibt
+  es hier nicht.
+}

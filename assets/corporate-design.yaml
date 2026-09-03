@@ -1,0 +1,49 @@
+
+schrift:
+  familie: Helvetica Neue
+  fallback: Helvetica, Arial, sans-serif
+  css: "'Helvetica Neue', Helvetica, Arial, sans-serif"
+
+farben:
+
+  - rolle: Primaerfarbe
+    schluessel: dunkelblau
+    hex: "#264892"
+    rgb: [38, 72, 146]
+    cmyk: [100, 65, 0, 20]
+    hsb: [221, 74, 57]
+
+  - rolle: Sekundaerfarbe 1
+    schluessel: hellblau
+    hex: "#a7c6eb"
+    rgb: [167, 198, 235]
+    cmyk: [50, 0, 0, 0]
+    hsb: [213, 29, 92]
+
+  - rolle: Sekundaerfarbe 2
+    schluessel: dunkelgrau
+    hex: "#777777"
+    rgb: [119, 119, 119]
+    cmyk: [0, 0, 0, 70]
+    hsb: [0, 0, 47]
+
+  - rolle: Sekundaerfarbe 3
+    schluessel: hellgrau
+    hex: "#dedede"
+    rgb: [222, 222, 222]
+    cmyk: [0, 0, 0, 20]
+    hsb: [0, 0, 87]
+
+  - rolle: Akzentfarbe 1
+    schluessel: dunkelorange
+    hex: "#dc421e"
+    rgb: [220, 66, 30]
+    cmyk: null
+    hsb: null
+
+  - rolle: Akzentfarbe 2
+    schluessel: hellorange
+    hex: "#f98752"
+    rgb: [249, 135, 82]
+    cmyk: null
+    hsb: null

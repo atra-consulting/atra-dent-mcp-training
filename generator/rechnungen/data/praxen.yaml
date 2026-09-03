@@ -1,0 +1,114 @@
+
+praxen:
+
+  - schluessel: beisser
+    stil: klassisch
+    name: Zahnarztpraxis Dr. med. dent. Hartmut Beisser
+    zusatz: null
+    behandler: Dr. med. dent. Hartmut Beisser
+    anschrift:
+      strasse: Wilhelmshöher Allee 122
+      plz: "34119"
+      ort: Kassel
+    kontakt:
+      telefon: 0561 7702-14
+      email: praxis@zahnarzt-beisser.de
+    bank:
+      institut: Kasseler Sparkasse
+      iban: DE21 5205 0353 0004 7711 22
+      bic: HELADEF1KAS
+    steuernummer: 26/812/40355
+    farben:
+      akzent: "#1a1a1a"
+      flaeche: "#f2f2f2"
+
+  - schluessel: weissraum
+    stil: modern
+    name: weissraum
+    zusatz: Zahnästhetik am Mühlenkamp
+    behandler: Dr. med. dent. Lena Kronmann
+    anschrift:
+      strasse: Mühlenkamp 43
+      plz: "22303"
+      ort: Hamburg
+    kontakt:
+      telefon: 040 2789-330
+      email: hallo@weissraum-zahn.de
+    bank:
+      institut: Hamburger Volksbank
+      iban: DE45 2019 0003 0088 4412 07
+      bic: GENODEF1HH2
+    steuernummer: 43/119/02876
+    farben:
+      akzent: "#0f766e"
+      flaeche: "#e6f4f1"
+
+  - schluessel: dds
+    stil: verrechnungsstelle
+    name: Deutsche Dentalabrechnung Süd AG
+    zusatz: Abrechnungsstelle für zahnärztliche Leistungen
+    behandler: null
+    im_auftrag_von:
+      name: MVZ Zahnzentrum Wurzelwerk
+      behandler: Dr. med. dent. Sonja Wurzel
+      anschrift:
+        strasse: Ludwigstraße 7
+        plz: "86152"
+        ort: Augsburg
+    anschrift:
+      strasse: Postfach 30 12 55
+      plz: "70472"
+      ort: Stuttgart
+    kontakt:
+      telefon: 0711 40058-0
+      email: service@dds-abrechnung.de
+    bank:
+      institut: Landesbank Baden-Württemberg
+      iban: DE88 6005 0101 0002 3344 55
+      bic: SOLADEST600
+    steuernummer: 99/037/21440
+    farben:
+      akzent: "#7a1f2b"
+      flaeche: "#f4ecee"
+
+  - schluessel: plombeck
+    stil: landpraxis
+    name: Zahnarztpraxis Waldemar Plombeck
+    zusatz: null
+    behandler: Waldemar Plombeck, Zahnarzt
+    anschrift:
+      strasse: Am Anger 3
+      plz: "37247"
+      ort: Klein-Kariesbach
+    kontakt:
+      telefon: 05542 881
+      email: null
+    bank:
+      institut: Raiffeisenbank Werratal
+      iban: DE60 5226 0385 0001 9922 30
+      bic: GENODEF1ESW
+    steuernummer: 25/140/07711
+    farben:
+      akzent: "#3a3a3a"
+      flaeche: "#f7f6f2"
+
+  - schluessel: kiefernwald
+    stil: klinik
+    name: Klinik am Kiefernwald
+    zusatz: Zentrum für Zahn-, Mund- und Kieferheilkunde
+    behandler: Prof. Dr. med. dent. Ansgar Molar
+    anschrift:
+      strasse: Kiefernallee 18
+      plz: "97688"
+      ort: Bad Molarheim
+    kontakt:
+      telefon: 0971 6042-0
+      email: abrechnung@klinik-kiefernwald.de
+    bank:
+      institut: Sparkasse Bad Kissingen
+      iban: DE12 7935 1010 0000 5566 78
+      bic: BYLADEM1KIS
+    steuernummer: 77/224/60193
+    farben:
+      akzent: "#1e3a5f"
+      flaeche: "#eaeef4"

@@ -1,0 +1,82 @@
+meta {
+  name: Arztservice erreichbar
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{arztserviceUrl}}/.well-known/agent-card.json
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+  res.body.protocolVersion: eq 0.3.0
+  res.body.skills: length 3
+}
+
+tests {
+  test("die Karte nennt ihre eigene, absolute Adresse", function() {
+    // Anders als beim Schadensfallagenten ist das keine localhost-Adresse:
+    // Der Dienst laeuft fremd gehostet, und seine Karte sagt wo.
+    expect(res.getBody().url).to.equal(`${bru.getEnvVar("arztserviceUrl")}/`);
+  });
+
+  test("die drei Fertigkeiten des Dienstes", function() {
+    const ids = res.getBody().skills.map(function(skill) { return skill.id; });
+    expect(ids).to.include("fachfrage-beantworten");
+    expect(ids).to.include("rechnung-beurteilen");
+    expect(ids).to.include("risikoeinschaetzung");
+  });
+
+  test("die Karte verlangt einen Schluessel im Header x-api-key", function() {
+    // Das ist der Unterschied zu jedem anderen Agenten dieser Sammlung, und
+    // er steht im Kontrakt und nicht in einer README: Wer den Fachzugang
+    // will, braucht den Schluessel -- die Karte selbst bleibt offen.
+    const karte = res.getBody();
+    expect(karte.securitySchemes.apiKey.type).to.equal("apiKey");
+    expect(karte.securitySchemes.apiKey.in).to.equal("header");
+    expect(karte.securitySchemes.apiKey.name).to.equal("x-api-key");
+    expect(karte.security[0]).to.have.property("apiKey");
+  });
+}
+
+docs {
+  # Der fremde Dienst, an dem Request 04 hängt
+
+  Der Arztservice ist der einzige Baustein der Kette, der **nicht** aus
+  diesem Repository kommt und **nicht** von `./start.sh` gestartet wird. Er
+  liegt in `atra-arzt-service` und läuft fremd gehostet; das Lab kennt von
+  ihm nur eine Adresse (`{{arztserviceUrl}}`) und einen Schlüssel.
+
+  Deshalb steht dieser Request hier: Zeigt Request 05 eine Eskalation mit
+  `ARZT_UNAVAILABLE`, beantwortet dieser Abruf die erste Frage — lag
+  es am Dienst? Er ist der einzige der Sammlung, der über das eigene Netz
+  hinausgeht.
+
+  **Er läuft absichtlich zuletzt und nicht zuerst.** Die Reihenfolge 01–05
+  erzählt die Kette; diese Prüfung ist die Fußnote dazu und soll sie nicht
+  unterbrechen. Wer nur wissen will, ob der Dienst antwortet, schickt allein
+  diesen Request ab.
+
+  ## Kein Schlüssel nötig — und warum das eine Aussage ist
+
+  `POST /` und alles unter `/tasks/` verlangen den Header `x-api-key`; ohne
+  ihn antwortet der Dienst mit HTTP 401 und dem JSON-RPC-Code `-32001`. Die
+  Agent Card bleibt davon ausgenommen, und das ist Absicht: Wer den
+  Schlüssel noch nicht hat, soll wenigstens erfahren können, dass und
+  welchen er braucht. Genau das prüft der dritte Test.
+
+  ## Wo der Schlüssel liegt, wenn man ihn doch braucht
+
+  In der Umgebung `Lokal` als **Secret Variable** `arztserviceApiKey`. Bruno
+  hält den Wert außerhalb der `.bru`-Datei; eingecheckt wird nur der Name.
+  Der Wert ist derselbe wie `AGENTEN_ARZTSERVICE_API_KEY` in der `.env` der
+  Wurzel — ein Wert, mehrere Aufrufer, nicht mehrere Stellen mit demselben
+  Schlüssel.
+
+  Kein Request dieser Sammlung braucht ihn heute. Er steht dort, damit ein
+  fachlicher Aufruf gegen `{{arztserviceUrl}}/` ihn als
+  `{{arztserviceApiKey}}` findet, statt in `vars` zu landen.
+}

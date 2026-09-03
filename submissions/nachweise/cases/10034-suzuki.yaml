@@ -1,0 +1,77 @@
+
+kundenId: 10034
+praxis: weissraum
+
+patient:
+  name: Hana Suzuki
+  geburtsdatum: 1989-11-19
+  anschrift:
+    strasse: Fasanenweg 12
+    plz: "69117"
+    ort: Heidelberg
+
+befund:
+  datum: 2026-07-20
+  aktenzeichen: "WR-2026-0559"
+  zahnstatus: []
+  diagnosen:
+    - Vollstaendig kariesfreies, unversorgtes Gebiss mit 28 eigenen Zaehnen.
+    - Mundhygiene sehr gut, keine Belagsbildung.
+  parodontalbefund: >-
+    Gingiva reizfrei, Sondierungstiefen durchgehend unter 3 mm, keine
+    Blutung auf Sondierung.
+  empfehlung: null
+  hkp_beiliegend: false
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2026-07-20, zahn: null, behandlung: Professionelle Zahnreinigung, 28 Zaehne }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-02
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: nein
+      freitext: null
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: nein
+      freitext: null
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: null
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Im Juli, nur zur Zahnreinigung.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: ja
+      freitext: Zweimal im Jahr, seit Jahren.
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: 0
+      begruendung: >-
+        Der Befund nennt keine Empfehlung, der Fragebogen bestaetigt das,
+        und die einzige Historie ist eine reine Vorsorgeleistung.
+    ERSATZBEDARF:
+      wert: 0
+      begruendung: Kein Zahn fehlt oder ist ersatzbeduerftig; deckt sich mit fehlendeZaehne 0 in der Akte.
+    SANIERUNGSGRAD:
+      wert: 0
+      begruendung: 28 eigene, unversorgte Zaehne ohne eine einzige Fuellung.
+    PARODONTALBEFUND:
+      wert: 5
+      begruendung: >-
+        Sondierungstiefen und Blutungsneigung sind dokumentiert und
+        durchgehend unauffaellig.
+  erwartete_zone: gruen
+  hinweis: >-
+    Die kuerzeste Akte im ganzen Bestand: vier Monate Versicherung, ein
+    Vorsorgetermin. Es gibt hier schlicht nichts zu finden.

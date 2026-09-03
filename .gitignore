@@ -1,0 +1,83 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Editoren / IDEs. Everything under .idea/ and .vscode/ is state of this one
+# machine -- except the run configurations, which are part of the lab: they
+# hold the debug ports that ./start.sh --debug opens, and a participant is
+# meant to get them with the clone rather than type them into a dialog.
+.idea/*
+!.idea/runConfigurations/
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+*.swp
+*~
+
+# Build-Artefakte: Maven-Ausgabe des Wissensdienstes
+wissen/dienst/target/
+
+# Einbettungsmodell, das start.sh beim ersten Start herunterlädt
+wissen/modell/
+
+# Invoice PDFs under submissions/rechnungen/pdf/ are checked in like
+# wissen/generated/ (entry point without Typst). Only ad-hoc frontend output
+# and the pagination test stay local.
+generator/rechnungen/adhoc/
+generator/rechnungen/pruefung/
+
+# Same rule for the health declarations: the submissions under
+# submissions/nachweise/pdf/ are checked in, the style comparison from
+# ./generator/nachweise/build.sh --pruefen stays local.
+generator/nachweise/pruefung/
+
+# Laufzeitbestand des Kernsystems. kernsystem/data/ ist die Vorlage und bleibt
+# im Git; geschrieben wird zur Laufzeit ausschliesslich hier hinein, damit eine
+# Vorfuehrung den Arbeitsbaum nicht schmutzig macht und kein "git pull" mit den
+# eigenen Faellen kollidiert. ./start.sh legt das Verzeichnis beim ersten Start
+# aus der Vorlage an, ./start.sh --bestand-zuruecksetzen setzt es zurueck.
+#
+# Mit fuehrendem Schraegstrich wie /tracelog/ weiter unten: nur dieses eine
+# Verzeichnis, nicht jedes "runtime" irgendwo im Baum.
+/kernsystem/runtime/
+
+# Python-Bytecode des Rechnungsgenerator-Frontends
+__pycache__/
+
+# Temporäres
+*.log
+*.tmp
+
+# Arbeitsverzeichnis der Superpowers-Ausfuehrung (Ledger, Briefs, Reviews)
+.superpowers/
+
+# Lokale Geheimnisse. Vorlage: .env.beispiel
+.env
+
+# Arbeitsbaeume paralleler Agenten, nicht versioniert
+.claude/worktrees/
+
+# Tracelog der Agenten- und MCP-Kommunikation (./start.sh --tracelog).
+# Enthaelt Klartext aus dem Gespraech samt Kundennummer und den Rohergebnissen
+# der Werkzeuge -- gehoert in keinen Commit.
+#
+# Mit fuehrendem Schraegstrich, also nur dieses eine Verzeichnis in der Wurzel:
+# Ohne ihn verschluckt die Regel auch das Java-Paket
+# agenten/a2a/.../a2a/tracelog/ -- und zwar lautlos.
+/tracelog/
+
+# Versehentlich in der Wurzel erzeugte SvelteKit-Artefakte. Die beiden
+# Oberflaechen ignorieren ihr eigenes /.svelte-kit selbst; ein "svelte-kit sync"
+# aus der Wurzel heraus legt aber hier eines an, das in keinen Commit gehoert.
+/.svelte-kit/
+
+# Eclipse JDT language server artefacts. The rename harness in tools/rename
+# starts jdtls, which writes these into whichever module it imports.
+.classpath
+.project
+.settings/
+bin/
+# Workspace state of the rename harness's language server.
+tools/rename/.jdtls*/

@@ -1,0 +1,48 @@
+meta {
+  name: 400 - Eintrittsalter ausserhalb der Grenzen
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{rechenkernUrl}}/beitragsberechnung
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "geburtsdatum": "1948-03-01",
+    "tarifId": "ATRA_DENT_X",
+    "gewuenschterBeginn": "2026-09-01"
+  }
+}
+
+assert {
+  res.status: eq 400
+  res.body.status: eq 400
+  res.body.detail: contains Eintrittsalter
+  res.body.detail: contains ATRA_DENT_X
+}
+
+docs {
+  Eintrittsalter 78 — atra.dent.brillant nimmt nur bis 65 auf. Die API
+  antwortet mit 400 und nennt in `detail` sowohl das errechnete Alter als
+  auch den Tarif.
+
+  Die Grenze steht nirgends im Code. Sie ergibt sich allein daraus, dass
+  `beitraege.json` für diesen Tarif kein Band oberhalb von 65 kennt — und
+  diese Bänder bilden ihrerseits die `eintrittsalter`-Angaben aus
+  `wissen/daten/tarife.yaml` ab. Eine Regel, zwei Darstellungen, kein dritter
+  Ort, an dem sie auseinanderlaufen könnte.
+
+  Für dasselbe Geburtsdatum mit `ATRA_DENT_S` gilt es genauso: smart geht bis
+  70, mit 78 gibt es auch dort kein Band.
+
+  Der zweite Weg in ein 400 an diesem Endpunkt: ein `geburtsdatum` nach dem
+  `gewuenschterBeginn`.
+}

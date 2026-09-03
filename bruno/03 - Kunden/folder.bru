@@ -1,0 +1,29 @@
+meta {
+  name: 03 - Kunden
+  seq: 3
+}
+
+docs {
+  # Kunden
+
+  Stammdaten der Versicherungsnehmer, gehalten in
+  `kernsystem/data/kunden.json`. Fünf Seed-Kunden:
+
+  | ID | Name | geboren | Tarif | Beginn | Status | Besonderheit |
+  |---|---|---|---|---|---|---|
+  | 10001 | Anna Mueller | 1990-04-12 | balance | 2024-03-01 | aktiv | vier Schadensfälle |
+  | 10002 | Bernd Schuster | 1958-09-30 | smart | 2025-11-01 | aktiv | 3 fehlende Zähne, drei Ablehnungen |
+  | 10003 | Clara Weiss | 1978-07-22 | brillant | 2025-02-01 | aktiv | Vorversicherung, keine Wartezeit |
+  | 10004 | Dimitrios Papadakis | 1971-11-05 | brillant SB | 2023-06-01 | aktiv | 2 fehlende Zähne, hohe Fälle |
+  | 10005 | Fatima Yilmaz | 2001-05-19 | balance | 2022-09-01 | inaktiv | stillgelegt, keine Schäden |
+
+  Die Requests 1–4 lesen nur. Ab "Kunde anlegen" wird geschrieben, aber
+  ausschließlich auf einem Kunden, den die Sammlung selbst anlegt und dessen ID
+  sie in `{{neueKundenId}}` merkt — der Seed-Bestand bleibt unverändert.
+  Deshalb von oben nach unten ausführen.
+
+  ## Löschen gibt es nicht
+
+  Die OAS kennt keine Löschoperation. Ein Kunde wird über `status: inaktiv`
+  stillgelegt, so wie Fatima Yilmaz. Das letzte Request im Ordner zeigt das.
+}

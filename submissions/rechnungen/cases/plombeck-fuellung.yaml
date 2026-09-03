@@ -1,0 +1,20 @@
+
+rechnungsnummer: "128/2026"
+rechnungsdatum: 2026-06-08
+praxis: plombeck
+patient:
+  name: Heinz-Otto Küppers
+  anschrift:
+    strasse: Dorfstraße 9
+    plz: "37247"
+    ort: Klein-Kariesbach
+  geburtsdatum: 1954-09-30
+positionen:
+  - { datum: 2026-06-02, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-06-02, art: goz, nummer: "0090", zahn: "45", leistung: Infiltrationsanästhesie, anzahl: 1, faktor: 2.3, betrag: 6.22 }
+  - { datum: 2026-06-02, art: goz, nummer: "2040", zahn: "45", leistung: Anlegen von Spanngummi, anzahl: 1, faktor: 2.3, betrag: 11.19 }
+  - { datum: 2026-06-02, art: goz, nummer: "2270", zahn: "45", leistung: Provisorium im direkten Verfahren, anzahl: 1, faktor: 1.8, betrag: 31.40 }
+  - { datum: 2026-06-02, art: material, nummer: null, zahn: "45", leistung: Füllungsmaterial, anzahl: 1, faktor: null, betrag: 14.20 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

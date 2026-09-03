@@ -1,0 +1,28 @@
+
+rechnungsnummer: "2026-05023"
+rechnungsdatum: 2026-07-24
+praxis: beisser
+patient:
+  name: Dimitrios Papadakis
+  anschrift:
+    strasse: Isarstrasse 44
+    plz: "80469"
+    ort: Muenchen
+  geburtsdatum: 1971-11-05
+positionen:
+  - { datum: 2026-04-03, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-04-03, art: goz, nummer: "0030", zahn: null, leistung: Heil- und Kostenplan, anzahl: 1, faktor: 2.3, betrag: 16.08 }
+  - { datum: 2026-04-03, art: goz, nummer: "9000", zahn: "46", leistung: Implantatbezogene Analyse und Vermessung, anzahl: 1, faktor: 2.3, betrag: 66.30 }
+  - { datum: 2026-04-03, art: goae, nummer: "5370", zahn: null, leistung: Panoramaschichtaufnahme des Kiefers, anzahl: 1, faktor: 1.8, betrag: 46.61 }
+  - { datum: 2026-04-28, art: goz, nummer: "9010", zahn: "46", leistung: Implantatinsertion, anzahl: 1, faktor: 2.8, betrag: 410.20 }
+  - { datum: 2026-04-28, art: goz, nummer: "0090", zahn: "46", leistung: Intraorale Infiltrationsanästhesie, anzahl: 2, faktor: 2.3, betrag: 12.44 }
+  - { datum: 2026-04-28, art: goae, nummer: "5000", zahn: "46", leistung: Röntgenaufnahme Zahnfilm, anzahl: 2, faktor: 1.8, betrag: 17.48 }
+  - { datum: 2026-04-28, art: material, nummer: null, zahn: "46", leistung: Implantatkörper und Verschlussschraube, anzahl: 1, faktor: null, betrag: 305.00 }
+  - { datum: 2026-06-02, art: goz, nummer: "9040", zahn: "46", leistung: Freilegen des Implantats und Einfügen von Aufbauelementen, anzahl: 1, faktor: 2.3, betrag: 94.80 }
+  - { datum: 2026-07-07, art: goz, nummer: "2200", zahn: "46", leistung: "Versorgung durch eine Vollkrone, Tangentialpräparation", anzahl: 1, faktor: 2.3, betrag: 218.40 }
+  - { datum: 2026-07-07, art: goz, nummer: "2197", zahn: "46", leistung: Adhäsive Befestigung der Krone, anzahl: 1, faktor: 2.3, betrag: 17.85 }
+  - { datum: 2026-07-07, art: goz, nummer: "5170", zahn: "46", leistung: Anatomische Abformung mit individuellem Löffel, anzahl: 1, faktor: 2.3, betrag: 44.10 }
+  - { datum: 2026-07-07, art: labor, nummer: null, zahn: "46", leistung: "Vollkeramische Krone, Zirkondioxid", anzahl: 1, faktor: null, betrag: 486.30 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

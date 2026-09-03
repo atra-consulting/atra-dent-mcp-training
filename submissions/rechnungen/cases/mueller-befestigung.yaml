@@ -1,0 +1,18 @@
+
+rechnungsnummer: "203/2026"
+rechnungsdatum: 2026-07-20
+praxis: plombeck
+patient:
+  name: Anna Müller
+  anschrift:
+    strasse: Musterstrasse 12
+    plz: "10115"
+    ort: Berlin
+  geburtsdatum: 1990-04-12
+positionen:
+  - { datum: 2026-07-13, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-07-13, art: goz, nummer: "0070", zahn: "26", leistung: Vitalitätsprüfung eines Zahnes, anzahl: 1, faktor: 2.3, betrag: 8.60 }
+  - { datum: 2026-07-13, art: goz, nummer: "2197", zahn: "26", leistung: Adhäsive Befestigung, anzahl: 1, faktor: 2.3, betrag: 17.85 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

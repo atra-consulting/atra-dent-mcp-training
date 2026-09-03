@@ -1,0 +1,544 @@
+[
+  {
+    "id": 50001,
+    "kundenId": 10001,
+    "behandlungsdatum": "2024-09-14",
+    "positionen": [
+      { "goz": "5010", "leistungsbereich": "ZE", "betrag": "1180.00", "beschreibung": "Bruecke Regio 24-26, Brueckenglied und zwei Anker, Faktor 2,3" },
+      { "goz": "5040", "leistungsbereich": "ZE", "betrag": "620.00", "beschreibung": "Vollkrone Zahn 24, Faktor 2,3" },
+      { "goz": "2197", "leistungsbereich": "ZE", "betrag": "62.10", "beschreibung": "Adhaesive Befestigung" }
+    ],
+    "rechnungsbetrag": "1862.10",
+    "erstattungsbetrag": "1000.00",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2024-09-20T09:12:00Z"
+  },
+  {
+    "id": 50002,
+    "kundenId": 10003,
+    "behandlungsdatum": "2025-03-08",
+    "positionen": [
+      { "goz": "0010", "leistungsbereich": "AKUT", "betrag": "28.00", "beschreibung": "Eingehende Untersuchung im Notdienst" },
+      { "goz": "3000", "leistungsbereich": "AKUT", "betrag": "62.00", "beschreibung": "Entfernung eines einwurzeligen Zahnes" },
+      { "goz": "0530", "leistungsbereich": "AKUT", "betrag": "24.00", "beschreibung": "Zuschlag fuer Leistungen ausserhalb der Sprechstunde" }
+    ],
+    "rechnungsbetrag": "114.00",
+    "erstattungsbetrag": "114.00",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2025-03-11T17:40:00Z"
+  },
+  {
+    "id": 50003,
+    "kundenId": 10001,
+    "behandlungsdatum": "2025-05-20",
+    "positionen": [
+      { "goz": "1040", "leistungsbereich": "PZR", "betrag": "118.00", "beschreibung": "Professionelle Zahnreinigung, 28 Zaehne" }
+    ],
+    "rechnungsbetrag": "118.00",
+    "erstattungsbetrag": "18.00",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2025-05-22T12:03:00Z"
+  },
+  {
+    "id": 50004,
+    "kundenId": 10003,
+    "behandlungsdatum": "2025-09-12",
+    "positionen": [
+      { "goz": "8000", "leistungsbereich": "FUN", "betrag": "148.00", "beschreibung": "Klinische Funktionsanalyse" },
+      { "goz": "8010", "leistungsbereich": "FUN", "betrag": "96.00", "beschreibung": "Instrumentelle Funktionsanalyse" },
+      { "goz": "7010", "leistungsbereich": "FUN", "betrag": "385.00", "beschreibung": "Eingliederung Aufbissbehelf mit adjustierter Oberflaeche" },
+      { "goz": "7000", "leistungsbereich": "FUN", "betrag": "205.00", "beschreibung": "Eingliederung Aufbissbehelf ohne adjustierte Oberflaeche, Gegenkiefer" }
+    ],
+    "rechnungsbetrag": "834.00",
+    "erstattungsbetrag": "600.00",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2025-09-18T10:55:00Z"
+  },
+  {
+    "id": 50005,
+    "kundenId": 10004,
+    "behandlungsdatum": "2025-10-16",
+    "positionen": [
+      { "goz": "9010", "leistungsbereich": "IMP", "betrag": "780.00", "beschreibung": "Implantatinsertion Regio 36, Faktor 2,3" },
+      { "goz": "9010", "leistungsbereich": "IMP", "betrag": "780.00", "beschreibung": "Implantatinsertion Regio 46, Faktor 2,3" },
+      { "goz": "9100", "leistungsbereich": "IMP", "betrag": "420.00", "beschreibung": "Knochenaufbau Regio 36 und 46" },
+      { "goz": "9050", "leistungsbereich": "IMP", "betrag": "290.00", "beschreibung": "Implantatfreilegung und Gingivaformer Regio 36 und 46" },
+      { "goz": "5040", "leistungsbereich": "ZE", "betrag": "690.00", "beschreibung": "Implantatgetragene Vollkrone Regio 36" },
+      { "goz": "5040", "leistungsbereich": "ZE", "betrag": "690.00", "beschreibung": "Implantatgetragene Vollkrone Regio 46" },
+      { "goz": "2197", "leistungsbereich": "ZE", "betrag": "124.20", "beschreibung": "Adhaesive Befestigung, zwei Kronen" },
+      { "goz": "0500", "leistungsbereich": "NAR", "betrag": "210.00", "beschreibung": "Zuschlag fuer Sedierung waehrend des implantologischen Eingriffs" }
+    ],
+    "rechnungsbetrag": "3984.20",
+    "erstattungsbetrag": "3734.20",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2025-10-24T08:30:00Z"
+  },
+  {
+    "id": 50006,
+    "kundenId": 10001,
+    "behandlungsdatum": "2025-11-22",
+    "positionen": [
+      { "goz": "2150", "leistungsbereich": "INL", "betrag": "420.00", "beschreibung": "Keramikinlay zweiflaechig Zahn 16" },
+      { "goz": "2170", "leistungsbereich": "INL", "betrag": "520.00", "beschreibung": "Keramikonlay Zahn 17" },
+      { "goz": "2197", "leistungsbereich": "INL", "betrag": "62.10", "beschreibung": "Adhaesive Befestigung" }
+    ],
+    "rechnungsbetrag": "1002.10",
+    "erstattungsbetrag": "851.79",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2025-11-27T15:18:00Z"
+  },
+  {
+    "id": 50007,
+    "kundenId": 10002,
+    "behandlungsdatum": "2026-03-05",
+    "positionen": [
+      { "goz": "2330", "leistungsbereich": "ZERH", "betrag": "42.00", "beschreibung": "Trepanation eines Zahnes" },
+      { "goz": "2410", "leistungsbereich": "ZERH", "betrag": "96.00", "beschreibung": "Wurzelkanalaufbereitung Zahn 46, je Kanal" },
+      { "goz": "2440", "leistungsbereich": "ZERH", "betrag": "78.00", "beschreibung": "Wurzelkanalfuellung, je Kanal" }
+    ],
+    "rechnungsbetrag": "216.00",
+    "erstattungsbetrag": "0.00",
+    "status": "abgelehnt",
+    "ablehnungsgrund": "WARTEZEIT",
+    "ablehnungshinweis": "Wartezeit von 8 Monaten laeuft bis 2026-07-01",
+    "eingereichtAm": "2026-03-09T11:44:00Z"
+  },
+  {
+    "id": 50008,
+    "kundenId": 10003,
+    "behandlungsdatum": "2026-03-14",
+    "positionen": [
+      { "goz": "2000", "leistungsbereich": "ZERH", "betrag": "390.00", "beschreibung": "Bleaching beider Kiefer, Verlangensleistung analog GOZ 2000" }
+    ],
+    "rechnungsbetrag": "390.00",
+    "erstattungsbetrag": "0.00",
+    "status": "abgelehnt",
+    "ablehnungsgrund": "KOSMETIK",
+    "ablehnungshinweis": "Rein kosmetische Leistung ohne medizinische Indikation",
+    "eingereichtAm": "2026-03-19T13:27:00Z"
+  },
+  {
+    "id": 50009,
+    "kundenId": 10003,
+    "behandlungsdatum": "2026-05-04",
+    "positionen": [
+      { "goz": "6000", "leistungsbereich": "KFO", "betrag": "340.00", "beschreibung": "Analyse der Behandlungsunterlagen und Behandlungsplan" },
+      { "goz": "6100", "leistungsbereich": "KFO", "betrag": "1180.00", "beschreibung": "Eingliederung festsitzender Apparatur, Oberkiefer" },
+      { "goz": "6120", "leistungsbereich": "KFO", "betrag": "1180.00", "beschreibung": "Eingliederung festsitzender Apparatur, Unterkiefer" },
+      { "goz": "6190", "leistungsbereich": "KFO", "betrag": "640.00", "beschreibung": "Kontroll- und Nachsorgemassnahmen" }
+    ],
+    "rechnungsbetrag": "3340.00",
+    "erstattungsbetrag": null,
+    "status": "in_pruefung",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-05-08T09:33:00Z"
+  },
+  {
+    "id": 50010,
+    "kundenId": 10001,
+    "behandlungsdatum": "2026-06-18",
+    "positionen": [
+      { "goz": "9010", "leistungsbereich": "IMP", "betrag": "780.00", "beschreibung": "Implantatinsertion Regio 36, Faktor 2,3" },
+      { "goz": "9100", "leistungsbereich": "IMP", "betrag": "340.00", "beschreibung": "Knochenaufbau Regio 36" },
+      { "goz": "9050", "leistungsbereich": "IMP", "betrag": "145.00", "beschreibung": "Implantatfreilegung und Gingivaformer" },
+      { "goz": "5040", "leistungsbereich": "ZE", "betrag": "690.00", "beschreibung": "Implantatgetragene Vollkrone Regio 36" },
+      { "goz": "2197", "leistungsbereich": "ZE", "betrag": "62.10", "beschreibung": "Adhaesive Befestigung" }
+    ],
+    "rechnungsbetrag": "2017.10",
+    "erstattungsbetrag": "1130.21",
+    "status": "genehmigt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-06-25T14:09:00Z"
+  },
+  {
+    "id": 50011,
+    "kundenId": 10004,
+    "behandlungsdatum": "2026-07-09",
+    "positionen": [
+      { "goz": "5210", "leistungsbereich": "ZE", "betrag": "2480.00", "beschreibung": "Versorgung mit Totalprothese Oberkiefer" },
+      { "goz": "5220", "leistungsbereich": "ZE", "betrag": "2480.00", "beschreibung": "Versorgung mit Totalprothese Unterkiefer" },
+      { "goz": "5170", "leistungsbereich": "ZE", "betrag": "640.00", "beschreibung": "Funktionsabformung, beide Kiefer" },
+      { "goz": "8000", "leistungsbereich": "FUN", "betrag": "148.00", "beschreibung": "Klinische Funktionsanalyse" }
+    ],
+    "rechnungsbetrag": "5748.00",
+    "erstattungsbetrag": "5000.00",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-07-15T10:21:00Z"
+  },
+  {
+    "id": 50012,
+    "kundenId": 10002,
+    "behandlungsdatum": "2026-07-20",
+    "positionen": [
+      { "goz": "4050", "leistungsbereich": "PAR", "betrag": "46.00", "beschreibung": "Entfernung harter und weicher Zahnbelaege" },
+      { "goz": "4070", "leistungsbereich": "PAR", "betrag": "92.00", "beschreibung": "Parodontalchirurgische Therapie, einwurzeliger Zahn" },
+      { "goz": "4075", "leistungsbereich": "PAR", "betrag": "118.00", "beschreibung": "Parodontalchirurgische Therapie, mehrwurzeliger Zahn" }
+    ],
+    "rechnungsbetrag": "256.00",
+    "erstattungsbetrag": "0.00",
+    "status": "abgelehnt",
+    "ablehnungsgrund": "NICHT_VERSICHERT",
+    "ablehnungshinweis": "Leistungsbereich PAR ist im Tarif atra.dent.smart nicht versichert",
+    "eingereichtAm": "2026-07-23T16:02:00Z"
+  },
+  {
+    "id": 50013,
+    "kundenId": 10002,
+    "behandlungsdatum": "2026-08-03",
+    "positionen": [
+      { "goz": "5010", "leistungsbereich": "ZE", "betrag": "1240.00", "beschreibung": "Bruecke Regio 35-37, Brueckenglied und zwei Anker" },
+      { "goz": "5040", "leistungsbereich": "ZE", "betrag": "620.00", "beschreibung": "Vollkrone Zahn 35, Faktor 2,3" }
+    ],
+    "rechnungsbetrag": "1860.00",
+    "erstattungsbetrag": "0.00",
+    "status": "abgelehnt",
+    "ablehnungsgrund": "FEHLENDE_ZAEHNE",
+    "ablehnungshinweis": "Bei Antragstellung fehlten 3 Zaehne; die Ausnahme gilt nur fuer ATRA_DENT_X und ATRA_DENT_X_SB",
+    "eingereichtAm": "2026-08-06T09:48:00Z"
+  },
+  {
+    "id": 50014,
+    "kundenId": 10004,
+    "behandlungsdatum": "2026-08-05",
+    "positionen": [
+      { "goz": "1040", "leistungsbereich": "PZR", "betrag": "132.00", "beschreibung": "Professionelle Zahnreinigung, 28 Zaehne" }
+    ],
+    "rechnungsbetrag": "132.00",
+    "erstattungsbetrag": null,
+    "status": "eingereicht",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-08-07T07:56:00Z"
+  },
+  {
+    "id": 50015,
+    "kundenId": 10035,
+    "behandlungsdatum": "2024-10-08",
+    "positionen": [
+      { "goz": "4050", "leistungsbereich": "PAR", "betrag": "46.00", "beschreibung": "Entfernung harter und weicher Zahnbelaege" },
+      { "goz": "4070", "leistungsbereich": "PAR", "betrag": "92.00", "beschreibung": "Parodontalchirurgische Therapie, einwurzeliger Zahn" },
+      { "goz": "4075", "leistungsbereich": "PAR", "betrag": "118.00", "beschreibung": "Parodontalchirurgische Therapie, mehrwurzeliger Zahn" }
+    ],
+    "rechnungsbetrag": "256.00",
+    "erstattungsbetrag": "104.80",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2024-10-14T10:22:00Z"
+  },
+  {
+    "id": 50016,
+    "kundenId": 10048,
+    "behandlungsdatum": "2024-11-18",
+    "positionen": [
+      { "goz": "6000", "leistungsbereich": "KFO", "betrag": "340.00", "beschreibung": "Analyse der Behandlungsunterlagen und Behandlungsplan" },
+      { "goz": "6100", "leistungsbereich": "KFO", "betrag": "1180.00", "beschreibung": "Eingliederung festsitzender Apparatur, Oberkiefer" },
+      { "goz": "6120", "leistungsbereich": "KFO", "betrag": "1180.00", "beschreibung": "Eingliederung festsitzender Apparatur, Unterkiefer" }
+    ],
+    "rechnungsbetrag": "2700.00",
+    "erstattungsbetrag": "0.00",
+    "status": "abgelehnt",
+    "ablehnungsgrund": "ANGERATEN",
+    "ablehnungshinweis": "Behandlung bereits vor Vertragsschluss angeraten, Behandlungsplan vom 2024-06-15",
+    "eingereichtAm": "2024-11-24T09:41:00Z"
+  },
+  {
+    "id": 50023,
+    "kundenId": 10023,
+    "behandlungsdatum": "2025-11-11",
+    "positionen": [
+      { "goz": "2330", "leistungsbereich": "ZERH", "betrag": "42.00", "beschreibung": "Trepanation eines Zahnes" },
+      { "goz": "2410", "leistungsbereich": "ZERH", "betrag": "96.00", "beschreibung": "Wurzelkanalaufbereitung Zahn 36, je Kanal" },
+      { "goz": "2440", "leistungsbereich": "ZERH", "betrag": "78.00", "beschreibung": "Wurzelkanalfuellung, je Kanal" },
+      { "goz": "2080", "leistungsbereich": "ZERH", "betrag": "84.00", "beschreibung": "Kompositfuellung zweiflaechig Zahn 36" }
+    ],
+    "rechnungsbetrag": "300.00",
+    "erstattungsbetrag": "170.00",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2025-11-17T10:26:00Z"
+  },
+  {
+    "id": 50027,
+    "kundenId": 10013,
+    "behandlungsdatum": "2026-01-27",
+    "positionen": [
+      { "goz": "5010", "leistungsbereich": "ZE", "betrag": "1180.00", "beschreibung": "Bruecke Regio 35-37, Brueckenglied und zwei Anker" },
+      { "goz": "5040", "leistungsbereich": "ZE", "betrag": "620.00", "beschreibung": "Vollkrone Zahn 35, Faktor 2,3" },
+      { "goz": "2197", "leistungsbereich": "ZE", "betrag": "62.10", "beschreibung": "Adhaesive Befestigung" }
+    ],
+    "rechnungsbetrag": "1862.10",
+    "erstattungsbetrag": "1612.10",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-02-02T09:58:00Z"
+  },
+  {
+    "id": 50029,
+    "kundenId": 10042,
+    "behandlungsdatum": "2026-02-10",
+    "positionen": [
+      { "goz": "9010", "leistungsbereich": "IMP", "betrag": "780.00", "beschreibung": "Implantatinsertion Regio 46, Faktor 2,3" },
+      { "goz": "9100", "leistungsbereich": "IMP", "betrag": "420.00", "beschreibung": "Knochenaufbau Regio 46" }
+    ],
+    "rechnungsbetrag": "1200.00",
+    "erstattungsbetrag": "0.00",
+    "status": "abgelehnt",
+    "ablehnungsgrund": "NICHT_APPROBIERT",
+    "ablehnungshinweis": "Behandlung durch nicht approbierten Behandler, Ausschluss laut Bedingungswerk",
+    "eingereichtAm": "2026-02-16T10:09:00Z"
+  },
+  {
+    "id": 50035,
+    "kundenId": 10026,
+    "behandlungsdatum": "2026-03-16",
+    "positionen": [
+      { "goz": "5040", "leistungsbereich": "ZE", "betrag": "690.00", "beschreibung": "Vollkrone Zahn 25, Faktor 2,3" },
+      { "goz": "2197", "leistungsbereich": "ZE", "betrag": "62.10", "beschreibung": "Adhaesive Befestigung" }
+    ],
+    "rechnungsbetrag": "752.10",
+    "erstattungsbetrag": "451.26",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-03-20T14:08:00Z"
+  },
+  {
+    "id": 50045,
+    "kundenId": 10006,
+    "behandlungsdatum": "2026-05-28",
+    "positionen": [
+      { "goz": "1040", "leistungsbereich": "PZR", "betrag": "148.00", "beschreibung": "Professionelle Zahnreinigung, 28 Zaehne" }
+    ],
+    "rechnungsbetrag": "148.00",
+    "erstattungsbetrag": "148.00",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-06-02T08:44:00Z"
+  },
+  {
+    "id": 50047,
+    "kundenId": 10009,
+    "behandlungsdatum": "2026-06-03",
+    "positionen": [
+      { "goz": "9010", "leistungsbereich": "IMP", "betrag": "780.00", "beschreibung": "Implantatinsertion Regio 36, Faktor 2,3" },
+      { "goz": "9100", "leistungsbereich": "IMP", "betrag": "420.00", "beschreibung": "Knochenaufbau Regio 36" },
+      { "goz": "9050", "leistungsbereich": "IMP", "betrag": "145.00", "beschreibung": "Implantatfreilegung und Gingivaformer" },
+      { "goz": "5040", "leistungsbereich": "ZE", "betrag": "690.00", "beschreibung": "Implantatgetragene Vollkrone Regio 36" },
+      { "goz": "2197", "leistungsbereich": "ZE", "betrag": "62.10", "beschreibung": "Adhaesive Befestigung" }
+    ],
+    "rechnungsbetrag": "2097.10",
+    "erstattungsbetrag": "2097.10",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-06-09T10:31:00Z"
+  },
+  {
+    "id": 50051,
+    "kundenId": 10023,
+    "behandlungsdatum": "2026-06-22",
+    "positionen": [
+      { "goz": "0500", "leistungsbereich": "NAR", "betrag": "260.00", "beschreibung": "Zuschlag fuer Sedierung bei Fuellungstherapie auf Verlangen" }
+    ],
+    "rechnungsbetrag": "260.00",
+    "erstattungsbetrag": "0.00",
+    "status": "abgelehnt",
+    "ablehnungsgrund": "SONSTIGES",
+    "ablehnungshinweis": "Sedierung ohne medizinische Indikation, Tarifbedingung fuer NAR nicht erfuellt",
+    "eingereichtAm": "2026-06-26T10:57:00Z"
+  },
+  {
+    "id": 50052,
+    "kundenId": 10042,
+    "behandlungsdatum": "2026-06-24",
+    "positionen": [
+      { "goz": "5040", "leistungsbereich": "ZE", "betrag": "690.00", "beschreibung": "Vollkrone Zahn 47, Faktor 2,3" },
+      { "goz": "2197", "leistungsbereich": "ZE", "betrag": "62.10", "beschreibung": "Adhaesive Befestigung" }
+    ],
+    "rechnungsbetrag": "752.10",
+    "erstattungsbetrag": "752.10",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-06-30T13:03:00Z"
+  },
+  {
+    "id": 50058,
+    "kundenId": 10007,
+    "behandlungsdatum": "2026-07-13",
+    "positionen": [
+      { "goz": "1040", "leistungsbereich": "PZR", "betrag": "96.00", "beschreibung": "Professionelle Zahnreinigung, 27 Zaehne" }
+    ],
+    "rechnungsbetrag": "96.00",
+    "erstattungsbetrag": "80.00",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-07-16T11:08:00Z"
+  },
+  {
+    "id": 50060,
+    "kundenId": 10034,
+    "behandlungsdatum": "2026-07-20",
+    "positionen": [
+      { "goz": "1040", "leistungsbereich": "PZR", "betrag": "132.00", "beschreibung": "Professionelle Zahnreinigung, 28 Zaehne" }
+    ],
+    "rechnungsbetrag": "132.00",
+    "erstattungsbetrag": "132.00",
+    "status": "ausgezahlt",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-07-23T15:12:00Z"
+  },
+  {
+    "id": 50068,
+    "kundenId": 10006,
+    "behandlungsdatum": "2026-08-06",
+    "positionen": [
+      { "goz": "2080", "leistungsbereich": "ZERH", "betrag": "98.00", "beschreibung": "Kompositfuellung zweiflaechig Zahn 37" }
+    ],
+    "rechnungsbetrag": "98.00",
+    "erstattungsbetrag": null,
+    "status": "in_pruefung",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-08-10T09:35:00Z"
+  },
+  {
+    "id": 50071,
+    "kundenId": 10003,
+    "behandlungsdatum": "2026-08-03",
+    "positionen": [
+      { "goz": "0010", "leistungsbereich": "ZERH", "betrag": "10.72", "beschreibung": "Eingehende Untersuchung, Faktor 2,3" },
+      { "goz": "0090", "leistungsbereich": "ZERH", "betrag": "6.22", "beschreibung": "Intraorale Infiltrationsanaesthesie Zahn 25, Faktor 2,3" },
+      { "goz": "2040", "leistungsbereich": "ZERH", "betrag": "11.19", "beschreibung": "Anlegen von Spanngummi Zahn 25, Faktor 2,3" },
+      { "goz": "2080", "leistungsbereich": "ZERH", "betrag": "118.30", "beschreibung": "Restauration mit Kompositmaterial, dreiflaechig, Zahn 25, Faktor 2,3" }
+    ],
+    "rechnungsbetrag": "146.43",
+    "erstattungsbetrag": null,
+    "status": "geprueft_freigabe",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-08-16T14:02:00Z",
+    "rechnung": {
+      "rechnungsnummer": "2026-05188",
+      "rechnungsdatum": "2026-08-05",
+      "absender": "Zahnarztpraxis Dr. med. dent. Hartmut Beisser",
+      "patient": "Clara Weiss",
+      "gesamtbetrag": "146.43"
+    },
+    "bewertung": {
+      "empfehlung": "freigabe",
+      "erstattungsvorschlag": "146.43",
+      "eskalationsgruende": [],
+      "positionen": [
+        { "goz": "0010", "leistungsbereich": "ZERH", "zustand": "NICHT_BESTIMMBAR", "begruendung": "Untersuchung im Rahmen der Fuellungstherapie; sie teilt den Bereich der Behandlung, zu der sie gehoert (goz-zuordnung.yaml, Nummer 0010). Zugeordnet zu ZERH, weil 2040 und 2080 auf dieser Rechnung ENTHALTEN und ZERH sind" },
+        { "goz": "0090", "leistungsbereich": "ZERH", "zustand": "NICHT_BESTIMMBAR", "begruendung": "Oertliche Betaeubung, ausdruecklich kein NAR; sie folgt der Fuellung an Zahn 25 (goz-zuordnung.yaml, Nummer 0090). Zugeordnet zu ZERH, weil 2040 und 2080 auf dieser Rechnung ENTHALTEN und ZERH sind" },
+        { "goz": "2040", "leistungsbereich": "ZERH", "zustand": "ENTHALTEN", "begruendung": "Kofferdam als Begleitleistung der Kompositfuellung, Leistungsbereich Zahnerhalt" },
+        { "goz": "2080", "leistungsbereich": "ZERH", "zustand": "ENTHALTEN", "begruendung": "Direkt gelegte Kompositfuellung, Leistungsbereich Zahnerhalt, in atra.dent.brillant zu 100 Prozent versichert (Bedingungswerk Paragraf 4 Absatz 2)" }
+      ],
+      "arztauskunft": {
+        "plausibilitaet": "plausibel",
+        "notwendigkeit": "ueblich",
+        "text": "Dreiflaechige Kompositfuellung an einem Praemolaren mit Kofferdam und Infiltrationsanaesthesie ist eine gaengige und in sich stimmige Kombination.",
+        "hinweis": "Fachauskunft eines Sprachmodells, nicht belegt, keine Entscheidung."
+      },
+      "begruendung": "Die Fuellung (2080) und der Kofferdam (2040) sind dem Leistungsbereich Zahnerhalt zugeordnet und im Tarif atra.dent.brillant zu 100 Prozent versichert. Untersuchung (0010) und Anaesthesie (0090) haben keinen eigenen Leistungsinhalt und bleiben NICHT_BESTIMMBAR; sie folgen der Fuellung und werden mit ihr erstattet. Der Vertrag ist aktiv, die Wartezeit entfaellt wegen lueckenloser Vorversicherung. Der Rechnungsbetrag liegt deutlich unter der Freigabeschwelle, die Arztauskunft ist unauffaellig.",
+      "agent": "schadensfall",
+      "modell": "gemini-3.6-flash",
+      "zeitpunkt": "2026-08-16T14:10:31Z"
+    },
+    "bearbeitungsprotokoll": [
+      { "zeitpunkt": "2026-08-16T14:02:00Z", "akteur": "kunde", "schritt": "Schadensfall eingereicht", "detail": "Rechnung 2026-05188 ueber 146.43 EUR, vier Positionen" },
+      { "zeitpunkt": "2026-08-16T14:10:04Z", "akteur": "agent", "schritt": "Status eingereicht -> in_pruefung", "detail": "Claiming durch den Schadensfallagenten" },
+      { "zeitpunkt": "2026-08-16T14:10:08Z", "akteur": "agent", "schritt": "Vertrag gelesen", "detail": "ATRA_DENT_X, aktiv seit 2025-02-01, Wartezeit entfaellt bei Vorversicherung" },
+      { "zeitpunkt": "2026-08-16T14:10:15Z", "akteur": "agent", "schritt": "GOZ-Pruefung", "detail": "2 von 4 Positionen ENTHALTEN (2040, 2080), 0010 und 0090 NICHT_BESTIMMBAR und der Fuellung zugeordnet; Leistungsbereich durchgaengig ZERH" },
+      { "zeitpunkt": "2026-08-16T14:10:22Z", "akteur": "agent", "schritt": "Arztauskunft eingeholt", "detail": "plausibel, ueblich" },
+      { "zeitpunkt": "2026-08-16T14:10:28Z", "akteur": "agent", "schritt": "Erstattung berechnet", "detail": "146.43 EUR, Quote 100 Prozent, kein Selbstbehalt" },
+      { "zeitpunkt": "2026-08-16T14:10:31Z", "akteur": "agent", "schritt": "Status in_pruefung -> geprueft_freigabe", "detail": "Freigabewaechter: keine Regel verletzt" }
+    ]
+  },
+  {
+    "id": 50072,
+    "kundenId": 10002,
+    "behandlungsdatum": "2026-07-20",
+    "positionen": [
+      { "goz": "0010", "leistungsbereich": null, "betrag": "10.72", "beschreibung": "Eingehende Untersuchung, Faktor 2,3" },
+      { "goz": "9010", "leistungsbereich": "IMP", "betrag": "892.40", "beschreibung": "Implantatinsertion Regio 46, Faktor 2,8" },
+      { "goz": "0500", "leistungsbereich": null, "betrag": "96.30", "beschreibung": "Zuschlag bei nichtstationaerer Durchfuehrung, 250 bis 499 Punkte" },
+      { "goz": "2200", "leistungsbereich": "ZE", "betrag": "218.40", "beschreibung": "Vollkrone Tangentialpraeparation Zahn 46, Faktor 2,3" },
+      { "goz": "5170", "leistungsbereich": "ZE", "betrag": "88.20", "beschreibung": "Anatomische Abformung mit individuellem Loeffel, Faktor 2,3" },
+      { "goz": "2197", "leistungsbereich": "ZE", "betrag": "35.70", "beschreibung": "Adhaesive Befestigung der Krone auf dem Implantat" },
+      { "goz": "9040", "leistungsbereich": "IMP", "betrag": "189.60", "beschreibung": "Freilegen des Implantats und Einfuegen von Aufbauelementen" }
+    ],
+    "rechnungsbetrag": "1531.32",
+    "erstattungsbetrag": null,
+    "status": "geprueft_eskalation",
+    "ablehnungsgrund": null,
+    "ablehnungshinweis": null,
+    "eingereichtAm": "2026-08-17T08:41:00Z",
+    "rechnung": {
+      "rechnungsnummer": "KKW-2026-003341",
+      "rechnungsdatum": "2026-08-06",
+      "absender": "Klinik am Kiefernwald, Bad Molarheim",
+      "patient": "Bernd Schuster",
+      "gesamtbetrag": "1531.32"
+    },
+    "bewertung": {
+      "empfehlung": "eskalation",
+      "erstattungsvorschlag": null,
+      "eskalationsgruende": [
+        { "code": "GOZ_UNCLEAR", "text": "0010, 0500 und 2197 bleiben NICHT_BESTIMMBAR: Untersuchung, Zuschlag und Befestigung haben keinen eigenen Leistungsinhalt und folgen ihrer Hauptleistung. Die Rechnung stellt aber Implantat (IMP, nicht versichert) und Krone (ZE, versichert) nebeneinander -- welcher von beiden sie folgen, entscheidet ein Mensch. Ohne Zuordnung laesst sich die Erstattung nicht berechnen." },
+        { "code": "BETRAG_ABOVE_THRESHOLD", "text": "Rechnungsbetrag 1531.32 EUR liegt ueber der Freigabeschwelle 200.00 EUR." }
+      ],
+      "positionen": [
+        { "goz": "0010", "leistungsbereich": null, "zustand": "NICHT_BESTIMMBAR", "begruendung": "Allgemeine Untersuchungsleistung ohne eigenen Leistungsbereich; sie folgt der Behandlung, und hier stehen IMP und ZE nebeneinander (goz-zuordnung.yaml, Nummer 0010)" },
+        { "goz": "9010", "leistungsbereich": "IMP", "zustand": "NICHT_ENTHALTEN", "begruendung": "Implantatinsertion, Leistungsbereich Implantate; in atra.dent.smart nicht versichert (Bedingungswerk Paragraf 4 Absatz 3)" },
+        { "goz": "0500", "leistungsbereich": null, "zustand": "NICHT_BESTIMMBAR", "begruendung": "Zuschlag ohne eigenen Leistungsinhalt; er folgt der chirurgischen Hauptleistung aus Abschnitt D, E oder K (goz-zuordnung.yaml, Nummer 0500)" },
+        { "goz": "2200", "leistungsbereich": "ZE", "zustand": "ENTHALTEN", "begruendung": "Vollkrone auf dem Implantat zaehlt laut Produktmodell zu ZE, nicht zu IMP; in atra.dent.smart zu 60 Prozent versichert" },
+        { "goz": "5170", "leistungsbereich": "ZE", "zustand": "ENTHALTEN", "begruendung": "Abformung fuer die Kronenversorgung, Leistungsbereich Zahnersatz" },
+        { "goz": "2197", "leistungsbereich": "ZE", "zustand": "NICHT_BESTIMMBAR", "begruendung": "Reine Befestigungsleistung ohne eigenen Leistungsinhalt; sie folgt dem, was befestigt wird (goz-zuordnung.yaml, Nummer 2197). Hier waere das die Krone (ZE), aber auf derselben Rechnung steht mit dem Implantat eine nicht versicherte Hauptbehandlung" },
+        { "goz": "9040", "leistungsbereich": "IMP", "zustand": "NICHT_ENTHALTEN", "begruendung": "Freilegung des Implantats, Leistungsbereich Implantate; in atra.dent.smart nicht versichert" }
+      ],
+      "arztauskunft": {
+        "plausibilitaet": "plausibel",
+        "notwendigkeit": "ueblich",
+        "text": "Implantatinsertion, Freilegung und Kronenversorgung an Zahn 46 bilden einen ueblichen Behandlungsablauf; die Abfolge der Termine passt zur Einheilzeit.",
+        "hinweis": "Fachauskunft eines Sprachmodells, nicht belegt, keine Entscheidung."
+      },
+      "begruendung": "Die Kronenversorgung ist im Tarif atra.dent.smart mit 60 Prozent versichert, die implantologischen Positionen sind es nicht. Drei Positionen lassen sich der Nummer nach keinem Leistungsbereich zuordnen, und die Rechnung stellt eine versicherte und eine nicht versicherte Hauptbehandlung nebeneinander; ohne eine entscheidbare Zuordnung habe ich erstattung_berechnen nicht aufgerufen und schlage keinen Betrag vor. Zusammen mit dem Rechnungsbetrag ueber der Freigabeschwelle geht der Fall an die Sachbearbeitung.",
+      "agent": "schadensfall",
+      "modell": "gemini-3.6-flash",
+      "zeitpunkt": "2026-08-17T09:14:33Z"
+    },
+    "bearbeitungsprotokoll": [
+      { "zeitpunkt": "2026-08-17T08:41:00Z", "akteur": "kunde", "schritt": "Schadensfall eingereicht", "detail": "Rechnung KKW-2026-003341 ueber 1531.32 EUR, sieben Positionen" },
+      { "zeitpunkt": "2026-08-17T09:14:02Z", "akteur": "agent", "schritt": "Status eingereicht -> in_pruefung", "detail": "Claiming durch den Schadensfallagenten" },
+      { "zeitpunkt": "2026-08-17T09:14:06Z", "akteur": "agent", "schritt": "Vertrag gelesen", "detail": "ATRA_DENT_S, aktiv seit 2025-11-01, Wartezeit von acht Monaten am 2026-07-01 abgelaufen" },
+      { "zeitpunkt": "2026-08-17T09:14:13Z", "akteur": "agent", "schritt": "GOZ-Pruefung", "detail": "2 ENTHALTEN, 2 NICHT_ENTHALTEN, 3 NICHT_BESTIMMBAR" },
+      { "zeitpunkt": "2026-08-17T09:14:21Z", "akteur": "agent", "schritt": "Arztauskunft eingeholt", "detail": "plausibel, ueblich" },
+      { "zeitpunkt": "2026-08-17T09:14:27Z", "akteur": "agent", "schritt": "Erstattung nicht berechnet", "detail": "Drei Positionen ohne eigenen Leistungsbereich, Zuordnung nicht entscheidbar; erstattung_berechnen wurde nicht aufgerufen" },
+      { "zeitpunkt": "2026-08-17T09:14:33Z", "akteur": "agent", "schritt": "Status in_pruefung -> geprueft_eskalation", "detail": "Freigabewaechter: GOZ_UNCLEAR, BETRAG_ABOVE_THRESHOLD" }
+    ]
+  }
+]

@@ -1,0 +1,35 @@
+meta {
+  name: 404 - Schadensfall unbekannt
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{basisUrl}}/schadensfaelle/99999
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": "genehmigt"
+  }
+}
+
+assert {
+  res.status: eq 404
+  res.body.status: eq 404
+  res.body.detail: contains 99999
+}
+
+docs {
+  404 auch bei schreibenden Zugriffen: PATCH auf einen Schadensfall, den es
+  nicht gibt, legt ihn nicht an. Ein neuer Fall entsteht ausschließlich über
+  `POST /schadensfaelle`, und die ID vergibt dabei das Kernsystem.
+
+  Der Rumpf ist inhaltlich einwandfrei — geprüft wird die Existenz zuerst.
+}

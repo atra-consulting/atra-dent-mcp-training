@@ -1,0 +1,21 @@
+meta {
+  name: 01 - Tarife
+  seq: 1
+}
+
+docs {
+  # Tarife
+
+  Referenzdaten, nur lesbar. Die Liste kommt aus
+  `rechenkern/src/main/resources/tarife.json` und ändert sich zur Laufzeit
+  nicht — die vier Tarife sind dieselben wie in `wissen/daten/tarife.yaml`.
+
+  Die API liefert je Tarif nur `id`, `name` und `basisbeitragMonatlich`.
+  Quoten, Wartezeiten, Sublimits und Staffeln sind bewusst **nicht** Teil
+  dieser API; sie stehen im Produktmodell und wären der natürliche Inhalt
+  einer MCP-Ressource.
+
+  Der `basisbeitragMonatlich` hier ist der Einstiegsbeitrag des jüngsten
+  Altersbands (18-30), also ein Ab-Preis. Was ein konkreter Kunde zahlt,
+  beantwortet Ordner 02 (`monatsbeitrag` der Beitragsberechnung).
+}

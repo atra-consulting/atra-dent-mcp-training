@@ -1,0 +1,1466 @@
+openapi: 3.1.0
+
+info:
+  title: Kernsystem Zahnzusatzversicherung API
+  version: 1.0.0
+  description: |
+    API-first-Spezifikation fuer das Kernsystem einer fiktiven
+    Zahnzusatzversicherung.
+
+    Das System verwaltet:
+    - **Kunden** — Stammdaten der Versicherungsnehmer
+    - **Schadensfaelle** — Schadenhistorie je Kunde
+    - **Rechnungsextraktion** — deterministische Strukturdaten aus
+      PDF/A-Zahnarztrechnungen
+
+    Tarifstammdaten, Beitragsberechnung und Erstattungsberechnung fuehrt
+    dieses System **nicht** mehr; sie liegen im Rechenkern
+    (`oas/rechenkern.yaml`). Der Tarif eines Kunden bleibt hier — als
+    `TarifId` in seiner Akte —, was er kostet nicht.
+
+    Fachliche Bezeichner sind durchgaengig deutsch. Umlaute werden als
+    ae/oe/ue geschrieben, damit Pfade, Feldnamen und generierter Code ohne
+    Sonderzeichen auskommen — dieselbe Konvention wie im Produktmodell
+    `wissen/daten/tarife.yaml`.
+
+    Die erste Implementierung haelt alle Daten als einfache JSON-Dateien
+    vor (keine Datenbank). Auf den API-Kontrakt hat das keinen Einfluss.
+  license:
+    name: MIT
+    identifier: MIT
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Lokaler Entwicklungsserver
+
+tags:
+  - name: Kunden
+    description: Stammdaten der Versicherungsnehmer
+  - name: Schadensfaelle
+    description: Schadenhistorie
+  - name: Rechnungsextraktion
+    description: Deterministische Strukturdaten aus PDF/A-Zahnarztrechnungen
+
+security:
+  - ApiSchluessel: []
+
+paths:
+  /kunden:
+    get:
+      operationId: listKunden
+      summary: Kunden auflisten und suchen
+      description: |
+        Mehrere Filter werden UND-verknuepft. Ohne Filter wird die
+        vollstaendige Kundenliste zurueckgegeben.
+      tags: [Kunden]
+      parameters:
+        - name: vorname
+          in: query
+          description: Filtert auf exakte Uebereinstimmung des Vornamens
+          schema:
+            type: string
+          examples:
+            anna:
+              value: Anna
+        - name: nachname
+          in: query
+          description: Filtert auf exakte Uebereinstimmung des Nachnamens
+          schema:
+            type: string
+          examples:
+            mueller:
+              value: Mueller
+        - name: geburtsdatum
+          in: query
+          description: Filtert auf exakte Uebereinstimmung des Geburtsdatums
+          schema:
+            type: string
+            format: date
+          examples:
+            beispiel:
+              value: '1990-04-12'
+        - name: status
+          in: query
+          description: Filtert auf den Kundenstatus
+          schema:
+            $ref: '#/components/schemas/Kundenstatus'
+      responses:
+        '200':
+          description: Liste der Kunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kunde'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+    post:
+      operationId: createKunde
+      summary: Neuen Kunden anlegen
+      tags: [Kunden]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KundeSchreiben'
+      responses:
+        '201':
+          description: Kunde angelegt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kunde'
+          headers:
+            Location:
+              description: URL des neu angelegten Kunden
+              schema:
+                type: string
+                format: uri
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+
+  /kunden/{kundenId}:
+    parameters:
+      - $ref: '#/components/parameters/KundenId'
+    get:
+      operationId: readKunde
+      summary: Kunden anhand der ID lesen
+      tags: [Kunden]
+      responses:
+        '200':
+          description: Kunde gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kunde'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+    put:
+      operationId: replaceKunde
+      summary: Kunden ersetzen (vollstaendige Aktualisierung)
+      tags: [Kunden]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KundeSchreiben'
+      responses:
+        '200':
+          description: Kunde ersetzt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kunde'
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+    patch:
+      operationId: updateKunde
+      summary: Kunden teilweise aktualisieren
+      tags: [Kunden]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KundeAendern'
+      responses:
+        '200':
+          description: Kunde aktualisiert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kunde'
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+
+  /kunden/{kundenId}/schadensfaelle:
+    parameters:
+      - $ref: '#/components/parameters/KundenId'
+    get:
+      operationId: listKundenSchadensfaelle
+      summary: Schadensfaelle eines Kunden auflisten
+      description: Bequemer Zugriff auf die Schadenhistorie eines einzelnen Kunden.
+      tags: [Schadensfaelle]
+      responses:
+        '200':
+          description: Liste der Schadensfaelle des Kunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schadensfall'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+
+  /rechnungsextraktion:
+    post:
+      operationId: extractRechnung
+      summary: Strukturdaten aus einer PDF/A-Rechnung extrahieren
+      description: |
+        Liest eine Zahnarztrechnung als PDF/A ein und gibt die enthaltenen
+        Daten strukturiert zurueck: Rechnungskopf, Patient, Positionen und
+        Betraege. Die Extraktion ist **deterministisch und
+        layoutunabhaengig** — reine Textextraktion aus dem eingebetteten
+        Textlayer plus ein fester, generischer Regelsatz, der auf jedes
+        Dokument identisch angewendet wird. Kein OCR, kein Modell, keine
+        Sonderbehandlung je Absender: dieselbe Datei ergibt immer dasselbe
+        Ergebnis.
+
+        Die Operation ist zustandslos; es wird nichts gespeichert und kein
+        Schadensfall angelegt. Das Ergebnis ist als Vorstufe zu
+        `POST /schadensfaelle` und `POST /erstattungsberechnung` im
+        Rechenkern (`oas/rechenkern.yaml`) gedacht — die Zuordnung der
+        Positionen zu Leistungsbereichen bleibt Aufgabe des Aufrufers (siehe
+        `wissen/daten/goz-zuordnung.yaml`).
+
+        Drei bewusste Grenzen:
+        - Das Dokument muss als **PDF/A** gekennzeichnet sein. Andernfalls
+          wird die Verarbeitung mit einer generischen Fehlermeldung
+          abgelehnt — auch dann, wenn der Textlayer lesbar waere.
+        - Es wird nur zurueckgegeben, was auf der Rechnung **steht**.
+          Weist ein Absender den Steigerungssatz nicht aus, ist `faktor`
+          null — der Wert wird nicht geschaetzt.
+        - Weil der Regelsatz generisch ist, sind die Kopffelder
+          (Rechnungsnummer, Datum, Absender, Patient) **Best-Effort** und
+          koennen null sein, wenn das Layout sie nicht erkennbar macht.
+          Positionen und Gesamtbetrag sind Pflicht: werden sie nicht
+          gefunden, gilt das Dokument als nicht verarbeitbar.
+      tags: [Rechnungsextraktion]
+      requestBody:
+        required: true
+        content:
+          application/pdf:
+            schema:
+              type: string
+              format: binary
+              description: Die Rechnung als PDF/A-Datei
+      responses:
+        '200':
+          description: Extrahierte Rechnungsdaten
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RechnungsextraktionResult'
+        '400':
+          description: |
+            Das Dokument konnte nicht verarbeitet werden — kein PDF/A, kein
+            lesbarer Textlayer oder keine erkennbaren Rechnungspositionen.
+            Die Fehlermeldung ist bewusst generisch und nennt keine Details
+            zum Dokumentinhalt.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Fehler'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+
+  /schadensfaelle:
+    get:
+      operationId: listSchadensfaelle
+      summary: Schadensfaelle auflisten
+      tags: [Schadensfaelle]
+      parameters:
+        - name: kundenId
+          in: query
+          description: Filtert auf die Kundennummer
+          schema:
+            $ref: '#/components/schemas/KundenId'
+        - name: status
+          in: query
+          description: Filtert auf einen oder mehrere Bearbeitungsstatus (mehrfach angeben oder kommagetrennt)
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Schadensfallstatus'
+      responses:
+        '200':
+          description: Liste der Schadensfaelle
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schadensfall'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+    post:
+      operationId: submitSchadensfall
+      summary: Neuen Schadensfall einreichen
+      tags: [Schadensfaelle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Schaden'
+      responses:
+        '201':
+          description: Schadensfall eingereicht
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schadensfall'
+          headers:
+            Location:
+              description: URL des neu angelegten Schadensfalls
+              schema:
+                type: string
+                format: uri
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+
+  /schadensfaelle/{schadensfallId}:
+    parameters:
+      - name: schadensfallId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchadensfallId'
+    get:
+      operationId: readSchadensfall
+      summary: Schadensfall anhand der ID lesen
+      tags: [Schadensfaelle]
+      responses:
+        '200':
+          description: Schadensfall gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schadensfall'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+    patch:
+      operationId: updateSchadensfall
+      summary: Schadensfall aktualisieren (Statuswechsel in der Bearbeitung)
+      description: |
+        Setzt Status, Erstattungsbetrag und Ablehnungsgrund. Erlaubte
+        Statusuebergaenge:
+
+        | Von | Nach | Wer |
+        |---|---|---|
+        | eingereicht | in_pruefung | Agent (Claiming mit `erwarteterStatus: eingereicht`; ein zweiter Aufruf bekommt 409) |
+        | eingereicht, in_pruefung, geprueft_* | genehmigt, abgelehnt | Sachbearbeitung |
+        | in_pruefung, geprueft_* | eingereicht | Reconcile des Fallpollers (Vorgabe: system) oder Sachbearbeitung ("erneut pruefen", dann `akteur: sachbearbeitung`) |
+        | genehmigt | ausgezahlt | Sachbearbeitung |
+
+        geprueft_freigabe und geprueft_eskalation lassen sich hier nicht
+        setzen — nur ueber `PUT /schadensfaelle/{id}/bewertung`. Jeder
+        Uebergang haengt einen Eintrag an das bearbeitungsprotokoll.
+        Derselbe Status noch einmal ist kein Uebergang und kein Fehler.
+
+        Die Spalte *Wer* ist die Vorgabe der Kante. Wer den Uebergang
+        tatsaechlich ausgeloest hat, sagt der Aufrufer mit `akteur` — noetig
+        dort, wo sich zwei Aufrufer eine Kante teilen: `in_pruefung ->
+        eingereicht` benutzen der Reconcile-Lauf des Fallpollers (system) und
+        der Knopf "Erneut pruefen lassen" der Sachbearbeitung.
+      tags: [Schadensfaelle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchadensfallAendern'
+      responses:
+        '200':
+          description: Schadensfall aktualisiert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schadensfall'
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+        '409':
+          $ref: '#/components/responses/Konflikt'
+
+  /schadensfaelle/{schadensfallId}/bewertung:
+    parameters:
+      - name: schadensfallId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchadensfallId'
+    put:
+      operationId: assessSchadensfall
+      summary: Bewertung des Schadensfallagenten setzen
+      description: |
+        Nur aus in_pruefung. Setzt den Status auf geprueft_freigabe oder
+        geprueft_eskalation (nach `bewertung.empfehlung`), speichert die
+        Bewertung, traegt fehlende Leistungsbereiche der Positionen aus
+        `bewertung.positionen` nach und haengt die mitgelieferten
+        Protokolleintraege an. Ein zweiter Aufruf auf einem geprueften Fall
+        ist ein 409.
+      tags: [Schadensfaelle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchadensfallBewerten'
+      responses:
+        '200':
+          description: Bewertung gespeichert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schadensfall'
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+        '401':
+          $ref: '#/components/responses/NichtAuthentifiziert'
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+        '409':
+          $ref: '#/components/responses/Konflikt'
+
+components:
+  securitySchemes:
+    ApiSchluessel:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: |
+        API-Schluessel fuer Backend-Clients des Kernsystems. Der Headername
+        bleibt bewusst englisch, weil er als De-facto-Standard von Gateways
+        und Tools erkannt wird.
+
+  parameters:
+    KundenId:
+      name: kundenId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/KundenId'
+
+  responses:
+    FehlerhafteAnfrage:
+      description: Die Anfrage war fehlerhaft oder hat die Validierung nicht bestanden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Fehler'
+    NichtAuthentifiziert:
+      description: API-Schluessel fehlt oder ist ungueltig
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Fehler'
+    NichtGefunden:
+      description: Die angeforderte Ressource existiert nicht
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Fehler'
+    Konflikt:
+      description: Der Statusuebergang ist im aktuellen Zustand nicht erlaubt
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Fehler'
+
+  schemas:
+    Fehler:
+      type: object
+      description: |
+        Fehlerobjekt nach RFC 7807 (Problem Details for HTTP APIs).
+
+        Die Feldnamen sind durch den Standard und den Medientyp
+        `application/problem+json` festgelegt und bleiben deshalb als
+        einzige Stelle dieser Spezifikation englisch. Eine Uebersetzung
+        wuerde den Kontrakt des Medientyps brechen.
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI, die den Fehlertyp identifiziert
+          examples: ["https://atra.example/fehler/validierung"]
+        title:
+          type: string
+          description: Kurze, menschenlesbare Zusammenfassung des Fehlers
+          examples: [Validierung fehlgeschlagen]
+        status:
+          type: integer
+          description: HTTP-Statuscode
+          examples: [400]
+        detail:
+          type: string
+          description: Erlaeuterung zu genau diesem Vorfall
+          examples: ["Feld 'geburtsdatum' muss in der Vergangenheit liegen"]
+        instance:
+          type: string
+          format: uri
+          description: URI, die diesen konkreten Vorfall identifiziert
+      required:
+        - title
+        - status
+
+    Geldbetrag:
+      type: string
+      format: number
+      minimum: 0
+      multipleOf: 0.01
+      description: |
+        Geldbetrag in EUR mit genau zwei Nachkommastellen, als Dezimalstring
+        uebertragen.
+
+        Bewusst **kein** `type: number`: binaeres Gleitkomma kann
+        0,01-Schritte nicht exakt darstellen, das Produktmodell verlangt aber
+        kaufmaennische Rundung auf zwei Nachkommastellen (`wissen/daten/tarife.yaml`,
+        Konvention `rundung`). Ein Dezimalstring haelt den Wert auf dem Draht
+        exakt.
+
+        Mapping fuer openapi-generator (Java): `type: string` mit
+        `format: number` wird als Decimal erkannt und zu `BigDecimal`.
+        Die Generator-Option `bigDecimalAsString` haelt das Wire-Format
+        beim Dezimalstring.
+
+        Negative Betraege sind ausgeschlossen: Rechnungs- und
+        Erstattungsbetraege sind laut Produktmodell nie kleiner als 0.
+      examples: ['450.00']
+
+    Kundenstatus:
+      type: string
+      enum: [aktiv, inaktiv]
+
+    KundenId:
+      type: integer
+      format: int64
+      minimum: 1
+      description: |
+        Fortlaufende numerische Kundennummer. Bewusst kurz gehalten, damit sie
+        im Gespraech nennbar und in Beispielen lesbar bleibt. Wird beim Anlegen
+        vom Kernsystem vergeben.
+      examples: [10042]
+
+    SchadensfallId:
+      type: integer
+      format: int64
+      minimum: 1
+      description: |
+        Fortlaufende numerische Schadensfallnummer. Wird beim Einreichen vom
+        Kernsystem vergeben.
+      examples: [50871]
+
+    TarifId:
+      type: string
+      description: |
+        Technischer Tarifschluessel. Stabiler Identifikator, unabhaengig vom
+        Anzeigenamen. Entspricht den `schluessel`-Werten im Produktmodell
+        (`wissen/daten/tarife.yaml`).
+      enum:
+        - ATRA_DENT_S
+        - ATRA_DENT_B
+        - ATRA_DENT_X
+        - ATRA_DENT_X_SB
+      examples: [ATRA_DENT_B]
+
+    Adresse:
+      type: object
+      properties:
+        strasse:
+          type: string
+          examples: [Musterstrasse 12]
+        plz:
+          type: string
+          examples: ['10115']
+        ort:
+          type: string
+          examples: [Berlin]
+        land:
+          type: string
+          examples: [DE]
+      required:
+        - strasse
+        - plz
+        - ort
+        - land
+
+    KundeSchreiben:
+      type: object
+      description: Schreibbare Kundenfelder fuer Anlage (POST) und vollstaendige Aktualisierung (PUT)
+      properties:
+        vorname:
+          type: string
+          examples: [Anna]
+        nachname:
+          type: string
+          examples: [Mueller]
+        geburtsdatum:
+          type: string
+          format: date
+          examples: ['1990-04-12']
+        email:
+          type: string
+          format: email
+          examples: [anna.mueller@example.com]
+        telefon:
+          type: string
+          examples: ['+49 30 1234567']
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+        tarifId:
+          $ref: '#/components/schemas/TarifId'
+        versicherungsbeginn:
+          type: string
+          format: date
+          description: Vertragsbeginn; das Versicherungsjahr laeuft 12 Monate ab diesem Datum
+          examples: ['2026-01-01']
+        vorversicherung:
+          type: boolean
+          description: |
+            Bestand bei Antragstellung lueckenloser Vorversicherungsschutz?
+            Steuert den Wegfall der Wartezeit bei den Tarifen mit
+            `wartezeit_entfaellt_bei_vorversicherung` (ATRA_DENT_X,
+            ATRA_DENT_X_SB).
+          examples: [false]
+        fehlendeZaehne:
+          type: integer
+          minimum: 0
+          maximum: 32
+          description: |
+            Anzahl der bei Antragstellung fehlenden, nicht ersetzten Zaehne.
+            Grundlage fuer den Ausschluss `FEHLENDE_ZAEHNE` und dessen
+            Ausnahme in ATRA_DENT_X und ATRA_DENT_X_SB (bis zu zwei fehlende
+            Zaehne nach 12 Monaten Vertragslaufzeit).
+          examples: [0]
+        status:
+          $ref: '#/components/schemas/Kundenstatus'
+      required:
+        - vorname
+        - nachname
+        - geburtsdatum
+        - email
+        - telefon
+        - adresse
+        - tarifId
+        - versicherungsbeginn
+        - vorversicherung
+        - fehlendeZaehne
+
+    KundeAendern:
+      type: object
+      description: Teilmenge der Kundenfelder fuer PATCH; alle Felder optional
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+        geburtsdatum:
+          type: string
+          format: date
+        email:
+          type: string
+          format: email
+        telefon:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+        tarifId:
+          $ref: '#/components/schemas/TarifId'
+        versicherungsbeginn:
+          type: string
+          format: date
+        vorversicherung:
+          type: boolean
+        fehlendeZaehne:
+          type: integer
+          minimum: 0
+          maximum: 32
+        status:
+          $ref: '#/components/schemas/Kundenstatus'
+
+    Kunde:
+      allOf:
+        - type: object
+          properties:
+            id:
+              allOf:
+                - $ref: '#/components/schemas/KundenId'
+              readOnly: true
+            erstelltAm:
+              type: string
+              format: date-time
+              readOnly: true
+            geaendertAm:
+              type: string
+              format: date-time
+              readOnly: true
+          required:
+            - id
+        - $ref: '#/components/schemas/KundeSchreiben'
+
+    BeitragsberechnungResult:
+      type: object
+      description: |
+        Ergebnis der Beitragsberechnung. Zurueckgegeben wird ausschliesslich
+        der ermittelte Monatsbeitrag; alle uebrigen Tarif- und
+        Leistungsdetails stammen aus dem angebundenen Produktmodell.
+
+        **Kein REST-Pfad dieser API liefert dieses Schema.** Die
+        Beitragsberechnung ueber HTTP fuehrt der Rechenkern
+        (`oas/rechenkern.yaml`). Hier steht das Schema nur noch, weil es die
+        Antwort des MCP-Werkzeugs `mein_beitrag_berechnen` beschreibt: Das
+        Kernsystem nimmt dafuer das Geburtsdatum aus der Akte und laesst die
+        Rechnung selbst vom Rechenkern ausfuehren.
+      properties:
+        monatsbeitrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Ermittelter Monatsbeitrag in EUR
+      required:
+        - monatsbeitrag
+
+    Schadensfallstatus:
+      type: string
+      description: |
+        Bearbeitungsstatus eines Schadensfalls.
+
+        | Wert | Bedeutung | Wer setzt ihn |
+        |---|---|---|
+        | `eingereicht` | liegt vor, noch nicht angesehen | Kunde (ueber Beratung) oder Sachbearbeitung |
+        | `in_pruefung` | ein Agent hat den Fall uebernommen (Claiming) | Schadensfallagent |
+        | `geprueft_freigabe` | Agent empfiehlt Freigabe, Erstattungsvorschlag liegt vor | Schadensfallagent, nur ueber die Bewertung |
+        | `geprueft_eskalation` | Agent eskaliert an die Sachbearbeitung, mit Gruenden | Schadensfallagent, nur ueber die Bewertung |
+        | `genehmigt` | entschieden, noch nicht ausgezahlt | Sachbearbeitung |
+        | `abgelehnt` | entschieden, mit ablehnungsgrund | Sachbearbeitung |
+        | `ausgezahlt` | erledigt | Sachbearbeitung |
+
+        Die erlaubten Uebergaenge erzwingt das Kernsystem (409 sonst), siehe
+        `PATCH /schadensfaelle/{id}` und `PUT /schadensfaelle/{id}/bewertung`.
+      enum: [eingereicht, in_pruefung, geprueft_freigabe, geprueft_eskalation, genehmigt, abgelehnt, ausgezahlt]
+
+    Leistungsbereich:
+      type: string
+      description: |
+        Leistungsbereich, dem ein Schadensfall zugeordnet wird. Die Zuordnung
+        entscheidet, welche Quote und welches Sublimit greifen, und ist
+        deshalb Teil des API-Kontrakts und kein Freitext.
+
+        | Schluessel | Bereich |
+        |---|---|
+        | `ZE` | Zahnersatz (auch die Krone auf einem Implantat) |
+        | `IMP` | Implantate (Wurzel, Aufbau, Knochenaufbau — nicht die Krone) |
+        | `INL` | Inlays und Onlays (laborgefertigt) |
+        | `ZERH` | Zahnerhalt (direkte Fuellungen, Wurzelbehandlung, Stiftaufbau) |
+        | `PAR` | Parodontosebehandlung |
+        | `PZR` | Prophylaxe und professionelle Zahnreinigung |
+        | `KFO` | Kieferorthopaedie |
+        | `FUN` | Funktionsanalyse und Aufbissschiene |
+        | `NAR` | Narkose und Sedierung (nicht die oertliche Betaeubung) |
+        | `AKUT` | Schmerzausschaltung und Akutbehandlung |
+
+        Massgeblich sind die Beschreibungen und Abgrenzungen im Produktmodell
+        (`wissen/daten/tarife.yaml`).
+      enum: [ZE, IMP, INL, ZERH, PAR, PZR, KFO, FUN, NAR, AKUT]
+      examples: [ZE]
+
+    GozNummer:
+      type: string
+      pattern: '^[0-9]{4}$'
+      description: |
+        Vierstellige Gebuehrennummer aus dem Gebuehrenverzeichnis der
+        Gebuehrenordnung fuer Zahnaerzte (GOZ 2012).
+
+        Die Abschnitte des Verzeichnisses:
+
+        | Nummernkreis | Abschnitt |
+        |---|---|
+        | 0010–0120 | A — Allgemeine zahnaerztliche Leistungen |
+        | 0500–0530 | L — Zuschlaege zu chirurgischen Leistungen |
+        | 1000–1040 | B — Prophylaktische Leistungen |
+        | 2000–2440 | C — Konservierende Leistungen |
+        | 3000–3310 | D — Chirurgische Leistungen |
+        | 4000–4150 | E — Mundschleimhaut- und Parodontalerkrankungen |
+        | 5000–5340 | F — Prothetische Leistungen |
+        | 6000–6260 | G — Kieferorthopaedische Leistungen |
+        | 7000–7100 | H — Eingliederung von Aufbissbehelfen und Schienen |
+        | 8000–8100 | J — Funktionsanalyse und Funktionstherapie |
+        | 9000–9170 | K — Implantologische Leistungen |
+
+        Der Abschnitt legt den Leistungsbereich **nicht** fest. Massgeblich
+        ist die Zuordnung nach den Beschreibungen im Produktmodell — eine
+        Krone auf einem Implantat zaehlt dort zu `ZE`, obwohl die Insertion
+        des Implantats aus Abschnitt K stammt. Deshalb traegt jede Position
+        ihren `leistungsbereich` ausdruecklich.
+      examples: ['9010']
+
+    Schadenposition:
+      type: object
+      description: |
+        Einzelne Rechnungsposition. Das Produktmodell rechnet positionsweise:
+        Rechenschritt 1 zieht nicht versicherte Positionen ab, Rechenschritt 2
+        wendet die Quote des jeweiligen Leistungsbereichs an. Eine Rechnung
+        kann deshalb mehrere Leistungsbereiche mit unterschiedlichen Quoten
+        umfassen.
+
+        Die Position bildet ab, was auf der Rechnung steht — nicht nur, was
+        eine Gebuehrenziffer traegt. Material, Labor (Paragraf 9 GOZ) und
+        Verlangensleistungen (Paragraf 2 Absatz 3 GOZ) gehoeren mit in den
+        Fall; sie sind bei Zahnersatz haeufig der groessere Teil der
+        Rechnung. Sie tragen keine Ziffer, deshalb ist `goz` optional.
+
+        Die Identitaet einer Position ist ihre **Stelle in der Liste**, nicht
+        ihre Gebuehrennummer: dieselbe Nummer kann mehrfach auf einer
+        Rechnung stehen (etwa 9010 an zwei Behandlungstagen), und eine
+        Position ohne Ziffer traegt gar keine. Ein Befund dazu verweist
+        ueber `Bewertungsposition.index` auf diese Stelle.
+      properties:
+        goz:
+          oneOf:
+            - $ref: '#/components/schemas/GozNummer'
+            - type: 'null'
+          description: |
+            Gebuehrenziffer, die auf der Rechnung steht — in der Regel eine
+            GOZ-Nummer, bei GOAe-Leistungen die GOAe-Ziffer. Sie wird
+            uebernommen, wie sie dasteht; die Rechnung kennzeichnet nicht
+            zuverlaessig, welche der beiden Gebuehrenordnungen gemeint ist
+            (siehe `ExtrahierteRechnungsposition.ziffer`).
+
+            `null` bei Material-, Labor- und Verlangensleistungen: die
+            Rechnung weist dort keine Ziffer aus. `null` heisst nicht "nicht
+            versichert" und nicht "unvollstaendig extrahiert" — es heisst,
+            dass diese Position keine Ziffer hat.
+        zahn:
+          type: [string, 'null']
+          description: |
+            Zahn im FDI-Schema, sofern die Rechnung ihn zu dieser Position
+            ausweist; uebernommen aus `ExtrahierteRechnungsposition.zahn`.
+
+            `null` ist haeufig und kein Mangel: Untersuchung,
+            Mundhygienestatus, professionelle Zahnreinigung und Fluoridierung
+            sind Ganzkieferleistungen, und die GOZ verlangt dort keine
+            Zahnangabe. Er wird nie hergeleitet — steht er nicht auf der
+            Rechnung, bleibt er leer.
+          examples: ['36']
+        datum:
+          type: [string, 'null']
+          format: date
+          description: |
+            Behandlungsdatum **dieser** Position, sofern das Rechnungslayout
+            es je Position fuehrt; uebernommen aus
+            `ExtrahierteRechnungsposition.datum`.
+
+            Je Position und nicht je Rechnung, weil eine Rechnung mehrere
+            Behandlungstage umfassen kann — `kiefernwald-sanierung` traegt
+            sieben. `Schadensfall.behandlungsdatum` bleibt davon unberuehrt:
+            es ist das frueheste Positionsdatum und der Bezugspunkt fuer
+            Wartezeit und Duplikatpruefung.
+          examples: ['2026-04-28']
+        anzahl:
+          type: [integer, 'null']
+          minimum: 1
+          description: |
+            Anzahl bzw. Menge, sofern die Rechnung sie ausweist; uebernommen
+            aus `ExtrahierteRechnungsposition.anzahl`. `null` heisst: nicht
+            angegeben — nicht: einmal. Der `betrag` ist stets der Betrag der
+            ganzen Position, nicht der einer Einheit.
+          examples: [2]
+        leistungsbereich:
+          oneOf:
+            - $ref: '#/components/schemas/Leistungsbereich'
+            - type: 'null'
+          description: |
+            Zugeordneter Leistungsbereich. Beim Einreichen aus einer Rechnung
+            darf er fehlen: die Rechnung nennt Gebuehrennummern, keine
+            Leistungsbereiche — die Zuordnung ist Produktwissen und wird mit
+            der Bewertung nachgetragen. Fuer die Erstattungsberechnung ist er
+            Pflicht.
+        betrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Betrag dieser Position in EUR
+        beschreibung:
+          type: string
+          description: Leistungstext der Position, wie er auf der Rechnung steht
+          examples: [Implantatinsertion Regio 36, Faktor 2.3]
+      required:
+        - betrag
+        - beschreibung
+
+    Schaden:
+      type: object
+      description: |
+        Schreibbare Felder zum Einreichen eines Schadensfalls. Der
+        Rechnungsbetrag wird nicht uebergeben, sondern vom Kernsystem als
+        Summe der Positionsbetraege ermittelt.
+      properties:
+        kundenId:
+          $ref: '#/components/schemas/KundenId'
+        behandlungsdatum:
+          type: string
+          format: date
+          examples: ['2026-02-15']
+        positionen:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Schadenposition'
+          examples:
+            - - goz: '9010'
+                zahn: '36'
+                datum: '2026-04-28'
+                anzahl: 1
+                leistungsbereich: IMP
+                betrag: '780.00'
+                beschreibung: Implantatinsertion Regio 36, Faktor 2.3
+              - goz: '2197'
+                zahn: '36'
+                datum: '2026-07-07'
+                anzahl: 1
+                leistungsbereich: ZE
+                betrag: '62.10'
+                beschreibung: Adhaesive Befestigung der Krone auf dem Implantat
+              - goz: null
+                zahn: '36'
+                datum: '2026-07-07'
+                anzahl: 1
+                leistungsbereich: ZE
+                betrag: '486.30'
+                beschreibung: Vollkeramische Krone, Zirkondioxid
+        rechnung:
+          oneOf:
+            - $ref: '#/components/schemas/Rechnungskopf'
+            - type: 'null'
+          description: Kopfdaten der Rechnung, sofern aus einer Extraktion eingereicht
+      required:
+        - kundenId
+        - behandlungsdatum
+        - positionen
+
+    Ablehnungsgrund:
+      type: string
+      description: |
+        Grund einer Ablehnung. Die ersten vier Werte entsprechen den
+        Ausschluss-Schluesseln im Produktmodell (`wissen/daten/tarife.yaml`,
+        Abschnitt `ausschluesse`), die uebrigen decken die tarifbedingten
+        Faelle ab.
+
+        | Wert | Bedeutung |
+        |---|---|
+        | `ANGERATEN` | Bei Vertragsschluss bereits angeratene oder begonnene Behandlung |
+        | `KOSMETIK` | Rein kosmetische Leistung ohne medizinische Indikation |
+        | `NICHT_APPROBIERT` | Behandlung durch nicht approbierte Behandler |
+        | `FEHLENDE_ZAEHNE` | Bei Antragstellung fehlende Zaehne |
+        | `NICHT_VERSICHERT` | Leistungsbereich im gewaehlten Tarif nicht versichert |
+        | `WARTEZEIT` | Wartezeit zum Behandlungsdatum noch nicht abgelaufen |
+        | `SONSTIGES` | Anderer Grund; dann `ablehnungshinweis` fuellen |
+      enum:
+        - ANGERATEN
+        - KOSMETIK
+        - NICHT_APPROBIERT
+        - FEHLENDE_ZAEHNE
+        - NICHT_VERSICHERT
+        - WARTEZEIT
+        - SONSTIGES
+      examples: [NICHT_VERSICHERT]
+
+    SchadensfallAendern:
+      type: object
+      description: Felder, die waehrend der Bearbeitung geaendert werden koennen
+      properties:
+        status:
+          $ref: '#/components/schemas/Schadensfallstatus'
+        erwarteterStatus:
+          allOf:
+            - $ref: '#/components/schemas/Schadensfallstatus'
+          description: |
+            Vorbedingung (Compare-and-Set): Die Aenderung wird nur ausgefuehrt,
+            wenn der Fall aktuell genau diesen Status hat; sonst 409. Damit
+            gewinnt beim Claiming (eingereicht -> in_pruefung mit
+            erwarteterStatus eingereicht) genau ein Aufrufer. Ohne das Feld ist
+            derselbe Status noch einmal kein Fehler.
+        erstattungsbetrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Ermittelte Erstattung in EUR
+        ablehnungsgrund:
+          $ref: '#/components/schemas/Ablehnungsgrund'
+        ablehnungshinweis:
+          type: string
+          description: Freitext zur Ergaenzung des Ablehnungsgrunds
+          examples: [Wartezeit laeuft bis 2026-04-01]
+        akteur:
+          allOf:
+            - $ref: '#/components/schemas/Protokollakteur'
+          description: |
+            Wer den Statuswechsel ausgeloest hat — der Akteur des
+            Protokolleintrags. Ohne Angabe gilt der Vorgabeakteur der Kante.
+            Die Angabe entscheidet nichts ueber die Zulaessigkeit des
+            Uebergangs, sie beschreibt nur den Aufrufer.
+
+    Schadensfall:
+      type: object
+      properties:
+        id:
+          allOf:
+            - $ref: '#/components/schemas/SchadensfallId'
+          readOnly: true
+        kundenId:
+          $ref: '#/components/schemas/KundenId'
+        behandlungsdatum:
+          type: string
+          format: date
+          description: |
+            Behandlungsdatum des Falls: das frueheste Datum, das die Rechnung
+            ausweist. Bezugspunkt fuer die Wartezeit und fuer die
+            Duplikatpruefung.
+
+            **Die Einschraenkung gehoert dazu.** Eine Rechnung kann mehrere
+            Behandlungstage umfassen — `kiefernwald-sanierung` traegt sieben.
+            Sie hat dann kein Behandlungsdatum, sondern einen Zeitraum, und
+            dieses Feld gibt ihn nicht wieder. Fuer die Wartezeit ist das
+            fruehste Datum die fuer die Kundin unguenstigste Lesart: liegt es
+            noch in der Wartezeit, faellt der ganze Fall darunter, auch wenn
+            der groesste Teil der Behandlung danach stattfand. Fuer die
+            Duplikatpruefung ist es willkuerlich. Seit die Positionen ihr
+            eigenes `datum` fuehren, waere beides schaerfer zu fassen; das
+            ist eine eigene Entscheidung und ausdruecklich nicht mit dieser
+            Kontraktaenderung getroffen worden.
+        positionen:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Schadenposition'
+        rechnungsbetrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Summe aller Positionsbetraege in EUR
+          readOnly: true
+        erstattungsbetrag:
+          oneOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+            - type: 'null'
+          description: Wird gesetzt, sobald der Schadensfall bearbeitet wurde
+        status:
+          $ref: '#/components/schemas/Schadensfallstatus'
+        ablehnungsgrund:
+          oneOf:
+            - $ref: '#/components/schemas/Ablehnungsgrund'
+            - type: 'null'
+        ablehnungshinweis:
+          type: [string, 'null']
+          description: Freitext zur Ergaenzung des Ablehnungsgrunds
+        eingereichtAm:
+          type: string
+          format: date-time
+          readOnly: true
+        rechnung:
+          oneOf:
+            - $ref: '#/components/schemas/Rechnungskopf'
+            - type: 'null'
+        bewertung:
+          oneOf:
+            - $ref: '#/components/schemas/Bewertung'
+            - type: 'null'
+          description: Vorschlag des Schadensfallagenten; null, solange keiner geprueft hat
+        bearbeitungsprotokoll:
+          type: array
+          items:
+            $ref: '#/components/schemas/Protokolleintrag'
+          description: Chronologisch; wird nur angehaengt, nie geaendert
+      required:
+        - id
+        - kundenId
+        - behandlungsdatum
+        - positionen
+        - rechnungsbetrag
+        - status
+        - eingereichtAm
+
+    Rechnungskopf:
+      type: object
+      description: |
+        Kopfdaten der eingereichten Rechnung, wie sie die Extraktion geliefert
+        hat. Alle Felder Best-Effort und deshalb nullable.
+      properties:
+        rechnungsnummer:
+          type: [string, 'null']
+        rechnungsdatum:
+          type: [string, 'null']
+          format: date
+        absender:
+          type: [string, 'null']
+          description: Erste Briefkopfzeile, Naeherung fuer den Behandler
+        patient:
+          type: [string, 'null']
+          description: Name laut Anschriftfeld
+        gesamtbetrag:
+          oneOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+            - type: 'null'
+          description: Ausgewiesener Gesamtbetrag laut Rechnung
+
+    Bewertungsempfehlung:
+      type: string
+      enum: [freigabe, eskalation]
+
+    Eskalationscode:
+      type: string
+      description: |
+        Warum ein Fall an die Sachbearbeitung geht. Vergeben vom
+        FreigabeGuard des Schadensfallagenten (deterministisch), nicht vom
+        Modell.
+
+        Ausnahme ist `MODELL_ESCALATION`: Der Agent hat den Fall aus eigener
+        fachlicher Einschaetzung zurueckgegeben; die Begruendung steht in
+        `bewertung.begruendung`. Auch dieser Code wird vom Waechter gesetzt und
+        nicht vom Modell -- er haelt nur fest, dass die Eskalation nicht aus
+        einer der uebrigen Regeln stammt. Der Waechter verschaerft naemlich
+        nur: Aus einer Modell-Eskalation wird nie eine Freigabe, und eine
+        Eskalation ohne Grund gibt es nicht.
+      enum:
+        - GOZ_UNCLEAR
+        - BETRAG_DEVIATES
+        - ARZT_FLAGGED
+        - ARZT_UNAVAILABLE
+        - BETRAG_ABOVE_THRESHOLD
+        - VERTRAG_INACTIVE
+        - WARTEZEIT
+        - PATIENT_UNCLEAR
+        - DUPLICATE
+        - EXTRACTION_INCOMPLETE
+        - MODELL_WITHOUT_RESULT
+        - MODELL_ESCALATION
+
+    Eskalationsgrund:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/Eskalationscode'
+        text:
+          type: string
+          description: Erlaeuterung fuer die Sachbearbeitung
+      required: [code, text]
+
+    GozZustand:
+      type: string
+      description: Ergebnis der Pruefung dem Grunde nach (Wissensdienst goz_pruefen)
+      enum: [ENTHALTEN, NICHT_ENTHALTEN, NICHT_BESTIMMBAR, UNBEKANNT]
+
+    Bewertungsposition:
+      type: object
+      description: |
+        Der Befund des Agenten zu genau einer Position des Schadensfalls.
+
+        Zugeordnet wird ueber `index`, nicht ueber die Gebuehrennummer: die
+        Nummer ist kein Schluessel. Sie kann auf derselben Rechnung mehrfach
+        stehen (`weiss-implantat-doppelt` traegt 9010 an zwei
+        Behandlungstagen), und Material-, Labor- und Verlangenspositionen
+        tragen ueberhaupt keine.
+      properties:
+        index:
+          type: [integer, 'null']
+          minimum: 0
+          description: |
+            Stelle der bewerteten Position in `schadensfall.positionen`,
+            nullbasiert. Der eindeutige Schluessel des Befunds.
+
+            Optional allein aus Ruecksicht auf Bewertungen, die vor
+            Einfuehrung des Feldes geschrieben wurden; dort bleibt `goz` der
+            (unscharfe) Schluessel. Neue Bewertungen fuehren ihn.
+          examples: [3]
+        goz:
+          oneOf:
+            - $ref: '#/components/schemas/GozNummer'
+            - type: 'null'
+          description: |
+            Die Gebuehrenziffer der bewerteten Position, unveraendert aus
+            `Schadenposition.goz` uebernommen. `null`, wenn die Position
+            keine traegt — dann sagt der Befund allein ueber `index`, welche
+            Position gemeint ist.
+        leistungsbereich:
+          oneOf:
+            - $ref: '#/components/schemas/Leistungsbereich'
+            - type: 'null'
+        zustand:
+          $ref: '#/components/schemas/GozZustand'
+        begruendung:
+          type: string
+          description: Begruendung des Agenten, mit Fundstelle wo moeglich
+      required: [zustand, begruendung]
+
+    Arztauskunft:
+      type: object
+      description: |
+        Fachauskunft des Arztservice zur Rechnung. Ein Sprachmodell in einer
+        Experten-Rolle — nicht belegt, nicht geprueft, keine Entscheidung.
+      properties:
+        plausibilitaet:
+          type: string
+          enum: [plausibel, auffaellig]
+        notwendigkeit:
+          type: string
+          enum: [ueblich, fraglich]
+        text:
+          type: string
+        hinweis:
+          type: string
+          description: Der Vorbehalt des Arztservice, unveraendert uebernommen
+      required: [plausibilitaet, notwendigkeit, text, hinweis]
+
+    Bewertung:
+      type: object
+      description: |
+        Ergebnis der Pruefung durch den Schadensfallagenten. Wird mit
+        `PUT /schadensfaelle/{id}/bewertung` (oder dem MCP-Tool
+        schadensfall_bewerten) gesetzt und setzt den Status auf
+        geprueft_freigabe bzw. geprueft_eskalation. Sie ist ein Vorschlag:
+        Erstattungsbetrag und Status genehmigt/abgelehnt setzt weiterhin die
+        Sachbearbeitung.
+      properties:
+        empfehlung:
+          $ref: '#/components/schemas/Bewertungsempfehlung'
+        erstattungsvorschlag:
+          oneOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+            - type: 'null'
+          description: Ergebnis von erstattung_berechnen; null bei Eskalation ohne Rechnung
+        eskalationsgruende:
+          type: array
+          items:
+            $ref: '#/components/schemas/Eskalationsgrund'
+        positionen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bewertungsposition'
+        arztauskunft:
+          oneOf:
+            - $ref: '#/components/schemas/Arztauskunft'
+            - type: 'null'
+        begruendung:
+          type: string
+          description: Prosa des Modells fuer die Sachbearbeitung
+        agent:
+          type: string
+          examples: [schadensfall]
+        modell:
+          type: [string, 'null']
+          examples: [gemini-3.6-flash]
+        zeitpunkt:
+          type: string
+          format: date-time
+          readOnly: true
+      required: [empfehlung, eskalationsgruende, positionen, begruendung, agent]
+
+    Protokollakteur:
+      type: string
+      enum: [kunde, agent, sachbearbeitung, system]
+
+    AgentCallKind:
+      type: string
+      enum: [modell, tool, a2a]
+
+    AgentCall:
+      type: object
+      description: Ein Aufruf des Agenten, gekuerzt fuer die Anzeige. Der vollstaendige Trace liegt im tracelog.
+      properties:
+        zeitpunkt:
+          type: string
+          format: date-time
+        art:
+          $ref: '#/components/schemas/AgentCallKind'
+        name:
+          type: string
+          examples: [goz_pruefen]
+        eingabeKurz:
+          type: [string, 'null']
+        ergebnisKurz:
+          type: [string, 'null']
+        dauerMs:
+          type: [integer, 'null']
+      required: [zeitpunkt, art, name]
+
+    Protokolleintrag:
+      type: object
+      description: |
+        Ein Schritt der Bearbeitung. Statuswechsel schreibt das Kernsystem
+        selbst; die Schritte des Agenten kommen mit der Bewertung.
+      properties:
+        zeitpunkt:
+          type: string
+          format: date-time
+        akteur:
+          $ref: '#/components/schemas/Protokollakteur'
+        schritt:
+          type: string
+          examples: ['Status eingereicht -> in_pruefung', 'GOZ-Pruefung']
+        detail:
+          type: [string, 'null']
+        calls:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentCall'
+      required: [zeitpunkt, akteur, schritt]
+
+    SchadensfallBewerten:
+      type: object
+      description: Eingabe der Bewertung samt der Protokollschritte des Agenten
+      properties:
+        bewertung:
+          $ref: '#/components/schemas/Bewertung'
+        protokoll:
+          type: array
+          items:
+            $ref: '#/components/schemas/Protokolleintrag'
+      required: [bewertung]
+
+    RechnungsextraktionResult:
+      type: object
+      description: |
+        Strukturierte Daten einer eingelesenen Zahnarztrechnung. Enthaelt
+        ausschliesslich, was auf der Rechnung steht — keine Zuordnung zu
+        Leistungsbereichen, keine Erstattungsrechnung, keine geschaetzten
+        Werte. Kopffelder sind Best-Effort des generischen Regelsatzes und
+        koennen null sein; Positionen und Betraege sind garantiert.
+      properties:
+        rechnungsnummer:
+          type: [string, 'null']
+          description: Rechnungsnummer, sofern im Dokument erkennbar
+          examples: ['2026-04711', 'DDS-2026-118447', '128/2026']
+        rechnungsdatum:
+          type: [string, 'null']
+          format: date
+          description: Ausstellungsdatum, sofern im Dokument erkennbar
+          examples: ['2026-03-14']
+        absender:
+          type: [string, 'null']
+          description: |
+            Erste Briefkopfzeile des Dokuments als Naeherung fuer den
+            Absender. Bei Abrechnung ueber eine Verrechnungsstelle ist das
+            nicht der Behandler.
+          examples: ['Dr. med. dent. Hartmut Beisser']
+        patient:
+          oneOf:
+            - $ref: '#/components/schemas/ExtrahierterPatient'
+            - type: 'null'
+          description: |
+            Empfaenger laut Anschriftfeld, sofern ein solches erkennbar
+            ist. Naeherung: der Rechnungsempfaenger muss nicht der Patient
+            sein.
+        positionen:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ExtrahierteRechnungsposition'
+        gesamtbetrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Ausgewiesener Gesamtbetrag der Rechnung in EUR
+        zahlbetrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: |
+            Offener Betrag in EUR. Weicht vom Gesamtbetrag ab, wenn die
+            Rechnung eine Anzahlung ausweist; ohne ausgewiesene Anzahlung
+            sind beide gleich.
+      required:
+        - positionen
+        - gesamtbetrag
+        - zahlbetrag
+
+    ExtrahierterPatient:
+      type: object
+      description: Patient laut Anschriftfeld der Rechnung
+      properties:
+        name:
+          type: string
+          examples: [Anna Mueller]
+        strasse:
+          type: string
+          examples: [Musterstrasse 12]
+        plz:
+          type: string
+          pattern: '^[0-9]{5}$'
+          examples: ['10115']
+        ort:
+          type: string
+          examples: [Berlin]
+      required:
+        - name
+        - strasse
+        - plz
+        - ort
+
+    ExtrahierteRechnungsposition:
+      type: object
+      description: |
+        Einzelne Rechnungsposition, wie sie auf der Rechnung steht. Felder,
+        die das jeweilige Rechnungslayout nicht ausweist, sind null — sie
+        werden nicht aus anderen Feldern hergeleitet. Bewusst **kein**
+        `leistungsbereich`: die Zuordnung einer Gebuehrennummer zum
+        Leistungsbereich ist Produktwissen
+        (`wissen/daten/goz-zuordnung.yaml`), nicht Bestandteil der Rechnung.
+      properties:
+        datum:
+          type: [string, 'null']
+          format: date
+          description: |
+            Behandlungsdatum der Position; null, wenn das Layout keine
+            Datumsangabe je Position fuehrt
+          examples: ['2026-01-08']
+        ziffer:
+          type: [string, 'null']
+          pattern: '^[0-9]{4}$'
+          description: |
+            Vierstellige Gebuehrennummer, wie sie auf der Rechnung steht —
+            in der Regel eine GOZ-Nummer, bei GOAe-Leistungen die
+            GOAe-Ziffer. Bewusst nicht als GOZ-Nummer typisiert: nicht
+            jedes Rechnungslayout kennzeichnet GOAe-Leistungen, die
+            Unterscheidung ist dann nicht Teil der Rechnung. Null bei
+            Material-, Labor- und Verlangensleistungen ohne Ziffer.
+          examples: ['9010']
+        leistung:
+          type: string
+          description: Leistungstext der Position
+          examples: [Eingehende Untersuchung]
+        zahn:
+          type: [string, 'null']
+          description: Zahnangabe im FDI-Schema, sofern ausgewiesen
+          examples: ['36']
+        anzahl:
+          type: [integer, 'null']
+          minimum: 1
+          description: Anzahl bzw. Menge, sofern ausgewiesen
+          examples: [2]
+        faktor:
+          type: [string, 'null']
+          description: |
+            Steigerungssatz als Dezimalstring, sofern die Rechnung ihn
+            ausweist ('2.3' fuer 2,3fach). Null heisst: nicht angegeben —
+            nicht: Faktor 1,0. Manche Absender weisen den Faktor bewusst
+            nicht aus; dann darf hier kein Wert erfunden werden.
+          examples: ['2.3']
+        betrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Betrag dieser Position in EUR
+      required:
+        - leistung
+        - betrag

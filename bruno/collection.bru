@@ -1,0 +1,127 @@
+auth {
+  mode: apikey
+}
+
+auth:apikey {
+  key: x-api-key
+  value: {{apiKey}}
+  placement: header
+}
+
+docs {
+  # atra.dent Kernsystem
+
+  Requests für jede Operation aus `oas/openapi.yaml` und `oas/rechenkern.yaml`,
+  ausgeführt gegen die Spring-Boot-Umsetzungen in `kernsystem/` und
+  `rechenkern/`. Ein Ordner je Ressource, plus ein Ordner mit Errors, der die
+  Fehlerschemata beider APIs zeigt.
+
+  ## Voraussetzung
+
+  ```bash
+  cd kernsystem
+  mvn spring-boot:run
+  ```
+
+  Aus dem Modulverzeichnis starten, nicht aus dem Repository-Wurzelverzeichnis —
+  `kernsystem.data-directory` ist relativ zum Arbeitsverzeichnis. Die
+  Anwendung lauscht auf `http://localhost:8080/api/v1`, genau das, was die
+  Umgebung `Lokal` als `{{basisUrl}}` mitbringt.
+
+  Ordner 01, 02 und 07 (Tarife, Beitragsberechnung, Erstattungsberechnung)
+  laufen seit dem Umzug der Tarifstammdaten gegen den Rechenkern, nicht mehr
+  gegen das Kernsystem:
+
+  ```bash
+  cd rechenkern
+  mvn spring-boot:run
+  ```
+
+  Er lauscht auf `http://localhost:8086/api/v1`, in der Umgebung `Lokal` als
+  `{{rechenkernUrl}}`.
+
+  ## Authentifizierung
+
+  Nur das Kernsystem verlangt einen Schlüssel. Jede Anfrage dorthin braucht
+  den Header `x-api-key`; er ist einmal auf Sammlungsebene als API-Key-Auth
+  hinterlegt und steht in der Umgebung als `{{apiKey}}` (Vorgabe
+  `atra-lab-2026`, im Kernsystem konfigurierbar über
+  `kernsystem.api-key`). Die Kernsystem-Requests erben ihn über
+  `auth: inherit`; die beiden 401-Fälle in Ordner 05 setzen sich bewusst
+  darüber hinweg.
+
+  Der Rechenkern verlangt keinen Schlüssel (`security: []` in
+  `oas/rechenkern.yaml`) — die Requests in Ordner 01, 02 und 07 setzen deshalb
+  `auth: none` und tragen keinen `x-api-key`.
+
+  ## Ordner
+
+  - **01 - Tarife** — unveränderliche Referenzdaten aus dem Rechenkern, der
+    harmloseste Einstieg.
+  - **02 - Beitragsberechnung** — zustandslos, schreibt nichts, läuft gegen
+    den Rechenkern. Zeigt zugleich die Altersbänder aus `beitraege.json`.
+  - **03 - Kunden** — Lesen und Suchen auf dem Seed-Bestand; Anlegen, PUT,
+    PATCH und Stilllegen auf einem Kunden, den die Sammlung selbst anlegt.
+  - **04 - Schadensfaelle** — Historie aus dem Seed-Bestand, dazu ein selbst
+    eingereichter Fall, der die Statuskette
+    `eingereicht → in_pruefung → genehmigt → ausgezahlt` durchläuft.
+  - **05 - Errors** — 401, 404, 400 und 405, gegen beide Dienste. Die
+    Kernsystem-Fehler antworten einheitlich mit `application/problem+json`
+    und dem `Fehler`-Schema; eine der beiden 400er gegen den Rechenkern zeigt
+    stattdessen dessen eingebaute Spring-Boot-Fehlerseite als JSON, siehe die
+    Erläuterung im jeweiligen Request.
+  - **06 - MCP** — dieselben Kernsystem-Ressourcen über Streamable HTTP statt
+    REST, JSON-RPC 2.0 über `{{mcpUrl}}`, mit der Mandantengrenze am Beispiel.
+  - **07 - Erstattungsberechnung** — zustandslos, läuft gegen den Rechenkern.
+    Ein glatter Fall mit sechs Rechenschritten, ein 400 bei einem
+    Behandlungsdatum vor Versicherungsbeginn.
+  - **08 - Schadensfallagent** — der einzige Ordner, der einen **Agenten**
+    anspricht und keinen Dienst: Rechnung einreichen, Agent Card lesen,
+    `fall_pruefen` über A2A (JSON-RPC auf `{{schadensfallagentUrl}}`),
+    Ergebnis am Fall lesen. Er braucht mehr als das Kernsystem — Wissensdienst,
+    Rechenkern und den Gemini-Schlüssel — und er dauert Minuten, weil hinter
+    der Fertigkeit eine Modell-Schleife liegt. Dazu den **Arztservice**, und
+    der ist der einzige Dienst der Sammlung, der nicht aus diesem Repository
+    kommt: Er läuft fremd gehostet unter `{{arztserviceUrl}}`. Details in der
+    Ordner-Doku.
+
+  ## Zustand
+
+  Ordner 03, 04 und 08 schreiben in `kernsystem/data/kunden.json` und
+  `kernsystem/data/schadensfaelle.json` — es gibt keine Datenbank, jeder Lauf
+  ist im `git diff` sichtbar. Ausgangszustand wiederherstellen:
+
+  ```bash
+  cd kernsystem && git checkout data
+  ```
+
+  Die Requests sind so geschnitten, dass sie die Seed-Daten nur lesen. Alles
+  Schreibende hängt an den Laufzeitvariablen `{{neueKundenId}}` und
+  `{{neueSchadensfallId}}`, die "Kunde anlegen" bzw. "Schadensfall einreichen"
+  per `bru.setVar()` setzen. Deshalb ordnerweise von oben nach unten ausführen —
+  oder gleich alles auf einmal:
+
+  ```bash
+  npx @usebruno/cli run --env Lokal
+  ```
+
+  Ordner 08 fällt dabei aus dem Rahmen, und zwar wegen einer Wartezeit, die
+  Bruno nicht kennt. Der Aufruf des Schadensfallagenten kommt nach 30
+  Sekunden zurück — so lange und nicht länger wartet das A2A-SDK auf das Ende
+  eines Zuges (`a2a.blocking.agent.timeout.seconds`), der Task steht dann auf
+  `working`. Die Prüfung selbst dauert gemessen rund 35 Sekunden und schreibt
+  ihr Ergebnis danach weiter in die Akte. Der letzte Request des Ordners liest
+  genau dieses Ergebnis und braucht deshalb eine Pause davor:
+
+  ```bash
+  npx @usebruno/cli run --env Lokal --delay 60000
+  ```
+
+  `--delay` ist die einzige Stellschraube dafür; einen Timeout-Schalter hat
+  das CLI nicht. Sie wartet vor **jedem** Request, verlängert also auch die
+  ersten sieben Ordner — wer die nicht bremsen will, fährt sie ohne `--delay`
+  und Ordner 08 für sich. Alles Weitere steht in dessen Ordner-Doku.
+
+  Jeder Request bringt `assert`-Blöcke mit, die Sammlung taugt damit als
+  Rauchtest der laufenden Anwendung.
+}

@@ -1,0 +1,11 @@
+spring:
+  main:
+    web-application-type: none
+  ai:
+    mcp:
+      server:
+        enabled: false
+
+wissen:
+  index:
+    laden: false

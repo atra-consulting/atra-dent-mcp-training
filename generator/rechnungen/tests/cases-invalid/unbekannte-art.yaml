@@ -1,0 +1,8 @@
+rechnungsnummer: "2026-T105"
+rechnungsdatum: 2026-03-14
+praxis: beisser
+patient:
+  name: Testpatient Unbekannte Art
+  anschrift: { strasse: Teststraße 1, plz: "34117", ort: Kassel }
+positionen:
+  - { datum: 2026-03-01, art: sonstiges, leistung: Irgendwas, anzahl: 1, betrag: 10.72 }

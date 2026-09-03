@@ -1,0 +1,20 @@
+
+rechnungsnummer: "2026-04892"
+rechnungsdatum: 2026-06-19
+praxis: beisser
+patient:
+  name: Anna Müller
+  anschrift:
+    strasse: Musterstrasse 12
+    plz: "10115"
+    ort: Berlin
+  geburtsdatum: 1990-04-12
+positionen:
+  - { datum: 2026-06-05, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-06-05, art: goz, nummer: "0090", zahn: "36", leistung: Intraorale Infiltrationsanästhesie, anzahl: 1, faktor: 2.3, betrag: 6.22 }
+  - { datum: 2026-06-05, art: goz, nummer: "2040", zahn: "36", leistung: Anlegen von Spanngummi, anzahl: 1, faktor: 2.3, betrag: 11.19 }
+  - { datum: 2026-06-05, art: goz, nummer: "2080", zahn: "36", leistung: "Präparieren einer Kavität und Restauration mit Kompositmaterialien in Adhäsivtechnik, dreiflächig", anzahl: 1, faktor: 2.3, betrag: 118.30 }
+  - { datum: 2026-06-05, art: material, nummer: null, zahn: "36", leistung: Füllungsmaterial, anzahl: 1, faktor: null, betrag: 16.40 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

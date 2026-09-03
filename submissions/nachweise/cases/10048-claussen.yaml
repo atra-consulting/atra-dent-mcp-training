@@ -1,0 +1,91 @@
+
+kundenId: 10048
+praxis: weissraum
+
+patient:
+  name: Wiebke Claussen
+  geburtsdatum: 1988-12-13
+  anschrift:
+    strasse: Elbdeich 16
+    plz: "22083"
+    ort: Hamburg
+
+befund:
+  datum: 2024-06-15
+  aktenzeichen: "W-2024-0217"
+  zahnstatus:
+    - { zahn: "14", zustand: fuellung }
+  diagnosen:
+    - Dentoalveolaere Enge im Ober- und Unterkiefer, kieferorthopaedische Behandlung mit festsitzender Apparatur empfohlen.
+  parodontalbefund: Gingiva reizfrei, keine Auffaelligkeiten.
+  empfehlung: >-
+    Kieferorthopaedische Behandlung mit festsitzender Apparatur empfohlen,
+    Behandlungsbeginn nach Vertragsschluss vorgesehen.
+  hkp_beiliegend: true
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: true
+
+historie:
+  eintraege:
+    - { datum: 2024-06-15, zahn: null, behandlung: Erstberatung und Erstellung Behandlungsplan Kieferorthopaedie }
+    - { datum: 2024-11-18, zahn: null, behandlung: Eingliederung festsitzender Apparatur, Ober- und Unterkiefer }
+    - { datum: 2025-05-06, zahn: null, behandlung: KFO-Kontrolltermin, Bogenwechsel }
+    - { datum: 2026-02-19, zahn: null, behandlung: KFO-Kontrolltermin, weitere Anpassung }
+    - { datum: 2026-07-09, zahn: null, behandlung: KFO-Kontrolltermin, Apparatur weiterhin in situ }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-06
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: ja
+      freitext: Die Zahnspange, die laeuft noch.
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: ja
+      freitext: Kieferorthopaedische Behandlung, seit November 2024.
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: null
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Anfang Juli, KFO-Kontrolle.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: ja
+      freitext: null
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: NICHT_BEURTEILBAR
+      begruendung: >-
+        Der einzige Befund datiert vom Beratungstermin vor Behandlungsbeginn
+        und beschreibt nur die urspruengliche Empfehlung. Ob nach ueber zwei
+        Jahren laufender Behandlung noch oder wieder etwas angeraten ist —
+        etwa eine Retention nach Entbaenderung —, sagt dieses Dokument nicht.
+    ERSATZBEDARF:
+      wert: 0
+      begruendung: >-
+        Kein Zahn fehlt, weder im veralteten Befund noch laut Fragebogen —
+        hier decken sich beide Quellen trotz des Altersunterschieds.
+    SANIERUNGSGRAD:
+      wert: 10
+      begruendung: >-
+        Eine alte Fuellung, sonst keine restaurative Versorgung dokumentiert
+        oder in der Historie erwaehnt; die kieferorthopaedische Behandlung
+        selbst zaehlt hier nicht zum Sanierungsgrad.
+    PARODONTALBEFUND:
+      wert: NICHT_BEURTEILBAR
+      begruendung: >-
+        Die Gingiva war 2024 reizfrei, doch nach ueber zwei Jahren fester
+        Apparatur ohne aktuelle Kontrolle ist der heutige parodontale
+        Zustand nicht bekannt — feste Zahnspangen erschweren die
+        Mundhygiene erheblich.
+  erwartete_zone: kein_score
+  hinweis: >-
+    Der Befund ist keine Momentaufnahme von heute, sondern von vor der
+    Behandlung. Wer aus ihm auf den aktuellen Zustand schliesst, liest ein
+    alte Aktenkopie als aktuellen Bericht.

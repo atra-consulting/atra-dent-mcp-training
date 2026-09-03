@@ -1,0 +1,7 @@
+rechnungsdatum: 2026-03-14
+praxis: beisser
+patient:
+  name: Testpatient Ohne Nummer
+  anschrift: { strasse: Teststraße 1, plz: "34117", ort: Kassel }
+positionen:
+  - { datum: 2026-03-01, art: goz, nummer: "0010", leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>consulting.atra</groupId>
+    <artifactId>agenten</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <artifactId>agenten-schadensfall</artifactId>
+  <name>atra.dent Agenten - Schadensfallagent</name>
+  <description>
+    Prueft eingereichte Schadensfaelle: holt sie im Takt aus dem Kernsystem,
+    claimt sie, prueft sie mit MCP-Tools und einer Fachauskunft des
+    Arztservice und schreibt eine Bewertung zurueck. A2A-Server forDirectory den
+    Skill fall_pruefen, MCP-Client gegenueber Kernsystem, Rechenkern und
+    Wissensdienst - und als einziger Agent des Labs zusaetzlich
+    REST-Client des Kernsystems.
+  </description>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>consulting.atra</groupId>
+      <artifactId>agenten-a2a</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>consulting.atra</groupId>
+      <artifactId>agenten-model</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>consulting.atra</groupId>
+      <artifactId>agenten-mcp</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-restclient</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-webmvc-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>consulting.atra</groupId>
+      <artifactId>agenten-mcp</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>consulting.atra.agenten.schadensfall.SchadensfallApplication</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

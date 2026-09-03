@@ -1,0 +1,148 @@
+
+name: atra.dent Orchestrator
+
+description: |
+  Nimmt das Anliegen einer Kundin entgegen und beantwortet es als ein
+  einzelner Ansprechpartner.
+
+  ## Worauf sich eine Antwort stützt
+
+  Die Auskunft dieses Dienstes kann sich auf die Auskunft eines Fachagenten
+  stützen. Welche das sind, hängt von der Konfiguration ab und kann wachsen,
+  ohne dass sich an diesem Kontrakt etwas ändert; im Regelbetrieb ist es die
+  Beratung zur Zahnzusatzversicherung atra.dent - Tarife, Wechsel,
+  Leistungen, Beiträge, Wartezeiten und Fragen zum eigenen Vertrag.
+
+  Ob eine Antwort auf einer solchen Auskunft beruht, muss niemand raten: Es
+  steht im data-Part des Artefakts. Das Feld `source` nennt den Agenten, und
+  die Felder daneben sind dessen eigene, unverändert wie er sie geliefert hat
+  - beim Beratungsagenten `belege` mit den Fundstellen im Bedingungswerk,
+  dazu `hinweise` und `tools`. Fehlt `source`, hat keine Fachauskunft die
+  Antwort getragen. Das ist kein Fehler: Eine Absage und eine Frage nach dem
+  Dienst selbst kommen ohne aus.
+
+  **Wer eine Fundstelle weiterverarbeitet, nimmt sie aus `belege` und nicht
+  aus dem Fließtext.** Der text-Part ist für Menschen geschrieben und keine
+  zitierfähige Fassung; er kann eine Fundstelle knapper oder anders benennen,
+  als sie im Bedingungswerk steht.
+
+  ## Was er nicht beantwortet
+
+  Fachfragen reicht der Orchestrator weiter, das ist der Regelfall und keine
+  Ausnahme - auch eine Frage zu Rechnungen oder Erstattung geht zunächst an
+  den zuständigen Fachagenten; ob er sie annimmt, entscheidet der selbst und
+  mit Blick in die Akte. Die **Prüfung** eines eingereichten Falls gehört
+  dazu: Sie geht an den Schadensfallagenten, seit er als zweiter Subagent
+  hängt. Was wirklich niemand bearbeitet - eine Auszahlung und der Vollzug
+  eines Antrags -, dafür gibt es keinen Agenten in diesem Aufbau: Darauf
+  kommt eine ehrliche Absage mit Verweis auf die Sachbearbeitung unter
+  service@atra.dent. Ebenso wenig gibt es hier eine zahnmedizinische
+  Auskunft.
+
+  ## Wer fragt
+
+  Die Kundennummer ist **kein Teil der Nachricht**. Sie kommt aus dem
+  Header `x-kunden-id` und wird auf demselben Weg weitergereicht - als
+  Header, nie als Nachrichtenteil und nie als `metadata`. Ein Wert im Text
+  wird nicht ausgewertet.
+
+  Ohne diesen Header antwortet der Dienst trotzdem, aber als sei niemand
+  angemeldet: Es gibt dann keinen Vertrag und keine Schadenhistorie, und
+  beantwortet wird nur, was ohne Kundenbezug gilt. Das ist der Fall
+  "Interessent ohne Akte" und kein Fehler.
+
+  ## Zwischenstände
+
+  Eine Auskunft kann Sekunden brauchen. Solange sie läuft, kommen
+  `TaskStatusUpdate`-Events; sie sagen, woran gerade gearbeitet wird, und
+  tragen nie ein Stück der Antwort.
+
+  ## Wenn eine Fachauskunft ausfällt
+
+  Dann kommt eine verständliche Absage, kein Stacktrace und kein fremdes
+  Fehlerobjekt. Was der Dienst nicht in Erfahrung bringen konnte, ersetzt er
+  ausdrücklich **nicht** durch eine eigene Auskunft.
+
+  ## Konventionen
+
+  Fachliche Bezeichner sind durchgängig deutsch, Umlaute als ae/oe/ue -
+  dieselbe Konvention wie im Kernsystem und im Produktmodell. Die Felder
+  dieser Karte folgen dagegen A2A 0.3 (SDK-Generation) und bleiben englisch.
+  Die Antwort an die Kundin ist gewöhnliches Deutsch mit Umlauten.
+
+  ## Alles erfunden
+
+  atra.dent ist eine erfundene Zahnzusatzversicherung. Tarife, Leistungen,
+  Grenzen, Beiträge und Kunden sind frei erfunden; es besteht kein Bezug zu
+  realen Produkten oder Anbietern.
+
+version: "1.0.0"
+
+provider:
+  organization: atra.consulting
+  url: https://atra.consulting/
+
+capabilities:
+  streaming: true
+  pushNotifications: false
+
+defaultInputModes:
+  - text/plain
+defaultOutputModes:
+  - text/plain
+  - application/json
+
+skills:
+
+  - id: anliegen-bearbeiten
+    name: Anliegen bearbeiten
+    description: |
+      Nimmt ein Anliegen in natürlicher Sprache entgegen und beantwortet es,
+      gestützt auf die Auskunft eines Fachagenten, sofern einer dafür
+      zuständig ist.
+
+      EINGABE: das Anliegen als text-Part, Media Type text/plain, höchstens
+      2000 Zeichen. Die Kundennummer gehört NICHT hinein - siehe "Wer fragt"
+      in der Beschreibung des Agenten.
+
+      AUSGABE: ein Artefakt namens `orchestrierung` mit einem text-Part und,
+      sofern eine Fachauskunft die Antwort getragen hat, einem data-Part. Der
+      text-Part trägt die Antwort in Prosa, wie sie einer Kundin vorgelegt
+      werden kann. Der data-Part trägt `source` mit dem Namen des Agenten und
+      daneben dessen eigene Felder unverändert - beim Beratungsagenten
+      `belege`, `hinweise` und `tools`. Fehlt der data-Part, beruht
+      die Antwort auf keiner Fachauskunft; siehe "Worauf sich eine Antwort
+      stützt".
+
+      RÜCKFRAGE: Fehlt eine Angabe, steht der Task auf `input-required` und
+      die Frage in `status.message`. Die Antwort darauf wird als neue
+      Nachricht in derselben `contextId` geschickt; der Vorgang wird dort
+      fortgesetzt, wo er offen ist, ohne dass der Aufrufer eine taskId
+      mitgeben müsste. Eine Rückfrage trägt kein Artefakt und damit auch
+      keinen Beleg.
+
+      ABSAGE: Kann oder soll er ein Anliegen nicht bearbeiten - etwa weil es
+      eine Auszahlung verlangt oder keine Fachauskunft zu erreichen war -,
+      bleibt der Task `completed`: Die Begründung steht als gewöhnliche
+      Antwort im Artefakt `orchestrierung`, mit dem Verweis auf die
+      Sachbearbeitung. Eine Absage ist eine Antwort und kein Fehler.
+
+      `rejected` trägt stattdessen eine Zurückweisung: Der Dienst nimmt die
+      eingehende Nachricht gar nicht erst an, weil sie mit mehr als 2000
+      Zeichen die zugesagte Höchstlänge überschreitet - eine Regelverletzung
+      des Aufrufers, keine fachliche Absage.
+
+      `failed` trägt eine Störung dieses Dienstes selbst: eine leere
+      Modellantwort bei der Einordnung, oder eine unerwartete Ausnahme
+      während der Bearbeitung. Beides ist selten und ebenfalls kein Ausdruck
+      einer fachlichen Absage.
+    tags:
+      - orchestrierung
+      - routing
+      - weiterleitung
+      - zahnzusatzversicherung
+    examples:
+      - Lohnt sich für mich ein Wechsel in einen besseren Tarif?
+      - Was zahlt mein Tarif bei Implantaten?
+      - Ich möchte eine Rechnung einreichen.
+      - Was können Sie eigentlich?

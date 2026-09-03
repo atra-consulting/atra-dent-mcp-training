@@ -1,0 +1,591 @@
+openapi: 3.1.0
+
+info:
+  title: Rechenkern Zahnzusatzversicherung API
+  version: 1.0.0
+  description: |
+    API-first-Spezifikation fuer den Rechenkern der fiktiven
+    Zahnzusatzversicherung atra.dent.
+
+    Der Dienst liefert die Tarifstammdaten, berechnet den Beitrag und die
+    Erstattung.
+
+    ## Was der Dienst nicht ist
+
+    Der Rechenkern ist zustandslos, kennt keinen Kunden und haelt keinen
+    Zustand: Bei gleicher Eingabe liefert er immer dieselbe Antwort, und er
+    speichert nichts. Er fuehrt keine Kundenstammdaten, keine
+    Vertragshistorie und keine Schadensfaelle — das bleibt beim Kernsystem
+    (`oas/openapi.yaml`). Er ruft auch keinen anderen Dienst auf.
+
+    Die Tarifregeln (Quoten, Sublimits, Selbstbehalt, Zahnstaffel,
+    Jahreshoechstgrenze) stammen aus dem Produktmodell
+    `wissen/daten/tarife.yaml`. Wartezeiten und individuelle
+    Leistungsausschluesse gehen in diese Rechnung nicht ein -- das sind
+    ausdrueckliche Nicht-Ziele. Die Beitraege berechnet der Dienst aus
+    seinen eigenen Altersbaendern.
+
+    ## Konventionen
+
+    Fachliche Bezeichner sind durchgaengig deutsch. Umlaute werden als
+    ae/oe/ue geschrieben, damit Pfade, Feldnamen und generierter Code ohne
+    Sonderzeichen auskommen — dieselbe Konvention wie im Kernsystem, im
+    Wissensdienst und im Produktmodell (`wissen/daten/tarife.yaml`).
+
+    ## Kein Zugriffsschutz in Version 1
+
+    Der Dienst haelt keine personenbezogenen Daten — er kennt keinen Kunden
+    und keine Kundennummer. Ein API-Schluessel wuerde im Lab nur Reibung
+    erzeugen, ohne etwas zu schuetzen. Sobald der Dienst ueber das Lab
+    hinaus erreichbar wird, gehoert das Schema des Kernsystems
+    (`ApiSchluessel`) uebernommen.
+  license:
+    name: MIT
+    identifier: MIT
+
+servers:
+  - url: http://localhost:8086/api/v1
+    description: Lokaler Entwicklungsserver
+
+security: []
+
+tags:
+  - name: Tarife
+    description: Waehlbare Zahntarife (Referenzdaten)
+  - name: Beitragsberechnung
+    description: Zustandslose Beitragsermittlung
+  - name: Erstattungsberechnung
+    description: Zustandslose Erstattungsermittlung
+
+paths:
+
+  /tarife:
+    get:
+      operationId: listTarife
+      summary: Verfuegbare Tarife auflisten
+      tags: [Tarife]
+      responses:
+        '200':
+          description: Liste der Tarife
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tarif'
+
+  /tarife/{tarifId}:
+    parameters:
+      - name: tarifId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/TarifId'
+    get:
+      operationId: readTarif
+      summary: Tarif anhand des Schluessels lesen
+      tags: [Tarife]
+      responses:
+        '200':
+          description: Tarif gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarif'
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+
+  /beitragsberechnung:
+    post:
+      operationId: calculateBeitrag
+      summary: Beitrag berechnen
+      description: |
+        Zustandslose Berechnung. Aus Geburtsdatum, Tarif und gewuenschtem
+        Versicherungsbeginn wird der Monatsbeitrag ermittelt. Es werden keine
+        Daten gespeichert.
+
+        Das Geburtsdatum dient zugleich der Pruefung des Eintrittsalters. Die
+        zulaessigen Altersgrenzen je Tarif stehen im Produktmodell
+        (`wissen/daten/tarife.yaml`), nicht in dieser API.
+      tags: [Beitragsberechnung]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeitragsberechnungRequest'
+      responses:
+        '200':
+          description: Berechneter Beitrag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeitragsberechnungResult'
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+
+  /erstattungsberechnung:
+    post:
+      operationId: calculateErstattung
+      summary: Erstattung berechnen
+      description: |
+        Zustandslose Berechnung der Erstattung zu einer Zahnarztrechnung. Es
+        werden keine Daten gespeichert; der Schadensfall wird dadurch weder
+        angelegt noch veraendert.
+
+        **Diese Operation existiert, damit niemand sie nachbaut.** Die
+        Erstattung folgt einer festen Schrittfolge, in der jeder Schritt auf
+        dem Ergebnis des vorigen aufsetzt — die Reihenfolge ist
+        ergebnisrelevant, und ein aufrufender Agent, der sie selbst rechnet,
+        rechnet sie frueher oder spaeter anders. Die Schrittfolge ist deshalb
+        Teil des Kontrakts und wird im Ergebnis einzeln ausgewiesen, damit eine
+        Auskunft belegt werden kann, statt plausibel zu klingen.
+
+        Der Aufrufer liefert den bisherigen Verbrauch mit, weil die Operation
+        zustandslos ist. Woher er stammt, sagt `GET /kunden/{id}/schadensfaelle`
+        im Kernsystem (`oas/openapi.yaml`). Die Regeln je Tarif — Quoten,
+        Sublimits, Selbstbehalt, Staffel — stehen im Produktmodell
+        (`wissen/daten/tarife.yaml`), nicht in dieser API.
+      tags: [Erstattungsberechnung]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErstattungsberechnungRequest'
+      responses:
+        '200':
+          description: Berechnete Erstattung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErstattungsberechnungResult'
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+
+components:
+
+  responses:
+    FehlerhafteAnfrage:
+      description: Die Anfrage war fehlerhaft oder hat die Validierung nicht bestanden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Fehler'
+    NichtGefunden:
+      description: Die angeforderte Ressource existiert nicht
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Fehler'
+
+  schemas:
+
+    Fehler:
+      type: object
+      description: |
+        Fehlerobjekt nach RFC 7807 (Problem Details for HTTP APIs).
+
+        Die Feldnamen sind durch den Standard und den Medientyp
+        `application/problem+json` festgelegt und bleiben deshalb als
+        einzige Stelle dieser Spezifikation englisch. Eine Uebersetzung
+        wuerde den Kontrakt des Medientyps brechen.
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI, die den Fehlertyp identifiziert
+          examples: ["https://atra.example/fehler/validierung"]
+        title:
+          type: string
+          description: Kurze, menschenlesbare Zusammenfassung des Fehlers
+          examples: [Validierung fehlgeschlagen]
+        status:
+          type: integer
+          description: HTTP-Statuscode
+          examples: [400]
+        detail:
+          type: string
+          description: Erlaeuterung zu genau diesem Vorfall
+          examples: ["Feld 'geburtsdatum' muss in der Vergangenheit liegen"]
+        instance:
+          type: string
+          format: uri
+          description: URI, die diesen konkreten Vorfall identifiziert
+      required:
+        - title
+        - status
+
+    Geldbetrag:
+      type: string
+      format: number
+      minimum: 0
+      multipleOf: 0.01
+      description: |
+        Geldbetrag in EUR mit genau zwei Nachkommastellen, als Dezimalstring
+        uebertragen.
+
+        Bewusst **kein** `type: number`: binaeres Gleitkomma kann
+        0,01-Schritte nicht exakt darstellen, das Produktmodell verlangt aber
+        kaufmaennische Rundung auf zwei Nachkommastellen (`wissen/daten/tarife.yaml`,
+        Konvention `rundung`). Ein Dezimalstring haelt den Wert auf dem Draht
+        exakt.
+
+        Mapping fuer openapi-generator (Java): `type: string` mit
+        `format: number` wird als Decimal erkannt und zu `BigDecimal`.
+        Die Generator-Option `bigDecimalAsString` haelt das Wire-Format
+        beim Dezimalstring.
+
+        Negative Betraege sind ausgeschlossen: Rechnungs- und
+        Erstattungsbetraege sind laut Produktmodell nie kleiner als 0.
+      examples: ['450.00']
+
+    TarifId:
+      type: string
+      description: |
+        Technischer Tarifschluessel. Stabiler Identifikator, unabhaengig vom
+        Anzeigenamen. Entspricht den `schluessel`-Werten im Produktmodell
+        (`wissen/daten/tarife.yaml`).
+      enum:
+        - ATRA_DENT_S
+        - ATRA_DENT_B
+        - ATRA_DENT_X
+        - ATRA_DENT_X_SB
+      examples: [ATRA_DENT_B]
+
+    Tarif:
+      type: object
+      description: |
+        Waehlbarer Zahntarif. Die Leistungsdetails (Quoten, Wartezeiten,
+        Sublimits, Staffeln, Ausschluesse) stammen aus dem angebundenen
+        Produktmodell und sind nicht Teil dieser API.
+      properties:
+        id:
+          $ref: '#/components/schemas/TarifId'
+        name:
+          type: string
+          description: Anzeigename; kann sich aendern, ohne die id zu beruehren
+          examples: [atra.dent.balance]
+        basisbeitragMonatlich:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: |
+            Monatsbeitrag des juengsten Eintrittsalters (18-30), also ein
+            Ab-Preis. Nicht zu verwechseln mit dem persoenlichen
+            Monatsbeitrag aus der Beitragsberechnung
+            (`BeitragsberechnungResult.monatsbeitrag`), der vom
+            tatsaechlichen Eintrittsalter abhaengt und i.d.R. hoeher liegt.
+      required:
+        - id
+        - name
+        - basisbeitragMonatlich
+
+    BeitragsberechnungRequest:
+      type: object
+      properties:
+        geburtsdatum:
+          type: string
+          format: date
+          examples: ['1990-04-12']
+        tarifId:
+          $ref: '#/components/schemas/TarifId'
+        gewuenschterBeginn:
+          type: string
+          format: date
+          description: Gewuenschter Versicherungsbeginn
+          examples: ['2026-01-01']
+      required:
+        - geburtsdatum
+        - tarifId
+        - gewuenschterBeginn
+
+    BeitragsberechnungResult:
+      type: object
+      description: |
+        Ergebnis der Beitragsberechnung. Zurueckgegeben wird ausschliesslich
+        der ermittelte Monatsbeitrag; alle uebrigen Tarif- und
+        Leistungsdetails stammen aus dem angebundenen Produktmodell.
+      properties:
+        monatsbeitrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Ermittelter Monatsbeitrag in EUR
+      required:
+        - monatsbeitrag
+
+    ErstattungsberechnungRequest:
+      type: object
+      description: |
+        Alles, was die Berechnung braucht. Aus `versicherungsbeginn` und
+        `behandlungsdatum` leitet der Rechenkern das Versicherungsjahr ab —
+        gezaehlt werden 12-Monats-Zeitraeume ab Vertragsbeginn, nicht
+        Kalenderjahre. Diese Ableitung gehoert bewusst hierher und nicht zum
+        Aufrufer.
+      properties:
+        tarifId:
+          $ref: '#/components/schemas/TarifId'
+        versicherungsbeginn:
+          type: string
+          format: date
+          description: Vertragsbeginn, Bezugspunkt fuer Versicherungsjahr und Staffel
+          examples: ['2025-01-01']
+        behandlungsdatum:
+          type: string
+          format: date
+          examples: ['2026-02-15']
+        positionen:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Schadenposition'
+        gkvLeistung:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: |
+            Vorleistung der gesetzlichen Krankenversicherung in EUR. Die Quoten
+            des Produktmodells verstehen sich einschliesslich dieser
+            Vorleistung. Fehlt der Wert, wird mit 0.00 gerechnet.
+          examples: ['600.00']
+        unfallbedingt:
+          type: boolean
+          default: false
+          description: |
+            Behandlung infolge eines Unfalls nach Versicherungsbeginn. Dann
+            entfaellt die Zahnstaffel; die Jahreshoechstgrenze bleibt.
+        verbrauch:
+          $ref: '#/components/schemas/Vorverbrauch'
+      required:
+        - tarifId
+        - versicherungsbeginn
+        - behandlungsdatum
+        - positionen
+
+    Vorverbrauch:
+      type: object
+      description: |
+        Bereits ausgezahlte Betraege. Angerechnet wird stets das, was
+        tatsaechlich ausgezahlt wurde, nicht das rechnerisch Ermittelte —
+        Betraege, die an Selbstbehalt oder Sublimit gescheitert sind, zaehlen
+        nicht mit. Fehlt das Objekt, wird ueberall mit 0.00 gerechnet, was dem
+        ersten Fall eines Vertrags entspricht.
+      properties:
+        staffel:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Seit Versicherungsbeginn ausgezahlt, kumuliert ueber alle Jahre
+        selbstbehalt:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: |
+            Im laufenden Versicherungsjahr bereits verbrauchter Selbstbehalt.
+            Der Selbstbehalt faellt einmal je Versicherungsjahr an, ueber alle
+            Leistungsbereiche zusammen und nicht je Bereich.
+        jahr:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Im laufenden Versicherungsjahr ausgezahlt, fuer die Jahreshoechstgrenze
+        leistungsbereiche:
+          type: object
+          description: |
+            Im laufenden Versicherungsjahr je Leistungsbereich ausgezahlt, fuer
+            die Sublimits mit `limitProJahr`. Schluessel ist der
+            Leistungsbereich. Fuer den seit Versicherungsbeginn kumulierten
+            Verbrauch (noetig fuer `limitGesamt`) siehe
+            `leistungsbereicheSeitVersicherungsbeginn`.
+          additionalProperties:
+            $ref: '#/components/schemas/Geldbetrag'
+          examples:
+            - PZR: '80.00'
+              ZE: '1200.00'
+        leistungsbereicheSeitVersicherungsbeginn:
+          type: object
+          description: |
+            Seit Versicherungsbeginn je Leistungsbereich ausgezahlt, kumuliert
+            ueber die gesamte Vertragslaufzeit, fuer Sublimits mit
+            `limitGesamt` (z. B. KFO: 1200 bei atra.dent.balance, 2000 bei
+            atra.dent.brillant). Schluessel ist der Leistungsbereich. Nicht zu
+            verwechseln mit `leistungsbereiche`, das nur das laufende
+            Versicherungsjahr traegt.
+          additionalProperties:
+            $ref: '#/components/schemas/Geldbetrag'
+          examples:
+            - KFO: '650.00'
+
+    Rechenschritt:
+      type: string
+      description: |
+        Die Schritte der Erstattungsermittlung in verbindlicher Reihenfolge.
+        Jeder Schritt setzt auf dem Zwischenergebnis des vorigen auf.
+
+        | Schritt | Bedeutung |
+        |---|---|
+        | `ERSTATTUNGSFAEHIG` | Rechnungsbetrag abzueglich nicht versicherter Positionen |
+        | `QUOTE` | Quote des jeweiligen Leistungsbereichs anwenden |
+        | `SUBLIMIT` | auf das Limit des Leistungsbereichs begrenzen, sofern eines besteht |
+        | `GKV` | Vorleistung der gesetzlichen Krankenversicherung abziehen |
+        | `SELBSTBEHALT` | noch nicht verbrauchten Jahresselbstbehalt abziehen |
+        | `STAFFEL` | auf verbleibenden Staffelbetrag begrenzen; erst nach Ablauf der Zahnstaffel stattdessen auf die Jahreshoechstgrenze begrenzen, sofern eine besteht |
+
+        Die Jahreshoechstgrenze greift also nicht neben der Zahnstaffel,
+        sondern erst danach: Das Bedingungswerk
+        (`wissen/dokumente/lib/bausteine.typ`, Abschnitt Zahnstaffel) macht
+        sie ausdruecklich von deren Ablauf abhaengig.
+
+        Kein Zwischenergebnis ist kleiner als 0. Gerundet wird kaufmaennisch
+        auf zwei Nachkommastellen, einmal am Ende.
+      enum: [ERSTATTUNGSFAEHIG, QUOTE, SUBLIMIT, GKV, SELBSTBEHALT, STAFFEL]
+
+    RechenschrittResult:
+      type: object
+      description: Zwischenergebnis nach einem Schritt, zum Beleg der Auskunft
+      properties:
+        schritt:
+          $ref: '#/components/schemas/Rechenschritt'
+        betrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Stand nach diesem Schritt in EUR
+        erlaeuterung:
+          type: string
+          description: Was in diesem Schritt gegriffen hat, in einem Satz
+          examples: [Quote 85 Prozent auf 2000.00 EUR erstattungsfaehigen Betrag]
+      required:
+        - schritt
+        - betrag
+
+    ErstattungsberechnungResult:
+      type: object
+      description: |
+        Ergebnis der Erstattungsermittlung. `erstattungsbetrag` ist der Wert,
+        der in `SchadensfallAendern` im Kernsystem (`oas/openapi.yaml`)
+        gehoert; `schritte` belegt, wie er zustande kommt.
+      properties:
+        erstattungsbetrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Auszuzahlende Erstattung in EUR
+        rechnungsbetrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Summe aller uebergebenen Positionsbetraege in EUR
+        eigenanteil:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: |
+            Was beim Versicherten bleibt: Rechnungsbetrag abzueglich
+            GKV-Vorleistung und Erstattung.
+        versicherungsjahr:
+          type: integer
+          minimum: 1
+          description: Aus Vertragsbeginn und Behandlungsdatum abgeleitetes Versicherungsjahr
+          examples: [2]
+        schritte:
+          type: array
+          description: |
+            Die Schritte in der Reihenfolge, in der sie gerechnet wurden.
+            Ein Schritt ohne Wirkung wird trotzdem ausgewiesen, damit die
+            Kette vollstaendig ist.
+          items:
+            $ref: '#/components/schemas/RechenschrittResult'
+      required:
+        - erstattungsbetrag
+        - rechnungsbetrag
+        - eigenanteil
+        - versicherungsjahr
+        - schritte
+
+    Leistungsbereich:
+      type: string
+      description: |
+        Leistungsbereich, dem ein Schadensfall zugeordnet wird. Die Zuordnung
+        entscheidet, welche Quote und welches Sublimit greifen, und ist
+        deshalb Teil des API-Kontrakts und kein Freitext.
+
+        | Schluessel | Bereich |
+        |---|---|
+        | `ZE` | Zahnersatz (auch die Krone auf einem Implantat) |
+        | `IMP` | Implantate (Wurzel, Aufbau, Knochenaufbau — nicht die Krone) |
+        | `INL` | Inlays und Onlays (laborgefertigt) |
+        | `ZERH` | Zahnerhalt (direkte Fuellungen, Wurzelbehandlung, Stiftaufbau) |
+        | `PAR` | Parodontosebehandlung |
+        | `PZR` | Prophylaxe und professionelle Zahnreinigung |
+        | `KFO` | Kieferorthopaedie |
+        | `FUN` | Funktionsanalyse und Aufbissschiene |
+        | `NAR` | Narkose und Sedierung (nicht die oertliche Betaeubung) |
+        | `AKUT` | Schmerzausschaltung und Akutbehandlung |
+
+        Massgeblich sind die Beschreibungen und Abgrenzungen im Produktmodell
+        (`wissen/daten/tarife.yaml`).
+      enum: [ZE, IMP, INL, ZERH, PAR, PZR, KFO, FUN, NAR, AKUT]
+      examples: [ZE]
+
+    GozNummer:
+      type: string
+      pattern: '^[0-9]{4}$'
+      description: |
+        Vierstellige Gebuehrennummer aus dem Gebuehrenverzeichnis der
+        Gebuehrenordnung fuer Zahnaerzte (GOZ 2012).
+
+        Die Abschnitte des Verzeichnisses:
+
+        | Nummernkreis | Abschnitt |
+        |---|---|
+        | 0010–0120 | A — Allgemeine zahnaerztliche Leistungen |
+        | 0500–0530 | L — Zuschlaege zu chirurgischen Leistungen |
+        | 1000–1040 | B — Prophylaktische Leistungen |
+        | 2000–2440 | C — Konservierende Leistungen |
+        | 3000–3310 | D — Chirurgische Leistungen |
+        | 4000–4150 | E — Mundschleimhaut- und Parodontalerkrankungen |
+        | 5000–5340 | F — Prothetische Leistungen |
+        | 6000–6260 | G — Kieferorthopaedische Leistungen |
+        | 7000–7100 | H — Eingliederung von Aufbissbehelfen und Schienen |
+        | 8000–8100 | J — Funktionsanalyse und Funktionstherapie |
+        | 9000–9170 | K — Implantologische Leistungen |
+
+        Der Abschnitt legt den Leistungsbereich **nicht** fest. Massgeblich
+        ist die Zuordnung nach den Beschreibungen im Produktmodell — eine
+        Krone auf einem Implantat zaehlt dort zu `ZE`, obwohl die Insertion
+        des Implantats aus Abschnitt K stammt. Deshalb traegt jede Position
+        ihren `leistungsbereich` ausdruecklich.
+      examples: ['9010']
+
+    Schadenposition:
+      type: object
+      description: |
+        Einzelne Rechnungsposition. Das Produktmodell rechnet positionsweise:
+        Rechenschritt 1 zieht nicht versicherte Positionen ab, Rechenschritt 2
+        wendet die Quote des jeweiligen Leistungsbereichs an. Eine Rechnung
+        kann deshalb mehrere Leistungsbereiche mit unterschiedlichen Quoten
+        umfassen.
+
+        Gerechnet wird ausschliesslich ueber `leistungsbereich` und `betrag`.
+        `goz` geht in keinen Rechenschritt ein und ist deshalb optional — eine
+        Material-, Labor- oder Verlangensposition ohne Gebuehrenziffer laeuft
+        durch dieselbe Kette wie jede andere, sobald ihr Leistungsbereich
+        feststeht.
+      properties:
+        goz:
+          oneOf:
+            - $ref: '#/components/schemas/GozNummer'
+            - type: 'null'
+          description: |
+            Gebuehrennummer der abgerechneten Leistung, wie sie auf der
+            Rechnung steht — in der Regel GOZ, bei GOAe-Leistungen die
+            GOAe-Ziffer. `null` bei Material-, Labor- und
+            Verlangensleistungen, die keine Ziffer tragen. Reine
+            Dokumentation der Position: dieser Dienst prueft sie nicht und
+            leitet aus ihr keinen Leistungsbereich ab.
+        leistungsbereich:
+          $ref: '#/components/schemas/Leistungsbereich'
+        betrag:
+          allOf:
+            - $ref: '#/components/schemas/Geldbetrag'
+          description: Betrag dieser Position in EUR
+        beschreibung:
+          type: string
+          description: Leistungstext der Position, wie er auf der Rechnung steht
+          examples: [Implantatinsertion Regio 36, Faktor 2.3]
+      required:
+        - leistungsbereich
+        - betrag
+        - beschreibung

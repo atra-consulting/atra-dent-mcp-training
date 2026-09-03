@@ -1,0 +1,21 @@
+
+rechnungsnummer: "2026-05144"
+rechnungsdatum: 2026-07-13
+praxis: beisser
+patient:
+  name: Clara Weiss
+  anschrift:
+    strasse: Domgasse 3
+    plz: "50667"
+    ort: Koeln
+  geburtsdatum: 1978-07-22
+positionen:
+  - { datum: 2026-06-08, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-06-08, art: goz, nummer: "9000", zahn: "36", leistung: Implantatbezogene Analyse und Vermessung, anzahl: 1, faktor: 2.3, betrag: 66.30 }
+  - { datum: 2026-06-08, art: goz, nummer: "0090", zahn: "36", leistung: Intraorale Infiltrationsanästhesie, anzahl: 2, faktor: 2.3, betrag: 12.44 }
+  - { datum: 2026-06-08, art: goz, nummer: "9010", zahn: "36", leistung: Implantatinsertion, anzahl: 1, faktor: 2.8, betrag: 410.20 }
+  - { datum: 2026-07-06, art: goz, nummer: "0090", zahn: "36", leistung: Intraorale Infiltrationsanästhesie, anzahl: 1, faktor: 2.3, betrag: 6.22 }
+  - { datum: 2026-07-06, art: goz, nummer: "9010", zahn: "36", leistung: Implantatinsertion, anzahl: 1, faktor: 2.3, betrag: 336.90 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

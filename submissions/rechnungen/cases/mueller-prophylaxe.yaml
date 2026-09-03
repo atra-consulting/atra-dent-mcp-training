@@ -1,0 +1,20 @@
+
+rechnungsnummer: "WR-2026-0512"
+rechnungsdatum: 2026-05-28
+praxis: weissraum
+patient:
+  name: Anna Müller
+  anschrift:
+    strasse: Musterstrasse 12
+    plz: "10115"
+    ort: Berlin
+  geburtsdatum: 1990-04-12
+positionen:
+  - { datum: 2026-04-14, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-04-14, art: goz, nummer: "1000", zahn: null, leistung: Erstellung eines Mundhygienestatus, anzahl: 1, faktor: 2.3, betrag: 18.63 }
+  - { datum: 2026-04-14, art: goz, nummer: "1040", zahn: null, leistung: Professionelle Zahnreinigung, anzahl: 28, faktor: 2.3, betrag: 116.85 }
+  - { datum: 2026-05-12, art: goz, nummer: "1020", zahn: null, leistung: Lokale Fluoridierung, anzahl: 1, faktor: 2.3, betrag: 9.31 }
+  - { datum: 2026-05-12, art: goz, nummer: "1010", zahn: null, leistung: Kontrolle des Übungserfolges, anzahl: 1, faktor: 2.3, betrag: 9.31 }
+zahlung:
+  frist_tage: 21
+  bereits_gezahlt: 0

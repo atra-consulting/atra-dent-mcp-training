@@ -1,0 +1,183 @@
+meta {
+  name: fall_pruefen per A2A
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{schadensfallagentUrl}}/
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+  x-kunden-id: {{kundenId}}
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": "bruno-fall-pruefen",
+    "method": "message/send",
+    "params": {
+      "message": {
+        "kind": "message",
+        "messageId": "bruno-fall-pruefen-1",
+        "role": "user",
+        "parts": [
+          { "kind": "text", "text": "Bitte pruefe Fall {{agentFallId}}." },
+          { "kind": "data", "data": { "schadensfallId": {{agentFallId}} } }
+        ]
+      }
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.error: isUndefined
+  res.body.result.kind: eq task
+}
+
+tests {
+  // Drei Ausgaenge, und alle drei sind richtig. Welcher eintritt, entscheiden
+  // zwei Dinge, die nichts miteinander zu tun haben: der Poller (siehe die
+  // Ordner-Doku) und die 30-Sekunden-Grenze des SDK (siehe unten).
+  // Dieselbe Liste wie STAENDE in sachbearbeiter-ui/src/lib/server/
+  // schadensfallagent.ts, und aus demselben Grund ohne "eingereicht": Der
+  // Stand kommt in diesen Absagen nie als aktueller vor -- das Claiming
+  // scheitert ja gerade daran, dass er es nicht mehr ist --, wohl aber als
+  // Wort in "geprueft werden nur eingereichte Faelle". Stuende er hier mit
+  // drin, bliebe dieser Test gruen, waehrend ein abgedrifteter Wortlaut in der
+  // UI still auf "abgelehnt" zurueckfiele: Bruno saehe das Wort, die UI nicht.
+  const STAENDE = ["in_pruefung", "geprueft_freigabe", "geprueft_eskalation",
+                   "genehmigt", "abgelehnt", "ausgezahlt"];
+
+  test("der Task laeuft, ist fertig oder wurde abgelehnt -- nie failed", function() {
+    expect(res.getBody().result.status.state)
+      .to.be.oneOf(["working", "completed", "rejected"]);
+  });
+
+  test("working heisst: uebernommen, Pruefung laeuft weiter", function() {
+    const ergebnis = res.getBody().result;
+    if (ergebnis.status.state !== "working") {
+      return;
+    }
+    // Der Abbruch beendet die Antwort, nicht den Lauf. Die taskId bleibt
+    // gueltig -- ueber tasks/get ist das Ergebnis spaeter abrufbar.
+    expect(ergebnis.id).to.be.a("string");
+    expect(ergebnis.artifacts ?? []).to.have.lengthOf(0);
+  });
+
+  test("completed liefert das Artefakt bewertung mit Empfehlung und Protokoll", function() {
+    const ergebnis = res.getBody().result;
+    if (ergebnis.status.state !== "completed") {
+      return;
+    }
+    const artefakt = ergebnis.artifacts[0];
+    expect(artefakt.name).to.equal("bewertung");
+    expect(artefakt.parts[0].text).to.contain(String(bru.getVar("agentFallId")));
+    const daten = artefakt.parts.find((teil) => teil.kind === "data").data;
+    expect(daten.bewertung.empfehlung).to.be.oneOf(["freigabe", "eskalation"]);
+    expect(daten.bewertung.agent).to.equal("schadensfall");
+    expect(daten.protokoll).to.have.length.above(0);
+  });
+
+  test("rejected nennt den Stand, auf dem der Fall jetzt wirklich steht", function() {
+    const ergebnis = res.getBody().result;
+    if (ergebnis.status.state !== "rejected") {
+      return;
+    }
+    // Der Agent vergibt fuer fuenf verschiedene Lagen denselben Zustand
+    // rejected; welche es war, sagt allein sein Satz -- und die
+    // Sachbearbeiter-UI klassifiziert genau daran (schadensfallagent.ts,
+    // benannterStand): "in_pruefung" heisst "laeuft schon, zuruecklehnen",
+    // jeder andere Stand "inzwischen weiterbearbeitet". Ein Wortlaut, der
+    // keinen dieser Staende nennt, waere dort still falsch -- die UI rahmte
+    // dann eine laufende Pruefung als Absage. Deshalb haelt dieser Test die
+    // Zusicherung von der anderen Seite fest.
+    const text = ergebnis.status.message.parts[0].text;
+    expect(STAENDE.some((stand) => text.includes(stand)), text).to.be.true;
+  });
+}
+
+docs {
+  Die Fertigkeit `fall_pruefen` von Hand aufgerufen — derselbe Weg, den
+  „Erneut prüfen" in der Sachbearbeiter-UI nimmt
+  (`sachbearbeiter-ui/src/lib/server/schadensfallagent.ts`).
+
+  ## Drei Dinge, ohne die es nicht geht
+
+  **`"kind": "message"` im Nachrichtenobjekt.** Das A2A-SDK deserialisiert
+  über dieses Diskriminatorfeld; fehlt es, antwortet der Dienst mit einem
+  JSON-RPC-Fehler, bevor der Agent überhaupt etwas sieht. Es ist die
+  häufigste Stolperstelle beim Nachbauen von Hand — im SDK setzt es der
+  Client von selbst.
+
+  **Der Header `x-kunden-id`** mit der Kundennummer **des Falls** (hier
+  10001, aus `{{kundenId}}`). Request 03 zeigt, was ohne ihn passiert.
+
+  **Die Fallnummer.** Sie steht hier doppelt: als data-Part
+  `{"schadensfallId": …}` und im Text. Der data-Part hat Vorrang, weil er
+  eindeutig ist; im Text gilt nur eine freistehende **fünfstellige** Zahl —
+  „Prüfe den Fall vom 8.1.2026, Nummer 50071" trifft damit den richtigen
+  Fall und nicht die 8. Ohne beides fragt der Agent zurück
+  (`input-required`), statt zu raten.
+
+  ## Er antwortet nach 30 Sekunden — fertig oder nicht
+
+  `message/send` blockiert, aber nicht unbegrenzt. Der
+  `DefaultRequestHandler` wartet mit `blocking=true` auf das Ende des Zuges,
+  und dahinter steht eine Grenze aus dem SDK selbst
+  (`META-INF/a2a-defaults.properties`):
+
+  ```properties
+  a2a.blocking.agent.timeout.seconds=30
+  ```
+
+  Läuft die Prüfung länger, antwortet der Dienst **trotzdem** — mit HTTP 200,
+  ohne Fehler, und mit dem Task im Zustand `working`. Das ist keine Absage:
+  Der Fall ist übernommen, die Prüfung läuft weiter und schreibt ihr Ergebnis
+  in die Akte. Nur die Antwort ist zu Ende, nicht der Lauf.
+
+  Eine Prüfung der Kompositfüllung aus Request 01 dauert gemessen rund 35
+  Sekunden — also regelmäßig ein paar Sekunden zu lang. Der übliche Ausgang
+  dieses Requests ist deshalb `working`, und Request 05 holt das Ergebnis.
+  Wer stattdessen den ganzen Verlauf sehen will, nimmt `message/stream`; die
+  Agent Card sagt Streaming zu, und der Stream bleibt bis zum Schluss offen.
+
+  ## Drei richtige Ausgänge
+
+  **`working`** — die 30 Sekunden waren um, siehe oben. Die `taskId` in der
+  Antwort bleibt gültig; über `tasks/get` ist das Ergebnis später abrufbar,
+  und am Fall steht es ohnehin.
+
+  **`completed`** — die Prüfung war schneller. Dann liegt das Artefakt
+  `bewertung` bei: Zusammenfassung in Prosa im text-Part, Empfehlung,
+  Erstattungsvorschlag, Eskalationsgründe, Positionen, Arztauskunft und
+  Protokoll im data-Part.
+
+  **`rejected`** — der Agent hat einen Konkurrenten, und der ist er selbst.
+  Läuft der Poller, hat er sich den Fall längst geholt; das Claiming ist ein
+  Compare-and-Set, und dieser Aufruf verliert es:
+
+  ```
+  Fall 50080 ließ sich nicht übernehmen; er steht jetzt auf in_pruefung.
+  Ein anderer war schneller.
+  ```
+
+  Auch das ist **kein Ausfall** — der Fall wird geprüft, nur eben vom Takt.
+  Die Absage nennt dafür den Stand, auf dem der Fall jetzt wirklich steht;
+  sie liest den Fall dafür eigens neu, weil der Stand von vorhin gerade der
+  falsche wäre. Mit `SCHADENSFALL_POLL_ENABLED=false` gibt es diesen
+  Konkurrenten nicht.
+
+  **Der Statusname in der Absage ist eine Kopplung, keine Verzierung.** Der
+  Agent vergibt für fünf verschiedene Lagen denselben Zustand `rejected`;
+  welche es war, steht allein in seinem Satz. Die Sachbearbeiter-UI
+  klassifiziert daran, ob sie „die Prüfung läuft" oder „der Fall wurde
+  weiterbearbeitet" anzeigt — deshalb prüft dieser Request den Satz und
+  nicht nur den Zustand.
+}

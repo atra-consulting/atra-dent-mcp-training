@@ -1,0 +1,109 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "request": "attach",
+      "name": "Debug: Kernsystem",
+      "hostName": "127.0.0.1",
+      "port": 9080,
+      "projectName": "kernsystem"
+    },
+    {
+      "type": "java",
+      "request": "attach",
+      "name": "Debug: Wissensdienst",
+      "hostName": "127.0.0.1",
+      "port": 9082,
+      "projectName": "wissensdienst"
+    },
+    {
+      "type": "java",
+      "request": "attach",
+      "name": "Debug: Orchestrator",
+      "hostName": "127.0.0.1",
+      "port": 9084,
+      "projectName": "agenten-orchestrator"
+    },
+    {
+      "type": "java",
+      "request": "attach",
+      "name": "Debug: Beratungsagent",
+      "hostName": "127.0.0.1",
+      "port": 9085,
+      "projectName": "agenten-beratung"
+    },
+    {
+      "type": "java",
+      "request": "attach",
+      "name": "Debug: Rechenkern",
+      "hostName": "127.0.0.1",
+      "port": 9086,
+      "projectName": "rechenkern"
+    },
+    {
+      "type": "java",
+      "request": "attach",
+      "name": "Debug: Schadensfallagent",
+      "hostName": "127.0.0.1",
+      "port": 9087,
+      "projectName": "agenten-schadensfall"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Debug: Sachbearbeiter-UI",
+      "address": "127.0.0.1",
+      "port": 6173,
+      "restart": true,
+      "localRoot": "${workspaceFolder}/sachbearbeiter-ui",
+      "remoteRoot": "${workspaceFolder}/sachbearbeiter-ui",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Debug: Kunden-Chat",
+      "address": "127.0.0.1",
+      "port": 6174,
+      "restart": true,
+      "localRoot": "${workspaceFolder}/kunden-chat",
+      "remoteRoot": "${workspaceFolder}/kunden-chat",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug: Alle",
+      "configurations": [
+        "Debug: Rechenkern",
+        "Debug: Kernsystem",
+        "Debug: Wissensdienst",
+        "Debug: Beratungsagent",
+        "Debug: Schadensfallagent",
+        "Debug: Orchestrator",
+        "Debug: Sachbearbeiter-UI",
+        "Debug: Kunden-Chat"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "Debug: Agenten",
+      "configurations": [
+        "Debug: Beratungsagent",
+        "Debug: Schadensfallagent",
+        "Debug: Orchestrator"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "Debug: Dienste",
+      "configurations": [
+        "Debug: Rechenkern",
+        "Debug: Kernsystem",
+        "Debug: Wissensdienst"
+      ],
+      "stopAll": true
+    }
+  ]
+}

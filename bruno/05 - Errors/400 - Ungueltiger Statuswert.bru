@@ -1,0 +1,37 @@
+meta {
+  name: 400 - Ungueltiger Statuswert
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{basisUrl}}/kunden?status=stillgelegt
+  body: none
+  auth: inherit
+}
+
+params:query {
+  status: stillgelegt
+}
+
+assert {
+  res.status: eq 400
+  res.body.status: eq 400
+  res.body.title: eq Validierung fehlgeschlagen
+  res.body.detail: contains status
+}
+
+docs {
+  `stillgelegt` klingt plausibel, steht aber nicht im Enum — `Kundenstatus`
+  kennt nur `aktiv` und `inaktiv`.
+
+  Ein unbekannter Enum-Wert an einem Query-Parameter ist **400**, nicht 200
+  mit leerer Liste. Das ist die richtige Antwort: der Aufrufer hat sich nicht
+  an den Kontrakt gehalten, und eine leere Liste würde ihm vorgaukeln, es gebe
+  keine Treffer.
+
+  `detail` nennt den Parameter beim Namen statt eine Java-Typmeldung
+  durchzureichen. Dasselbe gilt für `?status=` an `/schadensfaelle`
+  (`eingereicht`, `in_pruefung`, `geprueft_freigabe`, `geprueft_eskalation`,
+  `genehmigt`, `abgelehnt`, `ausgezahlt`) und für den Tarifschlüssel im Pfad.
+}

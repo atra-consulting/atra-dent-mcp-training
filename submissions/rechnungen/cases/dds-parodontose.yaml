@@ -1,0 +1,26 @@
+
+rechnungsnummer: "DDS-2026-118447"
+rechnungsdatum: 2026-05-20
+praxis: dds
+patient:
+  name: Miriam Haseloff
+  anschrift:
+    strasse: Bahnhofstraße 51
+    plz: "86150"
+    ort: Augsburg
+  geburtsdatum: 1968-03-25
+vorgang:
+  kundennummer: "4471902"
+  vorgangsnummer: "2026/PA/8831"
+positionen:
+  - { datum: 2026-03-04, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-03-04, art: goz, nummer: "4000", zahn: null, leistung: Erstellen eines Parodontalstatus, anzahl: 1, faktor: 2.3, betrag: 27.95 }
+  - { datum: 2026-03-18, art: goz, nummer: "4050", zahn: "14", leistung: Entfernung harter und weicher Zahnbeläge, anzahl: 8, faktor: 2.3, betrag: 59.63 }
+  - { datum: 2026-03-18, art: goz, nummer: "4060", zahn: null, leistung: Kontrolle nach Belagentfernung, anzahl: 1, faktor: 2.3, betrag: 13.98 }
+  - { datum: 2026-04-15, art: goz, nummer: "4070", zahn: "16", leistung: "Parodontalchirurgische Therapie, geschlossenes Vorgehen", anzahl: 6, faktor: 2.3, betrag: 96.44 }
+  - { datum: 2026-04-15, art: goz, nummer: "0090", zahn: "16", leistung: Intraorale Infiltrationsanästhesie, anzahl: 4, faktor: 2.3, betrag: 24.88 }
+  - { datum: 2026-05-06, art: goz, nummer: "4090", zahn: "11", leistung: Lappenoperation mit offener Kürettage, anzahl: 1, faktor: 2.3, betrag: 20.97 }
+  - { datum: 2026-04-15, art: material, nummer: null, zahn: null, leistung: Antibakterielles Gel, anzahl: 2, faktor: null, betrag: 38.60 }
+zahlung:
+  frist_tage: 14
+  bereits_gezahlt: 0

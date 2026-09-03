@@ -1,0 +1,35 @@
+meta {
+  name: 400 - Unbekannter Tarifschluessel
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{rechenkernUrl}}/tarife/ATRA_DENT_GOLD
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+  res.body.status: eq 400
+  res.body.error: eq Bad Request
+}
+
+docs {
+  Der Fall, der die 400/404-Grenze am schärfsten zeigt: `ATRA_DENT_GOLD` steht
+  im Pfad und sieht damit nach einer fehlenden Ressource aus — die Antwort ist
+  trotzdem **400**.
+
+  Grund: `tarifId` ist im Kontrakt ein Enum mit vier Werten, kein Freitext.
+  `ATRA_DENT_GOLD` ist also kein Tarif, den es gerade nicht gibt, sondern ein
+  Wert, den es nie geben kann. Die Anfrage scheitert schon an der Konvertierung
+  des Pfadsegments, bevor überhaupt jemand nachschlägt — noch vor dem
+  Rechenkern-eigenen Fehlerformat aus `ErrorHandling`. Die Antwort ist deshalb
+  Spring Boots eingebaute Fehlerseite als JSON (`error`, kein `title`), nicht
+  das `application/problem+json` der übrigen Fehler dieser Sammlung.
+
+  Zum Vergleich: `/kunden/99999` im Kernsystem ist 404. `kundenId` ist dort
+  eine offene Zahl — 99999 wäre eine gültige Kundennummer, es gibt sie nur
+  nicht.
+}

@@ -1,0 +1,38 @@
+
+stand: GOÄ 1996, Anlage zur Gebührenordnung für Ärzte
+quelle: gesetze-im-internet.de, Anlage zur GOÄ, geltende Fassung
+abgerufen: 2026-08-19
+
+hinweis: >
+  Auszug für Schulungszwecke, und ein sehr knapper. Abgebildet sind
+  ausschließlich die Nummern, die auf den achtzehn Rechnungen unter
+  submissions/rechnungen/cases/ tatsächlich vorkommen - zwei von rund
+  dreitausend Nummern der GOÄ. Die Datei ist damit kein Verzeichnis, sondern
+  eine Handvoll Einträge, die das Lab braucht. Jede andere GOÄ-Nummer bleibt
+  UNBEKANNT, und das ist richtig so: eine erfundene Zuordnung wäre
+  schlechter als eine Rückfrage. Die Übereinstimmung prüft
+  generator/reconcile.sh, kein Test im Wissensdienst.
+  Insbesondere nicht enthalten sind Vollnarkose und Sedierung. Sie wären der
+  Leistungsbereich NAR, den ausschließlich die GOÄ abrechnet - auf den
+  Testrechnungen steht keine solche Position, und ohne Fundstelle wird hier
+  keine Nummer eingetragen.
+
+positionen:
+
+
+  - nummer: "5000"
+    bezeichnung: Röntgenaufnahme eines Zahnes (Zahnfilm)
+    leistungsbereich: null
+    hinweis: >
+      Einzelzahnaufnahme zur Diagnostik oder Kontrolle. Sie folgt dem Bereich
+      der Behandlung an diesem Zahn - eine Kontrollaufnahme nach einer
+      Wurzelfüllung gehört zu ZERH, eine Kontrollaufnahme nach der
+      Implantatinsertion zu IMP.
+
+  - nummer: "5370"
+    bezeichnung: Panoramaschichtaufnahme der Kiefer (Orthopantomogramm)
+    leistungsbereich: null
+    hinweis: >
+      Übersichtsaufnahme beider Kiefer, in aller Regel am Anfang einer
+      Planung. Sie zeigt keinen einzelnen Zahn und folgt deshalb der
+      geplanten Behandlung, nicht einem Zahn.

@@ -1,0 +1,185 @@
+
+stand: 2026-01-01
+
+leistungsbereiche:
+
+  - schluessel: ZE
+    name: Zahnersatz
+    beschreibung: >
+      Ersatz zerstörter oder fehlender Zähne durch Kronen, Brücken,
+      Teil- und Vollprothesen sowie Teleskope. Auch die Krone auf einem
+      Implantat gehört hierher, nicht zu IMP.
+
+  - schluessel: IMP
+    name: Implantate
+    beschreibung: >
+      Künstliche Zahnwurzel samt Aufbau und der dafür nötige
+      Knochenaufbau. Die aufgesetzte Krone zählt zu ZE.
+
+  - schluessel: INL
+    name: Inlays und Onlays
+    beschreibung: >
+      Im Labor gefertigte Einlagefüllungen aus Keramik, Gold oder
+      Kunststoff. Direkt im Mund gelegte Füllungen zählen zu ZERH.
+
+  - schluessel: ZERH
+    name: Zahnerhalt
+    beschreibung: >
+      Maßnahmen zum Erhalt des eigenen Zahns: direkt gelegte Füllungen,
+      Wurzelbehandlung, Stiftaufbau.
+
+  - schluessel: PAR
+    name: Parodontosebehandlung
+    beschreibung: >
+      Behandlung des Zahnhalteapparats einschließlich Vorbehandlung und
+      Nachsorge.
+
+  - schluessel: PZR
+    name: Prophylaxe und professionelle Zahnreinigung
+    beschreibung: >
+      Vorbeugende Maßnahmen ohne Krankheitsbefund: professionelle
+      Zahnreinigung, Fluoridierung, Fissurenversiegelung.
+
+  - schluessel: KFO
+    name: Kieferorthopädie
+    beschreibung: >
+      Regulierung von Zahn- und Kieferfehlstellungen bei Erwachsenen,
+      feste und herausnehmbare Apparaturen.
+
+  - schluessel: FUN
+    name: Funktionsanalyse und Aufbissschiene
+    beschreibung: >
+      Diagnostik und Schienentherapie bei Kiefergelenksbeschwerden und
+      Zähneknirschen.
+
+  - schluessel: NAR
+    name: Narkose und Sedierung
+    beschreibung: >
+      Vollnarkose oder Sedierung während einer zahnärztlichen
+      Behandlung. Die örtliche Betäubung ist Teil der jeweiligen
+      Behandlung und kein eigener Leistungsbereich.
+
+  - schluessel: AKUT
+    name: Schmerzausschaltung und Akutbehandlung
+    beschreibung: >
+      Unaufschiebbare Behandlung bei akuten Schmerzen, einschließlich
+      Notdienst außerhalb der Sprechzeiten.
+
+tarife:
+
+  - schluessel: ATRA_DENT_S
+    anzeigename: atra.dent.smart
+    positionierung: Einstieg, Grundabsicherung Zahnersatz und Zahnerhalt
+    eintrittsalter: { von: 18, bis: 70 }
+    selbstbehalt: 0
+    jahreshoechstgrenze: null
+    wartezeit_monate: 8
+    staffel: STAFFEL_S
+    leistungen:
+      ZE:   { versichert: true,  quote: 60 }
+      IMP:  { versichert: false }
+      INL:  { versichert: true,  quote: 60 }
+      ZERH: { versichert: true,  quote: 70 }
+      PAR:  { versichert: false }
+      PZR:  { versichert: true,  quote: 100, limit_pro_jahr: 80, faelle_pro_jahr: 1 }
+      KFO:  { versichert: false }
+      FUN:  { versichert: false }
+      NAR:  { versichert: false }
+      AKUT: { versichert: true,  quote: 70 }
+
+  - schluessel: ATRA_DENT_B
+    anzeigename: atra.dent.balance
+    positionierung: Mittelklasse, breiter Leistungsumfang
+    eintrittsalter: { von: 18, bis: 70 }
+    selbstbehalt: 100
+    jahreshoechstgrenze: null
+    wartezeit_monate: 3
+    staffel: STAFFEL_B
+    leistungen:
+      ZE:   { versichert: true,  quote: 85 }
+      IMP:  { versichert: true,  quote: 85, max_faelle: 4, zeitraum_jahre: 5 }
+      INL:  { versichert: true,  quote: 85 }
+      ZERH: { versichert: true,  quote: 90 }
+      PAR:  { versichert: true,  quote: 80 }
+      PZR:  { versichert: true,  quote: 100, limit_pro_jahr: 150, faelle_pro_jahr: 2 }
+      KFO:  { versichert: true,  quote: 60, limit_gesamt: 1200, wartezeit_monate: 8 }
+      FUN:  { versichert: true,  quote: 80, limit_pro_jahr: 300 }
+      NAR:  { versichert: true,  quote: 80, bedingung: medizinischer Indikation }
+      AKUT: { versichert: true,  quote: 90 }
+
+  - schluessel: ATRA_DENT_X
+    anzeigename: atra.dent.brillant
+    positionierung: Vollschutz ohne nennenswerte Eigenbeteiligung
+    eintrittsalter: { von: 18, bis: 65 }
+    selbstbehalt: 0
+    jahreshoechstgrenze: 5000
+    wartezeit_monate: 3
+    wartezeit_entfaellt_bei_vorversicherung: true
+    staffel: STAFFEL_X
+    leistungen:
+      ZE:   { versichert: true,  quote: 100 }
+      IMP:  { versichert: true,  quote: 100, max_faelle: 8, zeitraum_jahre: 5 }
+      INL:  { versichert: true,  quote: 100 }
+      ZERH: { versichert: true,  quote: 100 }
+      PAR:  { versichert: true,  quote: 100 }
+      PZR:  { versichert: true,  quote: 100, limit_pro_jahr: 300, faelle_pro_jahr: null }
+      KFO:  { versichert: true,  quote: 70, limit_gesamt: 2000, wartezeit_monate: 6 }
+      FUN:  { versichert: true,  quote: 100, limit_pro_jahr: 600 }
+      NAR:  { versichert: true,  quote: 100 }
+      AKUT: { versichert: true,  quote: 100 }
+
+  - schluessel: ATRA_DENT_X_SB
+    anzeigename: atra.dent.brillant mit Selbstbehalt
+    positionierung: Vollschutz mit 250 EUR Selbstbehalt
+    eintrittsalter: { von: 18, bis: 65 }
+    selbstbehalt: 250
+    jahreshoechstgrenze: 5000
+    wartezeit_monate: 3
+    wartezeit_entfaellt_bei_vorversicherung: true
+    staffel: STAFFEL_X
+    leistungen_wie: ATRA_DENT_X
+
+staffeln:
+
+  - schluessel: STAFFEL_S
+    dauer_jahre: 4
+    stufen:
+      - { bis_jahr: 1, betrag: 500 }
+      - { bis_jahr: 2, betrag: 1000 }
+      - { bis_jahr: 3, betrag: 1500 }
+      - { bis_jahr: 4, betrag: 2500 }
+      - { bis_jahr: null, betrag: null }
+
+  - schluessel: STAFFEL_B
+    dauer_jahre: 4
+    stufen:
+      - { bis_jahr: 1, betrag: 1000 }
+      - { bis_jahr: 2, betrag: 2000 }
+      - { bis_jahr: 3, betrag: 3000 }
+      - { bis_jahr: 4, betrag: 4500 }
+      - { bis_jahr: null, betrag: null }
+
+  - schluessel: STAFFEL_X
+    dauer_jahre: 3
+    stufen:
+      - { bis_jahr: 1, betrag: 1500 }
+      - { bis_jahr: 2, betrag: 3000 }
+      - { bis_jahr: 3, betrag: 5000 }
+      - { bis_jahr: null, betrag: null }
+
+
+ausschluesse:
+  - schluessel: ANGERATEN
+    text: Vor Vertragsschluss angeratene oder begonnene Behandlungen
+  - schluessel: KOSMETIK
+    text: Rein kosmetische Leistungen wie Bleaching oder Veneers ohne medizinische Indikation
+  - schluessel: NICHT_APPROBIERT
+    text: Behandlungen durch nicht approbierte Behandler
+  - schluessel: FEHLENDE_ZAEHNE
+    text: Bei Vertragsschluss fehlende Zähne
+    ausnahme:
+      tarife: [ATRA_DENT_X, ATRA_DENT_X_SB]
+      text: >
+        Aufwendungen für den Ersatz von bis zu zwei bei Vertragsschluss
+        fehlenden Zähnen, wenn die Behandlung nach Ablauf von zwölf Monaten
+        seit Versicherungsbeginn begonnen wird

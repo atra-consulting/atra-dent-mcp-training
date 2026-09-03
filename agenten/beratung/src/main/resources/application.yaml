@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: agenten-beratung
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY:${GOOGLE_API_KEY:}}
+        chat:
+          model: ${AGENTEN_MODELS_BERATUNG:gemini-3.6-flash}
+
+server:
+  port: ${AGENTEN_BERATUNG_PORT:8085}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+agenten:
+  base-url: ${AGENTEN_BERATUNG_BASE_URL:http://localhost:8085}
+  card: ${AGENTEN_CARD:../cards/beratung.yaml}
+  max-length: 2000
+  mcp:
+    kernsystem:
+      url: ${AGENTEN_MCP_KERNSYSTEM_URL:http://localhost:8080}
+      endpoint: /mcp
+      api-key: ${AGENTEN_MCP_KERNSYSTEM_KEY:atra-lab-2026}
+    rechenkern:
+      url: ${AGENTEN_MCP_RECHENKERN_URL:http://localhost:8086}
+      endpoint: /mcp
+    wissen:
+      url: ${AGENTEN_MCP_WISSEN_URL:http://localhost:8082}
+      endpoint: /mcp
+    timeout: 30s
+
+logging:
+  level:
+    consulting.atra.agenten: INFO

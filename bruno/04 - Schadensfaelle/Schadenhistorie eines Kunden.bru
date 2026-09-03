@@ -1,0 +1,49 @@
+meta {
+  name: Schadenhistorie eines Kunden
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{basisUrl}}/kunden/{{kundenId}}/schadensfaelle
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body.length: gte 4
+  res.body[0].kundenId: eq 10001
+}
+
+tests {
+  test("die Liste enthaelt nur Faelle dieses Kunden", function() {
+    res.getBody().forEach(function(fall) {
+      expect(fall.kundenId, String(fall.id)).to.equal(10001);
+    });
+  });
+
+  test("die Seed-Faelle dieser Kundin stehen darin", function() {
+    const nummern = res.getBody().map(function(fall) { return fall.id; });
+    expect(nummern).to.include.members([50001, 50003, 50006, 50010]);
+  });
+}
+
+docs {
+  Anna Muellers Fälle (50001, 50003, 50006, 50010) — bequemer Zugriff auf
+  die Historie eines einzelnen Kunden.
+
+  Die Zusicherung lautet `gte 4` und nicht `eq 4`, aus demselben Grund wie das
+  `gte 5` bei "Kunden auflisten": Ordner 08 reicht für denselben Kunden 10001
+  einen weiteren Fall ein, und der bleibt im Bestand stehen, bis ihn
+  `./start.sh --bestand-zuruecksetzen` wieder entfernt. Geprüft wird deshalb
+  nicht die Länge, sondern was die Liste ausmacht — jeder Eintrag gehört 10001,
+  und die Seed-Fälle dieser Kundin sind darin.
+
+  Inhaltlich dasselbe wie `GET /schadensfaelle?kundenId=10001`, mit einem
+  Unterschied im Fehlerverhalten: dieser Pfad prüft, ob es den Kunden
+  überhaupt gibt, und antwortet sonst mit **404**. Der Filter über die
+  Query-Variante liefert für eine unbekannte Kundennummer dagegen 200 mit
+  leerer Liste — dort ist die Nummer ein Suchkriterium, hier ein Teil des
+  Ressourcenpfads.
+}

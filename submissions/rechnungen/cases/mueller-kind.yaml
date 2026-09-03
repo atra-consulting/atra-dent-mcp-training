@@ -1,0 +1,20 @@
+
+rechnungsnummer: "WR-2026-0631"
+rechnungsdatum: 2026-07-09
+praxis: weissraum
+patient:
+  name: Lena Mueller
+  anschrift:
+    strasse: Musterstrasse 12
+    plz: "10115"
+    ort: Berlin
+  geburtsdatum: 2017-08-30
+positionen:
+  - { datum: 2026-07-02, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-07-02, art: goz, nummer: "1000", zahn: null, leistung: Erstellung eines Mundhygienestatus, anzahl: 1, faktor: 2.3, betrag: 18.63 }
+  - { datum: 2026-07-02, art: goz, nummer: "1040", zahn: null, leistung: Professionelle Zahnreinigung, anzahl: 20, faktor: 2.3, betrag: 83.45 }
+  - { datum: 2026-07-02, art: goz, nummer: "1020", zahn: null, leistung: Lokale Fluoridierung, anzahl: 1, faktor: 2.3, betrag: 9.31 }
+  - { datum: 2026-07-02, art: goz, nummer: "2000", zahn: null, leistung: Versiegelung kariesfreier Zahnfissuren, anzahl: 4, faktor: 2.3, betrag: 43.60 }
+zahlung:
+  frist_tage: 21
+  bereits_gezahlt: 0

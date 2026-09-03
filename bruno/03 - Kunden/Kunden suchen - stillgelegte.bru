@@ -1,0 +1,31 @@
+meta {
+  name: Kunden suchen - stillgelegte
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{basisUrl}}/kunden?status=inaktiv
+  body: none
+  auth: inherit
+}
+
+params:query {
+  status: inaktiv
+}
+
+assert {
+  res.status: eq 200
+  res.body[0].nachname: eq Yilmaz
+  res.body[0].status: eq inaktiv
+}
+
+docs {
+  Die stillgelegten Kunden. Im Ausgangszustand ist das nur Fatima Yilmaz
+  (10005).
+
+  Wer den Ordner komplett durchläuft, findet hier am Ende einen zweiten
+  Treffer: das letzte Request legt den selbst angelegten Kunden still.
+  Deshalb prüft die Zusicherung nur den ersten Eintrag und nicht die Länge der
+  Liste.
+}

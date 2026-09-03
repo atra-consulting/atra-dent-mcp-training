@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: kernsystem
+
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: atra-dent-kernsystem
+        version: 1.0.0
+        type: SYNC
+        protocol: STATELESS
+        stdio: false
+        streamable-http:
+          mcp-endpoint: /mcp
+        capabilities:
+          tool: true
+          resource: false
+          prompt: false
+          completion: false
+        instructions: >
+          Fuehrt die Vertragswelt der fiktiven Zahnzusatzversicherung
+          atra.dent: Stammdaten mit eingebettetem Vertrag und die
+          Schadenhistorie.
+          Die Kundin oder der Kunde kommt aus dem Header x-kunden-id und wird
+          bei jeder einzelnen Anfrage neu ausgewertet; der Server haelt
+          zwischen zwei Anfragen keinen Zustand. Kein Tool nimmt eine
+          Kundennummer entgegen, und es gibt keinen Weg, eine andere Akte zu
+          erreichen -- weder lesend noch schreibend. Tools,
+          deren Name mit "mein" oder "meine" beginnt, arbeiten an genau dieser
+          Akte.
+          Was dieser Server nicht beantwortet: welche Tarife es gibt und was
+          sie kosten (tarife_auflisten, tarif_lesen, beitrag_berechnen im
+          Rechenkern), was ein Tarif inhaltlich leistet und wo das steht
+          (Bedingungswerke, Wissensdienst), ob eine Gebuehrennummer versichert
+          ist (goz_pruefen) und wie hoch eine Erstattung ausfaellt
+          (erstattung_berechnen im Rechenkern). Der tatsaechlich fuer einen
+          Schadensfall ausgezahlte Betrag wird trotzdem von der
+          Sachbearbeitung gesetzt und laesst sich ueber MCP nicht schreiben --
+          erstattung_berechnen liefert nur die Auskunft dazu, im Voraus oder
+          zur Kontrolle.
+          Die eine Ausnahme ist mein_beitrag_berechnen: Das Werkzeug bleibt
+          hier, weil das Geburtsdatum aus der Akte kommt; die Rechnung selbst
+          holt es beim Rechenkern.
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+kernsystem:
+  api-key: atra-lab-2026
+  data-directory: data
+  base-path: /api/v1
+  rechenkern:
+    url: ${KERNSYSTEM_RECHENKERN_URL:http://localhost:8086}
+    timeout: 5s

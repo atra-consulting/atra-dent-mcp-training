@@ -1,0 +1,90 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+	--radius: 0.5rem;
+	--background: #f7f9fc;
+	--foreground: #1c2333;
+	--card: #ffffff;
+	--card-foreground: #1c2333;
+	--popover: #ffffff;
+	--popover-foreground: #1c2333;
+	--primary: #264892;
+	--primary-foreground: #ffffff;
+	--secondary: #a7c6eb;
+	--secondary-foreground: #17284f;
+	--muted: #eaf0f8;
+	--muted-foreground: #5f6b80;
+	--accent: color-mix(in srgb, #a7c6eb 18%, transparent);
+	--accent-foreground: #264892;
+	--destructive: #dc421e;
+	--destructive-foreground: #ffffff;
+	--border: color-mix(in srgb, #264892 14%, transparent);
+	--input: #cfd8e6;
+	--ring: #264892;
+	--akzent: #dc421e;
+	--akzent-hell: #f98752;
+	--navy: #0a1121;
+	--navy-hell: #1d3566;
+}
+
+@theme inline {
+	--font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	--radius-sm: calc(var(--radius) - 4px);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 4px);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--color-akzent: var(--akzent);
+	--color-akzent-hell: var(--akzent-hell);
+	--color-navy: var(--navy);
+	--color-navy-hell: var(--navy-hell);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background font-sans text-foreground;
+	}
+	button:not(:disabled),
+	[role='button']:not(:disabled) {
+		cursor: pointer;
+	}
+}
+
+@layer components {
+	.flaeche-navy {
+		background-image: linear-gradient(160deg, var(--navy) 0%, #16274d 60%, var(--navy-hell) 100%);
+	}
+	.bg-akzent-verlauf {
+		background-image: linear-gradient(135deg, var(--akzent), var(--akzent-hell));
+	}
+	.text-akzent-verlauf {
+		background-image: linear-gradient(135deg, var(--akzent), var(--akzent-hell));
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+}

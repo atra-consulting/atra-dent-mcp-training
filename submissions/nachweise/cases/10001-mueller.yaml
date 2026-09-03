@@ -1,0 +1,89 @@
+
+kundenId: 10001
+praxis: weissraum
+
+patient:
+  name: Anna Mueller
+  geburtsdatum: 1990-04-12
+  anschrift:
+    strasse: Musterstrasse 12
+    plz: "10115"
+    ort: Berlin
+
+befund:
+  datum: 2026-08-04
+  aktenzeichen: null
+  zahnstatus:
+    - { zahn: "16", zustand: inlay }
+    - { zahn: "17", zustand: teilkrone }
+    - { zahn: "24", zustand: krone }
+    - { zahn: "25", zustand: bruecke }
+    - { zahn: "26", zustand: krone }
+    - { zahn: "36", zustand: implantat }
+    - { zahn: "37", zustand: fuellung }
+  diagnosen: []
+  parodontalbefund: null
+  empfehlung: null
+  hkp_beiliegend: false
+
+maengel:
+  seite_fehlt: 2
+  seiten_gesamt: 3
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2024-09-14, zahn: "24", behandlung: Bruecke Regio 24-26 mit Vollkrone 24 }
+    - { datum: 2025-05-20, zahn: null, behandlung: Professionelle Zahnreinigung }
+    - { datum: 2025-11-22, zahn: "16", behandlung: Keramikinlay und Keramikonlay 16/17 }
+    - { datum: 2026-06-18, zahn: "36", behandlung: Implantatinsertion mit Knochenaufbau }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-07
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: null
+      freitext: null
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: nein
+      freitext: Das Implantat ist fertig versorgt.
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: Alles ersetzt.
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Anfang August.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: ja
+      freitext: null
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: NICHT_BEURTEILBAR
+      begruendung: >-
+        Die Therapieempfehlung stand auf der fehlenden Seite 2, und die erste
+        Frage des Fragebogens blieb unbeantwortet. Es gibt keine Quelle
+        dafuer — weder eine bejahende noch eine verneinende.
+    ERSATZBEDARF:
+      wert: 20
+      begruendung: >-
+        Kein Zahn fehlt unversorgt: 25 ist Brueckenglied, 36 implantatgetragen.
+        Der Zahnstatus auf Seite 1 gibt das vollstaendig her.
+    SANIERUNGSGRAD:
+      wert: 60
+      begruendung: >-
+        Sieben versorgte Zaehne, darunter Bruecke, Implantat, Inlay und
+        Teilkrone. Aus dem Schema und der Historie eindeutig ablesbar.
+    PARODONTALBEFUND:
+      wert: NICHT_BEURTEILBAR
+      begruendung: >-
+        Der parodontale Befund stand auf Seite 2. Ein unauffaelliger
+        Zahnstatus sagt nichts ueber den Zahnhalteapparat.
+  erwartete_zone: kein_score
+  hinweis: >-
+    Der lehrreichste der vier: Es waere bequem, aus dem gut versorgten Gebiss
+    auf "nichts angeraten" zu schliessen. Die Unterlagen tragen diesen Schluss
+    nicht.

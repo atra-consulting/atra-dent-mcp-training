@@ -1,0 +1,56 @@
+meta {
+  name: Schadensfall ablehnen
+  type: http
+  seq: 9
+}
+
+patch {
+  url: {{basisUrl}}/schadensfaelle/50009
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": "abgelehnt",
+    "erstattungsbetrag": "0.00",
+    "ablehnungsgrund": "SONSTIGES",
+    "ablehnungshinweis": "Kieferorthopaedische Behandlung ohne medizinische Indikation laut Gutachten"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq abgelehnt
+  res.body.ablehnungsgrund: eq SONSTIGES
+  res.body.ablehnungshinweis: contains Indikation
+}
+
+docs {
+  Der andere Ausgang — anders als bis zur Einführung der Übergangsmatrix
+  nicht mehr auf demselben Fall wie die Requests davor: `genehmigt` und
+  `ausgezahlt` sind jetzt Endpunkte einer Entscheidung, von dort führt kein
+  Übergang mehr zu `abgelehnt` zurück (`StatusTransition` kennt keine Kante
+  `ausgezahlt → abgelehnt`, `ausgezahlt` ist ein Endzustand). Dieser Request
+  läuft deshalb auf dem Seed-Fall 50009 (`in_pruefung`, Kieferorthopädie),
+  von dort ist die Ablehnung direkt erlaubt.
+
+  Eine Ablehnung besteht aus vier Feldern, die zusammengehören: der Status,
+  ein `erstattungsbetrag` von 0.00, der Grund als Enum-Wert und ein Freitext,
+  der ihn auf diesen Fall herunterbricht.
+
+  `ablehnungsgrund` ist bewusst kein Freitext. Die ersten vier Werte —
+  `ANGERATEN`, `KOSMETIK`, `NICHT_APPROBIERT`, `FEHLENDE_ZAEHNE` — sind genau
+  die Ausschluss-Schlüssel aus `docs/tarife.yaml`; `NICHT_VERSICHERT` und
+  `WARTEZEIT` decken die tarifbedingten Fälle ab. Bleibt `SONSTIGES`, und
+  dann gehört in `ablehnungshinweis` etwas Brauchbares.
+
+  Wiederholtes Ausführen ist harmlos: `abgelehnt` noch einmal auf einen schon
+  abgelehnten Fall ist derselbe Status wie zuvor und damit kein Übergang,
+  kein Fehler — nur beim ersten Lauf (Ausgangszustand `in_pruefung`) ist es
+  tatsächlich ein Statuswechsel mit Protokolleintrag.
+}

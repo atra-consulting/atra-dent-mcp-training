@@ -1,0 +1,775 @@
+openapi: 3.1.0
+
+info:
+  title: Wissensdienst Zahnzusatzversicherung API
+  version: 1.0.0
+  description: |
+    API-first-Spezifikation fuer den Wissensdienst der fiktiven
+    Zahnzusatzversicherung atra.dent.
+
+    Der Dienst macht die erzeugten Bedingungswerke maschinell zugaenglich.
+    Er beantwortet zwei Fragen:
+
+    - **Was steht in den Bedingungen?** — semantische Suche ueber die
+      Paragraphen eines Bedingungswerks, mit zitierfaehiger Fundstelle
+    - **Ist diese Leistung im Tarif enthalten?** — Pruefung von
+      GOZ-Gebuehrennummern gegen einen Tarif
+
+    Dazu liefert er die Dokumente selbst aus, als PDF fuer die Anzeige beim
+    Menschen und als HTML fuer die Weiterverarbeitung.
+
+    ## Verhaeltnis zum Kernsystem
+
+    Dieser Dienst ist vom Kernsystem (`oas/openapi.yaml`) und vom Rechenkern
+    (`oas/rechenkern.yaml`) getrennt und kennt weder Kunden noch Vertraege
+    noch Beitraege. Er liest ausschliesslich das Produktmodell und die daraus
+    erzeugten Dokumente. Ein Beratungsagent kombiniert alle drei: das
+    Kernsystem sagt, was ein Kunde hat, der Rechenkern sagt, was ein Tarif
+    kostet, der Wissensdienst sagt, was das bedeutet.
+
+    ## Verhaeltnis zu MCP
+
+    Dieselbe Fachlogik wird zusaetzlich als MCP-Werkzeuge angeboten
+    (`bedingungen_suchen`, `goz_pruefen`). MCP laesst sich nicht in OpenAPI
+    beschreiben, deshalb steht hier nur die REST-Sicht. Beide Schnittstellen
+    sind duenne Adapter ueber derselben Service-Schicht — was diese
+    Spezifikation fachlich festlegt, gilt fuer die Werkzeuge unveraendert.
+    Die Zuordnung ist in `wissen/README.md` dokumentiert.
+
+    Zwei weitere Werkzeuge (`tarifempfehlung`, `beratungsleitfaden_suchen`)
+    arbeiten auf dem internen Beratungsmaterial und werden **ausschliesslich**
+    ueber MCP angeboten. Sie haben absichtlich keine Entsprechung in dieser
+    Spezifikation: Ihre Antworten steuern den Berater und sind nicht
+    zitierfaehig gegenueber dem Kunden. Ueber REST erreichbar ist von diesem
+    Material nur das Handbuch als Dokument — gekennzeichnet mit
+    `vertraulichkeit: INTERN`.
+
+    Das Beratungsmaterial liegt ausserdem in einem eigenen Suchraum. Ein
+    gemeinsamer Index mit den Bedingungswerken wuerde frueher oder spaeter
+    eine Vertriebsanweisung als Vertragsbedingung ausliefern.
+
+    ## Konventionen
+
+    Fachliche Bezeichner sind durchgaengig deutsch. Umlaute werden als
+    ae/oe/ue geschrieben, damit Pfade, Feldnamen und generierter Code ohne
+    Sonderzeichen auskommen — dieselbe Konvention wie im Kernsystem und im
+    Produktmodell (`wissen/daten/tarife.yaml`).
+
+    ## Kein Zugriffsschutz in Version 1
+
+    Die Bedingungswerke sind veroeffentlichte Verbraucherdokumente, und der
+    Dienst haelt keine personenbezogenen Daten. Ein API-Schluessel wuerde im
+    Lab nur Reibung erzeugen, ohne etwas zu schuetzen. Sobald der Dienst
+    ueber das Lab hinaus erreichbar wird, gehoert das Schema des Kernsystems
+    (`ApiSchluessel`) uebernommen.
+  license:
+    name: MIT
+    identifier: MIT
+
+servers:
+  - url: http://localhost:8082/api/v1
+    description: Lokaler Entwicklungsserver
+
+security: []
+
+tags:
+  - name: Dokumente
+    description: Katalog und Auslieferung der erzeugten Bedingungswerke
+  - name: Bedingungen
+    description: Semantische Suche in den Bedingungswerken
+  - name: GOZ
+    description: Pruefung von Gebuehrennummern gegen einen Tarif
+
+paths:
+
+  /dokumente:
+    get:
+      operationId: listDocuments
+      summary: Verfuegbare Dokumente auflisten
+      description: |
+        Liefert den vollstaendigen Katalog. Ohne Filter sind das alle
+        Bedingungswerke, der Tarifvergleich, die GOZ-Zuordnung und das
+        interne Beratungshandbuch.
+      tags: [Dokumente]
+      parameters:
+        - name: tarif
+          in: query
+          description: |
+            Filtert auf Dokumente, die fuer diesen Tarif gelten. Das schliesst
+            die tarifuebergreifenden Dokumente ein, weil sie fuer jeden Tarif
+            gelten — nicht fuer keinen.
+          schema:
+            $ref: '#/components/schemas/Tarifschluessel'
+        - name: vertraulichkeit
+          in: query
+          description: |
+            Filtert auf Dokumente dieser Stufe. Eine Oberflaeche, die Kunden
+            bedient, fragt `OEFFENTLICH` an und bekommt das Beratungsmaterial
+            gar nicht erst zu sehen.
+
+            Der Filter ist eine Bequemlichkeit, kein Schutz: Wer die Kennung
+            eines internen Dokuments kennt, kann es weiterhin direkt abrufen.
+          schema:
+            $ref: '#/components/schemas/Vertraulichkeit'
+      responses:
+        '200':
+          description: Liste der Dokumente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dokument'
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+
+  /dokumente/{dokumentId}:
+    parameters:
+      - $ref: '#/components/parameters/DokumentId'
+    get:
+      operationId: readDocument
+      summary: Metadaten eines Dokuments abrufen
+      tags: [Dokumente]
+      responses:
+        '200':
+          description: Metadaten des Dokuments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dokument'
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+
+  /dokumente/{dokumentId}/pdf:
+    parameters:
+      - $ref: '#/components/parameters/DokumentId'
+    get:
+      operationId: readDocumentPdf
+      summary: Dokument als PDF abrufen
+      description: |
+        Liefert das Dokument in der Fassung, die dem Menschen gezeigt wird.
+
+        Die Dateien sind gross (rund 8 bis 10 MB, weil die Bedingungswerke
+        bebildert sind). Sie sind ausdruecklich zum Einbetten in eine
+        Oberflaeche gedacht, nicht zum Verarbeiten durch ein Sprachmodell —
+        dafuer gibt es die Suche und die HTML-Fassung.
+      tags: [Dokumente]
+      responses:
+        '200':
+          description: Das Dokument als PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              description: |
+                Als `inline` gesetzt, damit der Browser das Dokument anzeigt,
+                statt einen Download anzustossen.
+              schema:
+                type: string
+                examples: ['inline; filename="atra-dent-balance-avb.pdf"']
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+
+  /dokumente/{dokumentId}/html:
+    parameters:
+      - $ref: '#/components/parameters/DokumentId'
+    get:
+      operationId: readDocumentHtml
+      summary: Dokument als HTML abrufen
+      description: |
+        Liefert die HTML-Fassung. Sie traegt dieselbe Gliederung wie das PDF,
+        aber als `section`-Struktur mit stabilen Kennungen — genau die
+        Abschnitte, die `abschnittId` in einem Suchtreffer benennt.
+
+        Damit laesst sich eine Fundstelle aus der Suche direkt im Volltext
+        anspringen, ohne durch ein PDF zu blaettern.
+      tags: [Dokumente]
+      responses:
+        '200':
+          description: Das Dokument als HTML
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          $ref: '#/components/responses/NichtGefunden'
+
+  /bedingungen/suche:
+    post:
+      operationId: searchBedingungswerk
+      summary: In den Bedingungen eines Tarifs suchen
+      description: |
+        Beantwortet eine Frage in natuerlicher Sprache mit den Passagen des
+        Bedingungswerks, die sie behandeln. Jeder Treffer nennt seine
+        Fundstelle, damit ein Agent belegen kann, worauf er sich stuetzt.
+
+        Gesucht wird ueber Absaetze und Tabellen gleichermassen. Das
+        Leistungsverzeichnis (Anlage A) ist Teil des Suchraums — es traegt
+        die Quoten und Grenzen und ist damit die haeufigste Fundstelle
+        ueberhaupt.
+
+        Die Suche findet Textstellen. Sie rechnet nicht, entscheidet nicht
+        ueber Erstattungen und ersetzt keine Leistungspruefung.
+      tags: [Bedingungen]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SucheRequest'
+      responses:
+        '200':
+          description: Gefundene Passagen, nach Relevanz absteigend
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SucheResult'
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+
+  /goz/pruefung:
+    post:
+      operationId: checkGoz
+      summary: Gebuehrennummern gegen einen Tarif pruefen
+      description: |
+        Prueft eine oder mehrere GOZ-Gebuehrennummern gegen einen Tarif — der
+        Regelfall ist eine ganze Zahnarztrechnung, deshalb nimmt der Aufruf
+        eine Liste und nicht eine einzelne Nummer.
+
+        Der Weg ist zweistufig: die Gebuehrennummer bestimmt den
+        Leistungsbereich (`wissen/daten/goz-zuordnung.yaml`), der
+        Leistungsbereich bestimmt Quote und Grenzen im Tarif
+        (`wissen/daten/tarife.yaml`).
+
+        Nicht jede Nummer laesst sich zuordnen, und das ist kein Mangel der
+        Daten, sondern eine Eigenschaft der GOZ: eine Untersuchung oder ein
+        Heil- und Kostenplan gehoert zu der Behandlung, der sie dienen, und
+        hat keinen eigenen Leistungsbereich. Solche Faelle liefern
+        `NICHT_BESTIMMBAR` — siehe `Gozstatus`.
+
+        Die Pruefung sagt, **ob** eine Leistung dem Grunde nach versichert
+        ist. Sie berechnet keine Erstattung: Selbstbehalt, Zahnstaffel,
+        Jahreshoechstgrenze und die Vorleistung der gesetzlichen
+        Krankenversicherung haengen am Vertrag und am bisherigen Verbrauch
+        und liegen bei `erstattung_berechnen` im Rechenkern — der Bereich aus
+        diesem Befund ist dessen Eingabe. Die genannte Quote versteht sich
+        einschliesslich der Vorleistung der gesetzlichen Krankenkasse.
+      tags: [GOZ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GozPruefungRequest'
+      responses:
+        '200':
+          description: |
+            Befunde in der Reihenfolge der angefragten Nummern. Eine Nummer,
+            die der Dienst nicht kennt, ist ein Befund mit dem Status
+            `UNBEKANNT` und kein Fehler — eine Rechnung mit einer
+            GOAE-Position soll auswertbar bleiben. Fuer die GOAe-Nummern, die
+            im Lab vorkommen, faellt der Befund inhaltlich aus: sie stehen im
+            GOAe-Auszug der Wissensbasis.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GozPruefungResult'
+        '400':
+          $ref: '#/components/responses/FehlerhafteAnfrage'
+
+components:
+
+  parameters:
+    DokumentId:
+      name: dokumentId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/DokumentId'
+
+  responses:
+    FehlerhafteAnfrage:
+      description: Die Anfrage war fehlerhaft oder hat die Validierung nicht bestanden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Fehler'
+    NichtGefunden:
+      description: Die angeforderte Ressource existiert nicht
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Fehler'
+
+  schemas:
+
+    Fehler:
+      type: object
+      description: |
+        Fehlerobjekt nach RFC 7807 (Problem Details for HTTP APIs).
+
+        Die Feldnamen sind durch den Standard und den Medientyp
+        `application/problem+json` festgelegt und bleiben deshalb als
+        einzige Stelle dieser Spezifikation englisch. Eine Uebersetzung
+        wuerde den Kontrakt des Medientyps brechen. Gleiche Festlegung wie
+        im Kernsystem.
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI, die den Fehlertyp identifiziert
+          examples: ["https://atra.example/fehler/unbekannter-tarif"]
+        title:
+          type: string
+          description: Kurze, menschenlesbare Zusammenfassung des Fehlers
+          examples: [Unbekannter Tarif]
+        status:
+          type: integer
+          description: HTTP-Statuscode
+          examples: [400]
+        detail:
+          type: string
+          description: Erlaeuterung zu genau diesem Vorfall
+          examples: ["Tarif 'ATRA_DENT_Z' ist nicht bekannt. Gueltig sind ATRA_DENT_S, ATRA_DENT_B, ATRA_DENT_X, ATRA_DENT_X_SB"]
+        instance:
+          type: string
+          format: uri
+          description: URI, die diesen konkreten Vorfall identifiziert
+      required:
+        - title
+        - status
+
+    Tarifschluessel:
+      type: string
+      description: |
+        Technischer Schluessel eines Tarifs. Identisch mit der Tarif-ID des
+        Kernsystems und mit `schluessel` im Produktmodell — es gibt bewusst
+        keine zweite Kennung neben dem Marketingnamen.
+      enum:
+        - ATRA_DENT_S
+        - ATRA_DENT_B
+        - ATRA_DENT_X
+        - ATRA_DENT_X_SB
+      examples: [ATRA_DENT_B]
+
+    Leistungsbereich:
+      type: string
+      description: |
+        Leistungsbereich des Produktmodells. Die Abgrenzung zwischen den
+        Bereichen steht in `wissen/daten/tarife.yaml` und entscheidet, welche
+        Quote und welches Sublimit greifen.
+      enum:
+        - ZE
+        - IMP
+        - INL
+        - ZERH
+        - PAR
+        - PZR
+        - KFO
+        - FUN
+        - NAR
+        - AKUT
+      examples: [IMP]
+
+    Gebuehrennummer:
+      type: string
+      pattern: '^[0-9]{4}$'
+      description: |
+        Vierstellige Gebuehrennummer, wie sie auf der Rechnung steht — in der
+        Regel nach Anlage 1 zur GOZ, bei Leistungen nach Paragraf 6 Absatz 2
+        GOZ nach der Gebuehrenordnung fuer Aerzte. Welche der beiden gemeint
+        ist, weist nicht jede Rechnung aus; der Dienst schlaegt deshalb in
+        beiden nach und sagt im Befund, wovon er ausgeht.
+
+        Bewusst **kein** `type: integer`: die Nummern tragen fuehrende Nullen
+        (`0010`, `0500`), die eine Zahl verlieren wuerde. Sie werden auch nie
+        gerechnet, nur verglichen.
+      examples: ["2270"]
+
+    DokumentId:
+      type: string
+      pattern: '^[a-z0-9-]+$'
+      description: |
+        Stabile Kennung eines erzeugten Dokuments, abgeleitet aus dem
+        Dateinamen ohne Endung.
+      examples: [atra-dent-balance-avb]
+
+    Dokumentart:
+      type: string
+      description: |
+        Art des Dokuments. `BEDINGUNGSWERK` gilt genau einem Tarif, die
+        uebrigen Arten gelten tarifuebergreifend.
+      enum:
+        - BEDINGUNGSWERK
+        - TARIFVERGLEICH
+        - GOZ_ZUORDNUNG
+        - BERATUNGSHANDBUCH
+      examples: [BEDINGUNGSWERK]
+
+    Vertraulichkeit:
+      type: string
+      description: |
+        Fuer wen das Dokument bestimmt ist.
+
+        - `OEFFENTLICH` — Verbraucherdokument. Darf dem Kunden vorgelegt und
+          woertlich zitiert werden.
+        - `INTERN` — steuert den Berater. Wird dem Kunden nicht vorgelegt und
+          nicht zitiert; wo es einem Bedingungswerk widerspricht, gilt das
+          Bedingungswerk.
+
+        Dies ist eine Kennzeichnung, kein Zugriffsschutz. Sie sagt einer
+        Oberflaeche, was sie anzeigen darf — sie hindert niemanden am Abruf.
+        Solange der Dienst nur im Lab laeuft, ist das die richtige Tiefe;
+        sobald er darueber hinausgeht, gehoert ein echter Schutz davor.
+      enum:
+        - OEFFENTLICH
+        - INTERN
+      examples: [OEFFENTLICH]
+
+    Dokument:
+      type: object
+      description: Metadaten eines erzeugten Dokuments
+      properties:
+        dokumentId:
+          $ref: '#/components/schemas/DokumentId'
+        titel:
+          type: string
+          description: Anzeigetitel, wie er im Dokument steht
+          examples: [Allgemeine Versicherungsbedingungen atra.dent.balance]
+        art:
+          $ref: '#/components/schemas/Dokumentart'
+        vertraulichkeit:
+          $ref: '#/components/schemas/Vertraulichkeit'
+        tarif:
+          description: |
+            Der Tarif, dem das Dokument gilt. Fehlt bei tarifuebergreifenden
+            Dokumenten — dort waere jede Angabe falsch.
+          oneOf:
+            - $ref: '#/components/schemas/Tarifschluessel'
+            - type: 'null'
+        pdfUrl:
+          type: string
+          format: uri-reference
+          description: Pfad zum PDF, relativ zur Server-URL
+          examples: [/dokumente/atra-dent-balance-avb/pdf]
+        htmlUrl:
+          type: string
+          format: uri-reference
+          description: Pfad zur HTML-Fassung, relativ zur Server-URL
+          examples: [/dokumente/atra-dent-balance-avb/html]
+      required:
+        - dokumentId
+        - titel
+        - art
+        - vertraulichkeit
+        - pdfUrl
+        - htmlUrl
+
+    SucheRequest:
+      type: object
+      properties:
+        tarif:
+          $ref: '#/components/schemas/Tarifschluessel'
+          description: |
+            Pflichtangabe. Die Tarife unterscheiden sich in Quoten,
+            Wartezeiten und Ausschluessen, und die Bedingungswerke
+            widersprechen einander entsprechend. Eine Antwort ohne Tarif
+            waere nicht ungenau, sondern beliebig — deshalb gibt es keinen
+            Standardwert und keine tarifuebergreifende Suche.
+        frage:
+          type: string
+          minLength: 3
+          maxLength: 500
+          description: Frage in natuerlicher Sprache
+          examples: ["Wie lange ist die Wartezeit fuer Zahnersatz?"]
+        anzahl:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 5
+          description: |
+            Hoechstzahl der Treffer. Der Standardwert reicht fuer eine
+            belegte Antwort; hoehere Werte kosten Kontext, ohne die Antwort
+            besser zu machen.
+      required:
+        - tarif
+        - frage
+
+    Fundstelle:
+      type: object
+      description: |
+        Eine gefundene Passage mit ihrem Ort im Dokument. Die Fundstelle
+        benennt einen Paragraphen oder eine Anlage, nicht eine Seitenzahl —
+        Paragraphen bleiben stabil, wenn sich das Layout aendert.
+      properties:
+        dokumentId:
+          $ref: '#/components/schemas/DokumentId'
+        abschnittId:
+          type: string
+          description: |
+            Kennung des Abschnitts, identisch mit der `id` des zugehoerigen
+            `section`-Elements in der HTML-Fassung. Damit laesst sich die
+            Stelle direkt anspringen.
+          examples: [wartezeiten]
+        ueberschrift:
+          type: string
+          description: Zitierfaehige Bezeichnung des Abschnitts
+          examples: ["§ 4 Wartezeiten"]
+        text:
+          type: string
+          description: Der gefundene Textabschnitt
+        bewertung:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          description: |
+            Aehnlichkeit zur Frage, zwischen 0 und 1. Ein Vergleichsmass
+            innerhalb einer Trefferliste, keine Aussage ueber inhaltliche
+            Richtigkeit.
+        htmlUrl:
+          type: string
+          format: uri-reference
+          description: Pfad zur HTML-Fassung des Dokuments, mit Sprungmarke
+          examples: [/dokumente/atra-dent-balance-avb/html#wartezeiten]
+        pdfUrl:
+          type: string
+          format: uri-reference
+          description: Pfad zum PDF, fuer die Anzeige beim Menschen
+          examples: [/dokumente/atra-dent-balance-avb/pdf]
+      required:
+        - dokumentId
+        - abschnittId
+        - ueberschrift
+        - text
+        - bewertung
+        - htmlUrl
+        - pdfUrl
+
+    SucheResult:
+      type: object
+      properties:
+        tarif:
+          $ref: '#/components/schemas/Tarifschluessel'
+        frage:
+          type: string
+          description: Die gestellte Frage, unveraendert zurueckgegeben
+        treffer:
+          type: array
+          description: |
+            Absteigend nach Bewertung. Leer, wenn nichts hinreichend
+            aehnlich war — das ist ein gueltiges Ergebnis und kein Fehler.
+          items:
+            $ref: '#/components/schemas/Fundstelle'
+      required:
+        - tarif
+        - frage
+        - treffer
+
+    GozPruefungRequest:
+      type: object
+      properties:
+        tarif:
+          $ref: '#/components/schemas/Tarifschluessel'
+          description: |
+            Pflichtangabe. Ob eine Leistung enthalten ist, ist ohne Tarif
+            keine beantwortbare Frage.
+        nummern:
+          type: array
+          minItems: 1
+          maxItems: 100
+          description: |
+            Die zu pruefenden Gebuehrennummern, ueblicherweise die Positionen
+            einer Rechnung. Doppelte Nummern sind zulaessig — eine Rechnung
+            kann dieselbe Leistung mehrfach ausweisen — und werden einzeln
+            beantwortet.
+          items:
+            $ref: '#/components/schemas/Gebuehrennummer'
+          examples:
+            - ["2270", "9010", "0010"]
+      required:
+        - tarif
+        - nummern
+
+    Gozstatus:
+      type: string
+      description: |
+        Ergebnis der Pruefung einer einzelnen Nummer.
+
+        - `ENTHALTEN` — die Nummer gehoert zu einem Leistungsbereich, der in
+          diesem Tarif versichert ist. Quote und Grenzen stehen im Befund.
+        - `NICHT_ENTHALTEN` — der Leistungsbereich ist in diesem Tarif nicht
+          versichert. Eine klare Absage.
+        - `NICHT_BESTIMMBAR` — die Nummer laesst sich keinem Leistungsbereich
+          zuordnen, weil sie einer Hauptbehandlung dient (Untersuchung,
+          Planung, Abformung, Zuschlag) oder in mehreren Bereichen vorkommen
+          kann. **Das ist keine Ablehnung.** Wer darauf mit "nicht
+          versichert" antwortet, antwortet falsch; richtig ist die
+          Rueckfrage, zu welcher Behandlung die Position gehoert. Der Fall
+          ist haeufig und fachlich gewollt.
+        - `UNBEKANNT` — die Nummer steht weder in Anlage 1 zur GOZ noch im
+          GOAe-Auszug der Wissensbasis. Das betrifft vor allem Leistungen,
+          die der Zahnarzt nach Paragraph 6 Absatz 2 GOZ ueber die
+          Gebuehrenordnung fuer Aerzte abrechnet, darunter Vollnarkose und
+          Sedierung. Auch hier ist eine Rueckfrage die richtige Reaktion,
+          keine Ablehnung.
+
+        Der GOAe-Auszug (`wissen/daten/goae-auszug.yaml`) fuehrt nur die
+        wenigen Nummern, die im Lab tatsaechlich vorkommen. Eine Nummer, die
+        er kennt, wird beantwortet wie eine GOZ-Nummer — fuer den
+        Versicherungsschutz macht die Gebuehrenordnung keinen Unterschied.
+        Die beiden Nummernkreise ueberschneiden sich; steht eine Nummer in
+        beiden, gilt die GOZ (es ist eine Zahnarztrechnung), und die
+        `begruendung` nennt die zweite Lesart.
+      enum:
+        - ENTHALTEN
+        - NICHT_ENTHALTEN
+        - NICHT_BESTIMMBAR
+        - UNBEKANNT
+      examples: [ENTHALTEN]
+
+    Leistungsgrenzen:
+      type: object
+      description: |
+        Grenzen, die im Tarif fuer diesen Leistungsbereich gelten. Alle
+        Felder sind optional; welche gesetzt sind, haengt vom Bereich und
+        vom Tarif ab. Ein leeres Objekt bedeutet: keine bereichseigene
+        Grenze.
+
+        Nicht enthalten sind Selbstbehalt, Zahnstaffel und
+        Jahreshoechstgrenze — die gelten ueber alle Bereiche hinweg und
+        haengen am Vertrag, nicht an der Gebuehrennummer.
+      properties:
+        limitProJahr:
+          $ref: '#/components/schemas/Geldbetrag'
+          description: Hoechstbetrag je Versicherungsjahr fuer diesen Bereich
+        limitGesamt:
+          $ref: '#/components/schemas/Geldbetrag'
+          description: Hoechstbetrag ueber die gesamte Vertragslaufzeit
+        faelleProJahr:
+          type: integer
+          minimum: 1
+          description: Hoechstzahl erstattungsfaehiger Faelle je Versicherungsjahr
+        maxFaelle:
+          type: integer
+          minimum: 1
+          description: Hoechstzahl der Faelle innerhalb von `zeitraumJahre`
+        zeitraumJahre:
+          type: integer
+          minimum: 1
+          description: Zeitraum in Jahren, auf den sich `maxFaelle` bezieht
+        wartezeitMonate:
+          type: integer
+          minimum: 0
+          description: |
+            Abweichende Wartezeit fuer diesen Bereich. Fehlt, wenn die
+            allgemeine Wartezeit des Tarifs gilt.
+        bedingung:
+          type: string
+          description: |
+            Zusaetzliche fachliche Voraussetzung im Klartext, sofern der
+            Tarif eine nennt.
+          examples: [medizinischer Indikation]
+
+    Geldbetrag:
+      type: string
+      format: decimal
+      pattern: '^\d{1,10}\.\d{2}$'
+      description: |
+        Geldbetrag in EUR mit genau zwei Nachkommastellen, als Dezimalstring
+        uebertragen.
+
+        Bewusst **kein** `type: number`: binaeres Gleitkomma kann
+        0,01-Schritte nicht exakt darstellen. Gleiche Festlegung wie im
+        Kernsystem, damit Betraege zwischen beiden Diensten ohne Umformung
+        durchgereicht werden koennen.
+      examples: ["150.00"]
+
+    GozBefund:
+      type: object
+      description: Ergebnis der Pruefung einer einzelnen Gebuehrennummer
+      properties:
+        nummer:
+          $ref: '#/components/schemas/Gebuehrennummer'
+        bezeichnung:
+          type: string
+          description: |
+            Leistungsbeschreibung nach Anlage 1 zur GOZ, bei einer Nummer aus
+            dem GOAe-Auszug die dortige. Fehlt bei `UNBEKANNT`, weil der
+            Dienst die Nummer dann nicht kennt.
+          examples: [Implantatinsertion einschliesslich Wundverschluss]
+        abschnitt:
+          type: string
+          pattern: '^[A-L]$'
+          description: |
+            Abschnitt des GOZ-Gebuehrenverzeichnisses. Der Buchstabe I wird
+            in der GOZ nicht vergeben; auf H folgt J.
+
+            Fehlt bei `UNBEKANNT` und bei einer Nummer aus dem GOAe-Auszug:
+            die GOAe gliedert anders, und zwei Gliederungen gehoeren nicht in
+            dasselbe Feld.
+          examples: [K]
+        leistungsbereich:
+          description: |
+            Zugeordneter Leistungsbereich. `null` bei `NICHT_BESTIMMBAR` und
+            `UNBEKANNT`.
+          oneOf:
+            - $ref: '#/components/schemas/Leistungsbereich'
+            - type: 'null'
+        status:
+          $ref: '#/components/schemas/Gozstatus'
+        quote:
+          description: |
+            Erstattungsquote in Prozent, nur bei `ENTHALTEN`.
+
+            Die Quote versteht sich **inklusive** der Vorleistung der
+            gesetzlichen Krankenversicherung: 100 Prozent bedeutet
+            Rechnungsbetrag abzueglich dessen, was die Kasse bereits gezahlt
+            hat, nicht zusaetzlich dazu.
+          oneOf:
+            - type: integer
+              minimum: 0
+              maximum: 100
+            - type: 'null'
+          examples: [85]
+        grenzen:
+          description: Grenzen des Bereichs im Tarif, nur bei `ENTHALTEN`.
+          oneOf:
+            - $ref: '#/components/schemas/Leistungsgrenzen'
+            - type: 'null'
+        begruendung:
+          type: string
+          description: |
+            Ein Satz, warum dieser Status gilt — formuliert, um gegenueber
+            einem Menschen verwendet zu werden.
+
+            Bei `NICHT_BESTIMMBAR` und `UNBEKANNT` enthaelt der Satz, was zu
+            klaeren ist. Das ist die Vorlage fuer die Rueckfrage, die ein
+            Beratungsagent stellen soll, statt die Position stillschweigend
+            als nicht versichert zu behandeln.
+          examples: ["Implantate sind in atra.dent.balance zu 85 Prozent versichert, hoechstens 4 Faelle in 5 Jahren."]
+      required:
+        - nummer
+        - status
+        - begruendung
+
+    GozPruefungResult:
+      type: object
+      properties:
+        tarif:
+          $ref: '#/components/schemas/Tarifschluessel'
+        befunde:
+          type: array
+          description: |
+            Ein Befund je angefragter Nummer, in der Reihenfolge der Anfrage.
+            Laenge und Reihenfolge entsprechen `nummern` — auch bei
+            Doppelnennungen, damit sich die Befunde den Rechnungspositionen
+            zuordnen lassen.
+          items:
+            $ref: '#/components/schemas/GozBefund'
+      required:
+        - tarif
+        - befunde

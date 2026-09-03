@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: rechenkern
+
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: atra-dent-rechenkern
+        version: 1.0.0
+        type: SYNC
+        protocol: STATELESS
+        stdio: false
+        streamable-http:
+          mcp-endpoint: /mcp
+        capabilities:
+          tool: true
+          resource: false
+          prompt: false
+          completion: false
+        instructions: >
+          Tarife, Beitraege und Erstattungen der fiktiven
+          Zahnzusatzversicherung atra.dent: tarife_auflisten, tarif_lesen,
+          beitrag_berechnen und erstattung_berechnen.
+          Der Rechenkern kennt keinen Kunden und haelt keinen Zustand. Kein
+          Tool nimmt eine Kundennummer entgegen, keins liest oder schreibt
+          eine Akte, und es gibt keinen Header, der eine Identitaet traegt --
+          anders als im Kernsystem, das den x-kunden-id-Header auswertet.
+          beitrag_berechnen ist deshalb das Tool fuer Interessenten und fuer
+          Dritte; fuer den eigenen Vertrag der aufrufenden Kundin ist
+          mein_beitrag_berechnen im Kernsystem richtig, weil es das
+          Geburtsdatum aus der Akte nimmt statt es zu erfragen.
+          Ebenso erstattung_berechnen: es rechnet zustandslos, kennt deshalb
+          keinen bisherigen Verbrauch von sich aus und bekommt ihn als
+          Parameter mitgegeben -- Quelle ist
+          GET /kunden/{id}/schadensfaelle im Kernsystem.
+          Was dieser Server nicht beantwortet: was ein Tarif inhaltlich
+          leistet und wo das steht (Bedingungswerke, Wissensdienst), ob eine
+          Gebuehrennummer versichert ist und welchem Leistungsbereich sie
+          zugeordnet wird (goz_pruefen), und alles, was zu einem bestehenden
+          Vertrag gehoert -- Stammdaten, Schadensfaelle, Tarifwechsel.
+          Dafuer ist das Kernsystem zustaendig.
+
+server:
+  port: ${SERVER_PORT:8086}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+rechenkern:
+  api:
+    base-path: /api/v1
+  data:
+    directory: ../wissen/daten
+
+logging:
+  level:
+    consulting.atra.rechenkern: INFO

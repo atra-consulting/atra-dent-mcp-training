@@ -1,0 +1,39 @@
+meta {
+  name: 401 - API-Schluessel fehlt
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{basisUrl}}/kunden
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 401
+  res.body.status: eq 401
+  res.body.title: eq Nicht authentifiziert
+  res.body.type: eq https://atra.example/fehler/authentifizierung
+}
+
+docs {
+  Der einzige Request der Sammlung mit `auth: none` statt `auth: inherit` —
+  der Header `x-api-key` fehlt also komplett.
+
+  Geprüft wird in einem Servlet-Filter vor allem anderen, bewusst ohne Spring
+  Security: für einen einzigen statischen Schlüssel wäre dessen
+  Konfigurationsaufwand nicht zu rechtfertigen. Der Filter greift für jeden
+  Pfad des Kernsystems.
+
+  Das Ziel ist bewusst `/kunden` und nicht mehr `/tarife`: Tarifstammdaten
+  und Beitragsberechnung liegen seit dem Umzug im Rechenkern, der **keinen**
+  Schlüssel verlangt (`security: []` in `oas/rechenkern.yaml`) — dort gäbe es
+  nichts abzuweisen. `/kunden` bleibt im Kernsystem und braucht den Schlüssel
+  weiterhin wie jeder andere Pfad dort, siehe "401 - API-Schluessel falsch"
+  gleich darunter.
+
+  Trotz eigener Codestelle hat die Antwort dieselbe Form wie jede andere
+  Fehlerantwort — der Filter benutzt denselben Erzeuger wie die
+  Fehlerbehandlung der Controller.
+}

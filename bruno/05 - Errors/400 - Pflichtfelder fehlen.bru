@@ -1,0 +1,44 @@
+meta {
+  name: 400 - Pflichtfelder fehlen
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{basisUrl}}/kunden
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "vorname": "Unvollstaendig"
+  }
+}
+
+assert {
+  res.status: eq 400
+  res.body.status: eq 400
+  res.body.title: eq Validierung fehlgeschlagen
+  res.body.type: eq https://atra.example/fehler/validierung
+  res.body.detail: contains nachname
+}
+
+docs {
+  `KundeSchreiben` verlangt zehn Pflichtfelder; hier kommt genau eines an.
+
+  `detail` zählt alle beanstandeten Felder in einem Durchgang auf, getrennt
+  durch Semikolon — nicht nur das erste. Wer ein Formular gegen diese API
+  baut, kann daraus alle Meldungen auf einmal erzeugen.
+
+  Die Texte stammen aus den Sprachpaketen der Bean Validation und werden vor
+  der Ausgabe umlautfrei geschrieben ("muss groesser-gleich 0 sein"). Als
+  `detail` gehen sie als Datenwert über die API und fallen damit unter
+  dieselbe ae/oe/ue-Regel wie Pfade und Feldnamen.
+
+  Angelegt wird nichts — das Request lässt sich beliebig oft wiederholen.
+}

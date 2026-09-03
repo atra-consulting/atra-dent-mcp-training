@@ -1,0 +1,67 @@
+meta {
+  name: Mein Vertrag lesen
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{mcpUrl}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json, text/event-stream
+  MCP-Protocol-Version: 2025-06-18
+  x-kunden-id: {{kundenId}}
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "method": "tools/call",
+    "params": {
+      "name": "mein_vertrag_lesen",
+      "arguments": {}
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("die Akte gehoert der Kundennummer aus dem Header", function() {
+    const ergebnis = res.getBody().result;
+    const kunde = JSON.parse(ergebnis.content[0].text);
+    expect(ergebnis.isError).to.not.equal(true);
+    expect(String(kunde.id)).to.equal(bru.getEnvVar("kundenId"));
+    expect(kunde.nachname).to.equal("Müller");
+  });
+}
+
+docs {
+  Ein Tool-Aufruf ohne ein einziges Argument — und trotzdem kommt genau eine
+  Akte zurück. Welche, sagt der Header `x-kunden-id`.
+
+  Dasselbe über REST wäre `GET /kunden/10001`: die Kundennummer steht im Pfad,
+  und wer den Schlüssel hat, kommt an jede Akte. Die Grenze zieht dort die
+  aufrufende Anwendung. Über MCP entscheidet ein Modell zur Laufzeit, welchen
+  Aufruf es macht — eine Grenze, die von dieser Entscheidung abhinge, wäre
+  keine.
+
+  Zum Ausprobieren: `x-kunden-id` auf 10003 setzen. Es kommt Clara Weiss
+  zurück, ohne dass sich am Rumpf etwas ändert. Ausgewertet wird der Header
+  jeder einzelnen Anfrage — und weil dieser Server zustandslos läuft, gibt es
+  gar keinen Ort mehr, an dem sich eine Kundennummer über die Anfrage hinaus
+  festsetzen könnte.
+
+  Der Request trägt keinen Zustand aus Request 01 mit sich — nur den
+  ausgehandelten Header `MCP-Protocol-Version`. Dass er auch allein ausgeführt
+  antwortet, liegt daran, dass ein zustandsloser Server den Handshake nicht
+  mehr nachhalten kann; Pflicht ist er nach der Spezifikation weiterhin. Siehe
+  die Ordner-Doku.
+}

@@ -1,0 +1,19 @@
+
+rechnungsnummer: "187/2026"
+rechnungsdatum: 2026-05-11
+praxis: plombeck
+patient:
+  name: Clara Weiss
+  anschrift:
+    strasse: Domgasse 3
+    plz: "50667"
+    ort: Koeln
+  geburtsdatum: 1978-07-22
+positionen:
+  - { datum: 2026-05-04, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-05-04, art: goz, nummer: "0090", zahn: "25", leistung: Infiltrationsanästhesie, anzahl: 1, faktor: 2.3, betrag: 6.22 }
+  - { datum: 2026-05-04, art: goz, nummer: "2060", zahn: "25", leistung: "Präparieren einer Kavität und Restauration mit Kompositmaterialien in Adhäsivtechnik, zweiflächig", anzahl: 1, faktor: 2.3, betrag: 48.68 }
+  - { datum: 2026-05-04, art: material, nummer: null, zahn: "25", leistung: Füllungsmaterial, anzahl: 1, faktor: null, betrag: 11.80 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

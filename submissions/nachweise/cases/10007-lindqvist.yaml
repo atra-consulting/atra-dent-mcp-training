@@ -1,0 +1,98 @@
+
+kundenId: 10007
+praxis: plombeck
+
+patient:
+  name: Gustav Lindqvist
+  geburtsdatum: 1962-03-15
+  anschrift:
+    strasse: Lindenallee 5
+    plz: "24103"
+    ort: Kiel
+
+befund:
+  datum: 2026-08-05
+  aktenzeichen: "WP-114/26"
+  zahnstatus:
+    - { zahn: "14", zustand: krone }
+    - { zahn: "15", zustand: fuellung }
+    - { zahn: "24", zustand: krone }
+    - { zahn: "36", zustand: wurzelgefuellt }
+    - { zahn: "46", zustand: fuellung }
+  diagnosen:
+    - >-
+      Multiple insuffiziente Restaurationen im Seitenzahnbereich,
+      Kronenraender an 14 und 24 teils ueberpruefungswuerdig.
+    - Wurzelbehandelter Zahn 36 roentgenologisch unauffaellig.
+  parodontalbefund: >-
+    Sondierungstiefen ueberwiegend 3 bis [handschriftlich unleserlich] mm,
+    Blutung auf Sondierung [Rest des Vermerks nicht zu entziffern].
+  empfehlung: >-
+    Kontrolle der Kronenraender 14 und 24 [Rest des handschriftlichen
+    Vermerks unleserlich, Tinte verlaufen].
+  hkp_beiliegend: false
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: [empfehlung, parodontalbefund]
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2009-11-03, zahn: "36", behandlung: Wurzelkanalbehandlung, Selbstzahlerleistung vor Vertragsbeginn }
+    - { datum: 2014-04-18, zahn: "14", behandlung: Krone eingegliedert, Selbstzahlerleistung vor Vertragsbeginn }
+    - { datum: 2026-07-13, zahn: null, behandlung: Professionelle Zahnreinigung }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-09
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: nein
+      freitext: Nicht dass ich wuesste.
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: nein
+      freitext: null
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: Nein, alle noch da, auch wenn einige schon einiges mitgemacht haben.
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Anfang Juli, da wurden auch die Zaehne gereinigt.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: ja
+      freitext: null
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: NICHT_BEURTEILBAR
+      begruendung: >-
+        Das Empfehlungsfeld ist bis auf den ersten Halbsatz unleserlich; ob
+        und was ueber die Kronenraender hinaus angeraten wurde, gibt das
+        Papier nicht her. Der Fragebogen verneint zwar, kann das fehlende
+        Feld aber nicht ersetzen.
+    ERSATZBEDARF:
+      wert: 0
+      begruendung: >-
+        Der Zahnschema-Teil ist vollstaendig lesbar und zeigt keinen
+        fehlenden oder ersatzbeduerftigen Zahn; deckt sich mit
+        fehlendeZaehne 0 in der Akte.
+    SANIERUNGSGRAD:
+      wert: 55
+      begruendung: >-
+        Zwei Kronen, zwei Fuellungen und eine Wurzelbehandlung sind im Schema
+        eindeutig erkennbar — fuer 64 Jahre ein erheblich vorversorgtes, aber
+        vollstaendiges Gebiss.
+    PARODONTALBEFUND:
+      wert: NICHT_BEURTEILBAR
+      begruendung: >-
+        Der parodontale Befund ist im Fliesstext an der entscheidenden Stelle
+        unleserlich. Bei diesem Alter und dieser Vorgeschichte waere gerade
+        dieser Wert nicht nebensaechlich.
+  erwartete_zone: kein_score
+  hinweis: >-
+    Die Landpraxis-Handschrift, eng und in Serifen, reisst genau an den zwei
+    Stellen ab, an denen es zaehlt. Der Rest des Bogens ist tadellos lesbar —
+    das macht die Luecke nicht harmloser.

@@ -1,0 +1,59 @@
+meta {
+  name: Kunde ersetzen
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{basisUrl}}/kunden/{{neueKundenId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "vorname": "Greta",
+    "nachname": "Hoffmann-Berg",
+    "geburtsdatum": "1988-02-29",
+    "email": "greta.hoffmann-berg@example.com",
+    "telefon": "+49 351 5566778",
+    "adresse": {
+      "strasse": "Koenigsufer 9",
+      "plz": "01097",
+      "ort": "Dresden",
+      "land": "DE"
+    },
+    "tarifId": "ATRA_DENT_X",
+    "versicherungsbeginn": "2026-09-01",
+    "vorversicherung": true,
+    "fehlendeZaehne": 0
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.nachname: eq Hoffmann-Berg
+  res.body.adresse.ort: eq Dresden
+  res.body.status: eq aktiv
+}
+
+docs {
+  Vollständige Aktualisierung nach Heirat und Umzug. PUT ersetzt alle
+  schreibbaren Felder — was hier fehlt, ist danach weg. Der Rumpf ist deshalb
+  derselbe wie beim Anlegen, nur mit geändertem Nachnamen, E-Mail und Adresse.
+
+  **Ausnahme: `status`.** Das Feld fehlt im Rumpf, und trotzdem bleibt der
+  Kunde `aktiv` statt auf einen Vorgabewert zurückzufallen. Beim PUT übernimmt
+  das Kernsystem den bisherigen Status, wenn keiner mitkommt. Das ist bewusst
+  so: Stilllegen über `status: inaktiv` ist hier die einzige Form des
+  Außerbetriebnehmens, und eine gewöhnliche Adressänderung darf sie nicht
+  unbemerkt aufheben. Beim Anlegen gibt es keinen Vorzustand — dort greift die
+  Vorgabe `aktiv` aus der OAS.
+
+  Läuft nur, wenn "Kunde anlegen" vorher gelaufen ist und `{{neueKundenId}}`
+  gesetzt hat.
+}

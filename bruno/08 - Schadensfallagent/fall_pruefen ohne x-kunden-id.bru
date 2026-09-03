@@ -1,0 +1,85 @@
+meta {
+  name: fall_pruefen ohne x-kunden-id
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{schadensfallagentUrl}}/
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": "bruno-ohne-header",
+    "method": "message/send",
+    "params": {
+      "message": {
+        "kind": "message",
+        "messageId": "bruno-ohne-header-1",
+        "role": "user",
+        "parts": [
+          { "kind": "text", "text": "Bitte pruefe Fall {{agentFallId}}." },
+          { "kind": "data", "data": { "schadensfallId": {{agentFallId}} } }
+        ]
+      }
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.error: isUndefined
+  res.body.result.status.state: eq rejected
+}
+
+tests {
+  test("die Absage sagt nichts ueber den Fall -- auch nicht, dass es ihn gibt", function() {
+    const text = res.getBody().result.status.message.parts[0].text;
+    expect(text).to.equal(`Zu Fall ${bru.getVar('agentFallId')} kann ich Ihnen nichts sagen.`);
+  });
+
+  test("kein Artefakt -- der Fall wurde nicht einmal gelesen", function() {
+    expect(res.getBody().result.artifacts ?? []).to.have.lengthOf(0);
+  });
+}
+
+docs {
+  Derselbe Aufruf wie Request 04, nur ohne den Header `x-kunden-id`. Er
+  antwortet mit HTTP 200, ohne JSON-RPC-Fehler, mit einem Task auf
+  `rejected` — und mit einem Satz, der nichts verrät:
+
+  ```
+  Zu Fall 50080 kann ich Ihnen nichts sagen.
+  ```
+
+  **Wörtlich derselbe Satz wie zu einem fremden Fall und derselbe wie zu
+  einer Nummer, die es nicht gibt.** Drei verschiedene Lagen, eine Absage —
+  denn schon der Unterschied zwischen ihnen wäre die Auskunft, die keine
+  sein soll: Wer die fünfstelligen Nummern durchprobiert, erführe sonst an
+  der Antwort, welche Fälle existieren. `A2aEndpointTest` pinnt die
+  Gleichheit der beiden Sätze ausdrücklich.
+
+  Der Fall wird dafür nicht einmal gelesen — die Weiche steht vor dem ersten
+  Zugriff auf das Kernsystem. Es gibt deshalb auch nichts zu übernehmen und
+  nichts zu bewerten; der Fall bleibt unangetastet auf `eingereicht`, und
+  Request 04 findet ihn genauso vor.
+
+  ## Warum der Header hier Pflicht ist und beim Poller nicht
+
+  Der Poller kommt an dieser Tür nicht vorbei — er ruft die Prüfung
+  unmittelbar auf und geht gar nicht durch die A2A-Fertigkeit. Wer dagegen
+  über A2A kommt und keine Kundennummer mitbringt, ist keine Anlage, sondern
+  eine unbekannte Fragende: Der Agent hängt inzwischen als Subagent am
+  Orchestrator, „Bitte prüfe Fall 50099" erreicht ihn also aus dem
+  Kunden-Chat. Ohne Header ließe sich nicht entscheiden, ob der Fall der
+  Fragenden gehört — und das Artefakt trüge Name, Geburtsdatum, Tarif und
+  Schadenhistorie der Falleigentümerin zurück an die Fragende.
+}

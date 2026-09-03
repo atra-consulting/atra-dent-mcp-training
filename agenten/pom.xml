@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.1.0</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>consulting.atra</groupId>
+  <artifactId>agenten</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <name>atra.dent Agenten</name>
+  <description>
+    Die Agentenschicht des Labs: ein Orchestrator, der ein Anliegen einordnet
+    und weiterreicht, ein Beratungsagent, der das Beratungsgespraech fuehrt,
+    und ein Schadensfallagent, der eingereichte Faelle im Takt prueft. Sie
+    sprechen untereinander A2A; die Fachagenten sind zusaetzlich MCP-Clients
+    gegenueber Kernsystem, Rechenkern und Wissensdienst.
+  </description>
+
+  <modules>
+    <module>a2a</module>
+    <module>model</module>
+    <module>mcp</module>
+    <module>beratung</module>
+    <module>orchestrator</module>
+    <module>schadensfall</module>
+  </modules>
+
+  <properties>
+    <java.version>25</java.version>
+    <maven.compiler.release>25</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring-ai.version>2.0.0</spring-ai.version>
+    <excluded.groups>integration</excluded.groups>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.ai</groupId>
+        <artifactId>spring-ai-bom</artifactId>
+        <version>${spring-ai.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>consulting.atra</groupId>
+        <artifactId>agenten-a2a</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>consulting.atra</groupId>
+        <artifactId>agenten-model</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>consulting.atra</groupId>
+        <artifactId>agenten-mcp</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>consulting.atra</groupId>
+        <artifactId>agenten-mcp</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludedGroups>${excluded.groups}</excludedGroups>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

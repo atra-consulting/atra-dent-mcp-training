@@ -1,0 +1,139 @@
+meta {
+  name: 08 - Schadensfallagent
+  seq: 8
+}
+
+docs {
+  # Schadensfallagent
+
+  Die ganze Kette: eine Rechnung einreichen, den Agenten
+  ansehen, ihn ohne Ausweis fragen, ihn mit Ausweis prüfen lassen, das
+  Ergebnis am Fall lesen. Ein sechster steht daneben und gehört nicht zur
+  Kette: Er fragt den fremd gehosteten Arztservice, ob er antwortet.
+
+  Das ist der einzige Ordner der Sammlung, der einen **Agenten** anspricht
+  und nicht einen Dienst. Der Unterschied ist am Draht sichtbar: kein
+  `x-api-key`, kein REST-Pfad, sondern JSON-RPC 2.0 auf `/` — und ein
+  Gegenüber, das ablehnen, zurückfragen oder einfach schon angefangen haben
+  kann.
+
+  ## Voraussetzung
+
+  ```bash
+  ./start.sh rechenkern kernsystem wissen agenten-schadensfall
+  ```
+
+  Der Agent braucht alle drei: das Kernsystem für Fall und Vertrag, den
+  Wissensdienst für `goz_pruefen` und den Rechenkern für
+  `erstattung_berechnen`. Er braucht außerdem den Gemini-Schlüssel aus
+  `.env` — jede Prüfung ist eine Modell-Schleife.
+
+  **Der vierte steht nicht in dieser Zeile.** Die Fachauskunft holt der
+  Agent beim Arztservice, und der liegt nicht mehr im Lab: eigenes
+  Repository (`atra-arzt-service`), fremd gehostet, angesprochen über
+  `AGENTEN_ARZTSERVICE_URL` und `AGENTEN_ARZTSERVICE_API_KEY` aus derselben
+  `.env`. `./start.sh` startet ihn nicht, es prüft vor dem Start des Agenten
+  nur, ob seine Agent Card antwortet. Fehlt er oder fehlt der Schlüssel,
+  läuft der Ordner trotzdem — jede Prüfung endet dann mit dem Eskalationsgrund
+  `ARZT_UNAVAILABLE`. Request 06 sagt, ob er erreichbar ist.
+
+  ## Der Poller ist der Konkurrent dieser Sammlung
+
+  **Dieser Agent wartet nicht auf eine Nachricht.** Ein Poller sieht alle
+  zehn Sekunden nach Fällen im Status `eingereicht` und übernimmt jeden
+  davon per Compare-and-Set. Wer den Agenten also selbst anstoßen will,
+  muss ihm den Fall abnehmen, bevor er ihn sich selbst holt — und wer dabei
+  gewinnt, entscheidet keine Regel, sondern die Uhr.
+
+  Deshalb läuft dieser Ordner am aufschlussreichsten mit abgeschaltetem
+  Takt:
+
+  ```bash
+  SCHADENSFALL_POLL_ENABLED=false ./start.sh rechenkern kernsystem wissen \
+      agenten-schadensfall
+  ```
+
+  Dann ist Request 04 der einzige Weg zu einer Prüfung, und Request 05 liest
+  genau deren Ergebnis.
+
+  **Mit laufendem Takt bleiben alle Requests grün**, sie erzählen nur
+  eine andere Geschichte — und welche, hängt am Zufall: Hat der Poller den
+  Fall vorher erwischt, verliert Request 04 das Compare-and-Set und bekommt
+  die Absage „ließ sich nicht übernehmen; er steht jetzt auf in_pruefung",
+  oder gleich „Fall … steht auf geprueft_freigabe". Der Task steht dann auf
+  `rejected` statt auf `working`. Beides ist richtig, und der Request prüft
+  jeden Zweig einzeln; der Fall wird so oder so bewertet, nur eben vom Takt.
+
+  Auch das ist Zufall und nicht Vorhersage: Der Poller arbeitet die Fälle in
+  **einem** Thread ab. Sind die Seed-Fälle in `eingereicht` noch
+  unbearbeitet, ist er minutenlang mit ihnen beschäftigt — und Request 04
+  gewinnt das Rennen, obwohl der Takt läuft. Genau so ist dieser Ordner beim
+  letzten Nachfahren durchgelaufen.
+
+  ## Ein zweiter Lauf sieht ein Duplikat
+
+  Ohne `git checkout data` dazwischen reicht Request 01 dieselbe Rechnung ein
+  zweites Mal ein, und der Wächter erkennt das: Der zweite Fall kommt mit
+  `DUPLICATE` zurück statt zur Freigabe. Der Ordner bleibt grün — die
+  Zusicherung lässt beide Ausgänge zu —, aber wer die Freigabe sehen will,
+  setzt die Daten vorher zurück.
+
+  ## Bruno kennt kein `sleep`
+
+  Eine Prüfung ist eine Modell-Schleife über drei MCP-Server und einen
+  fremden Agenten; für die Kompositfüllung aus Request 01 dauert sie gemessen
+  rund 35 Sekunden. Der Aufruf in Request 04 kommt aber schon nach 30 zurück
+  — so lange und nicht länger wartet der `DefaultRequestHandler` des A2A-SDK
+  auf das Ende des Zuges (`a2a.blocking.agent.timeout.seconds=30`). Er
+  antwortet dann mit dem Task im Zustand `working`: Die Antwort ist zu Ende,
+  der Lauf nicht.
+
+  Zwischen Request 04 und Request 05 fehlen also ein paar Sekunden, und
+  Bruno hat keinen Wartebefehl. Dieser Ordner erfindet auch keinen — die
+  Pause setzt der Aufrufer:
+
+  ```bash
+  npx @usebruno/cli run "08 - Schadensfallagent" --env Lokal --delay 60000
+  ```
+
+  `--delay` wartet vor **jedem** Request, nicht gezielt vor einem; der ganze
+  Ordner dauert damit gemessene 271 Sekunden. In der Oberfläche stellt sich die
+  Frage nicht: Dort dauert der Weg zum nächsten Mausklick länger als die
+  Prüfung. Und wer Request 05 einmal auf `in_pruefung` antreffen sollte,
+  schickt ihn schlicht noch einmal ab — die Fallnummer steht bis dahin in
+  `{{agentFallId}}`.
+
+  ## Was der Agent verlangt
+
+  **`"kind": "message"` im Nachrichtenobjekt.** Das SDK deserialisiert die
+  Nachricht über ihr Diskriminatorfeld; ohne es antwortet der Dienst mit
+  einem JSON-RPC-Fehler, noch bevor der Agent etwas sieht.
+
+  **Den Header `x-kunden-id` mit der Kundennummer des Falls.** Er ist keine
+  Formsache: Ohne ihn antwortet der Agent „Zu Fall … kann ich Ihnen nichts
+  sagen." — wörtlich dieselbe Absage wie zu einem fremden Fall, damit sich
+  aus dem Unterschied nichts herauslesen lässt. Request 03 zeigt das.
+
+  An derselben Kundennummer hängen dabei zwei verschiedene Fragen: **In
+  wessen Namen gelesen wird**, steht am Fall und nicht am Header — der Agent
+  liest Vertrag und Historie immer im Namen der Falleigentümerin. **Ob
+  dieser Aufrufer fragen darf**, beantwortet dagegen allein der Header.
+
+  ## Zustand
+
+  Request 01 legt einen Fall an, Request 04 (oder der Poller) bewertet ihn.
+  Beides steht in `kernsystem/data/schadensfaelle.json` und ist im
+  `git diff` sichtbar. Ausgangszustand:
+
+  ```bash
+  cd kernsystem && git checkout data
+  ```
+
+  Die Requests fassen keinen Seed-Fall an — sie arbeiten ausschließlich auf
+  `{{agentFallId}}`, den Request 01 selbst anlegt. **Der Poller tut das
+  nicht:** Läuft der Takt, holt er sich auch die Seed-Fälle in `eingereicht`
+  und bewertet sie. Das ist kein Schaden, aber es ist ein anderer
+  Ausgangszustand als vorher — `./start.sh --bestand-zuruecksetzen` stellt ihn
+  her. (Geschrieben wird nach `kernsystem/runtime/`, nicht nach
+  `kernsystem/data/`; letzteres ist die Vorlage und bleibt unberührt.)
+}

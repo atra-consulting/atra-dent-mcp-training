@@ -1,0 +1,91 @@
+
+kundenId: 10004
+praxis: kiefernwald
+
+patient:
+  name: Dimitrios Papadakis
+  geburtsdatum: 1971-11-05
+  anschrift:
+    strasse: Rosenweg 4
+    plz: "60313"
+    ort: Frankfurt am Main
+
+befund:
+  datum: 2024-03-11
+  aktenzeichen: "KKW-2024-00887"
+  zahnstatus:
+    - { zahn: "36", zustand: fehlend }
+    - { zahn: "46", zustand: fehlend }
+    - { zahn: "14", zustand: krone }
+    - { zahn: "26", zustand: fuellung }
+    - { zahn: "27", zustand: wurzelgefuellt }
+  diagnosen:
+    - Freiendluecken Regio 36 und 46 nach Extraktion 2022.
+    - Uebrige Bezahnung erhaltungswuerdig, keine akute Karies.
+  parodontalbefund: null
+  empfehlung: null
+  hkp_beiliegend: false
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: true
+
+historie:
+  eintraege:
+    - { datum: 2024-03-11, zahn: null, behandlung: Befundaufnahme, Beratung Implantatversorgung }
+    - { datum: 2025-10-16, zahn: "36", behandlung: Implantatinsertion mit Knochenaufbau Regio 36 und 46 }
+    - { datum: 2025-12-02, zahn: "36", behandlung: Implantatgetragene Vollkronen Regio 36 und 46 }
+    - { datum: 2026-07-09, zahn: null, behandlung: Versorgung mit Totalprothese Ober- und Unterkiefer, Funktionsabformung }
+    - { datum: 2026-08-05, zahn: null, behandlung: Professionelle Zahnreinigung }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-08
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: nein
+      freitext: Ist alles gemacht worden letztes Jahr.
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: nein
+      freitext: null
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: Nein, ist alles versorgt.
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Weiss ich nicht mehr genau, im Sommer war ich zur Reinigung.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: ja
+      freitext: null
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: NICHT_BEURTEILBAR
+      begruendung: >-
+        Der Befund ist zwei Jahre alt und nennt keine Empfehlung; seither
+        liegen zwei grosse Versorgungen. Ob heute etwas ansteht, sagt keine
+        der drei Quellen.
+    ERSATZBEDARF:
+      wert: NICHT_BEURTEILBAR
+      begruendung: >-
+        Befund 2024 zwei fehlende Zaehne, Historie 2026 Totalprothese in
+        beiden Kiefern, Fragebogen verneint fehlende Zaehne. Der heutige
+        Zustand ist aus den Unterlagen nicht zu ermitteln.
+    SANIERUNGSGRAD:
+      wert: 75
+      begruendung: >-
+        Unabhaengig vom Streit um den heutigen Stand ist die Vorgeschichte
+        eindeutig: Implantate, implantatgetragener Zahnersatz und
+        Totalprothetik. Das Merkmal ist auch ohne aktuellen Befund beurteilbar.
+    PARODONTALBEFUND:
+      wert: NICHT_BEURTEILBAR
+      begruendung: Der Befundbogen erhebt den Zahnhalteapparat nicht. Kein Wert, keine Aussage.
+  erwartete_zone: kein_score
+  hinweis: >-
+    Drei Merkmale offen, eines belastbar. Die richtige Antwort ist die
+    Nachforderung eines aktuellen Befunds — nicht die Ablehnung. Wer aus dem
+    Widerspruch auf Taeuschung schliesst, bewertet den Patienten statt die
+    Unterlagen.

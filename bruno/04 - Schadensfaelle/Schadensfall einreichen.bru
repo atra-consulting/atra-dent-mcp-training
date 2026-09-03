@@ -1,0 +1,92 @@
+meta {
+  name: Schadensfall einreichen
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{basisUrl}}/schadensfaelle
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "kundenId": 10003,
+    "behandlungsdatum": "2026-08-07",
+    "positionen": [
+      {
+        "goz": "9010",
+        "leistungsbereich": "IMP",
+        "betrag": "780.00",
+        "beschreibung": "Implantatinsertion Regio 46, Faktor 2,3"
+      },
+      {
+        "goz": "9100",
+        "leistungsbereich": "IMP",
+        "betrag": "340.00",
+        "beschreibung": "Knochenaufbau Regio 46"
+      },
+      {
+        "goz": "5040",
+        "leistungsbereich": "ZE",
+        "betrag": "690.00",
+        "beschreibung": "Implantatgetragene Vollkrone Regio 46"
+      },
+      {
+        "goz": "2197",
+        "leistungsbereich": "ZE",
+        "betrag": "62.10",
+        "beschreibung": "Adhaesive Befestigung"
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.headers.location: isDefined
+  res.body.status: eq eingereicht
+  res.body.erstattungsbetrag: isNull
+}
+
+script:post-response {
+  bru.setVar("neueSchadensfallId", res.getBody().id);
+  console.log("Neue Schadensfallnummer:", bru.getVar("neueSchadensfallId"));
+}
+
+tests {
+  test("rechnungsbetrag ist die Summe der Positionen", function() {
+    expect(res.getBody().rechnungsbetrag).to.equal("1872.10");
+  });
+}
+
+docs {
+  Ein neues Implantat für Clara Weiss (10003), Gegenstück zu Fall 50010 auf der
+  anderen Kieferhälfte. Die Nummer landet in `{{neueSchadensfallId}}`, die
+  drei folgenden Requests arbeiten damit — bis `genehmigt`/`ausgezahlt`, dem
+  glücklichen Ausgang. Den anderen Ausgang zeigt "Schadensfall ablehnen" an
+  einem eigenen Fall: `genehmigt` und `ausgezahlt` sind jetzt Endpunkte, von
+  dort führt kein Übergang mehr zu `abgelehnt`.
+
+  Drei Dinge passieren beim Einreichen:
+
+  - **`rechnungsbetrag` wird gebildet**, nicht übernommen. 780.00 + 340.00 +
+    690.00 + 62.10 = 1872.10. Das Feld steht gar nicht im `Schaden`-Schema —
+    wer es mitschickt, dessen Wert wird ignoriert.
+  - **`status` ist `eingereicht`**, immer. Ein anderer Anfangsstatus lässt sich
+    nicht setzen.
+  - **`erstattungsbetrag` bleibt `null`.** Das Kernsystem rechnet nicht.
+
+  Die `kundenId` wird gegen den Bestand geprüft, aber ein unbekannter Kunde
+  ist hier **400**, nicht 404: beim Einreichen ist die Nummer ein Feld im
+  Rumpf, also ein Eingabefehler, kein fehlender Pfad. Siehe
+  "400 - Unbekannter Kunde im Rumpf" in Ordner 05.
+
+  `positionen` braucht mindestens einen Eintrag, jede Position alle vier
+  Felder. `goz` ist auf vier Ziffern festgelegt.
+}

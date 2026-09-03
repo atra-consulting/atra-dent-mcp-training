@@ -1,0 +1,47 @@
+meta {
+  name: 400 - Behandlungsdatum vor Versicherungsbeginn
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{rechenkernUrl}}/erstattungsberechnung
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "tarifId": "ATRA_DENT_B",
+    "versicherungsbeginn": "2022-03-01",
+    "behandlungsdatum": "2021-01-01",
+    "positionen": [
+      {"goz": "2210", "leistungsbereich": "ZE", "betrag": "1000.00",
+       "beschreibung": "Krone Regio 36"}
+    ]
+  }
+}
+
+assert {
+  res.status: eq 400
+  res.body.status: eq 400
+  res.body.detail: contains Versicherungsbeginn
+}
+
+docs {
+  Eine Behandlung, die vor dem angegebenen Versicherungsbeginn liegt — fachlich
+  nicht möglich, also ein 400 mit `application/problem+json`, wie im
+  Kernsystem auch (Ordner 05). Der Rechenkern verlangt dafür keine Datenbank
+  und keinen Kunden; die Prüfung sitzt in `Erstattungsberechnung` selbst, bevor
+  überhaupt gerechnet wird.
+
+  Eine weitere fachliche Ablehnung desselben Endpunkts: leere `positionen`,
+  siehe `ErstattungsberechnungControllerTest` im Rechenkern. Ein nicht
+  versicherter Leistungsbereich ist dagegen **kein** 400 — die Position bleibt
+  in `rechnungsbetrag`, trägt aber 0.00 EUR zur Erstattung bei
+  (`ErstattungsrechnungTest.fall_2`).
+}

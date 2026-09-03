@@ -1,0 +1,8 @@
+rechnungsnummer: "2026-T103"
+rechnungsdatum: 2026-03-14
+praxis: beisser
+patient:
+  name: Testpatient Faktor
+  anschrift: { strasse: Teststraße 1, plz: "34117", ort: Kassel }
+positionen:
+  - { datum: 2026-03-01, art: goz, nummer: "0010", leistung: Eingehende Untersuchung, anzahl: 1, faktor: 4.2, betrag: 10.72 }

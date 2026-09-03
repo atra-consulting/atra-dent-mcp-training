@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Debug: Dienste" type="CompoundRunConfigurationType">
+    <toRun name="Debug: Rechenkern" type="Remote" />
+    <toRun name="Debug: Kernsystem" type="Remote" />
+    <toRun name="Debug: Wissensdienst" type="Remote" />
+    <method v="2" />
+  </configuration>
+</component>

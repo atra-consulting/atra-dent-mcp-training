@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>consulting.atra</groupId>
+  <artifactId>atra-mcp-a2a-lab</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <name>atra.dent Lab</name>
+  <description>
+    Reiner Aggregator ueber alle Java-Bausteine des Labs. Er buendelt sie zu
+    einem Reaktor, damit eine IDE das Projekt vollstaendig sieht und ein
+    einzelner Aufruf in der Wurzel alles baut. Er ist bewusst kein Parent:
+    Jeder Baustein behaelt seinen eigenen spring-boot-starter-parent und laesst
+    sich weiterhin einzeln ueber "mvn -f &lt;baustein&gt;/pom.xml" bauen, genau
+    so wie start.sh und setup.sh es tun.
+  </description>
+
+  <modules>
+    <module>produktmodell</module>
+    <module>rechenkern</module>
+    <module>kernsystem</module>
+    <module>wissen/dienst</module>
+    <module>agenten</module>
+  </modules>
+
+</project>

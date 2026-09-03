@@ -1,0 +1,26 @@
+
+rechnungsnummer: "KKW-2026-003107"
+rechnungsdatum: 2026-07-28
+praxis: kiefernwald
+patient:
+  name: Bernd Schuster
+  anschrift:
+    strasse: Hafenweg 7
+    plz: "20457"
+    ort: Hamburg
+  geburtsdatum: 1958-09-30
+positionen:
+  - { datum: 2026-05-05, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-05-05, art: goz, nummer: "0030", zahn: null, leistung: Heil- und Kostenplan, anzahl: 1, faktor: 2.3, betrag: 16.08 }
+  - { datum: 2026-05-05, art: goae, nummer: "5370", zahn: null, leistung: Panoramaschichtaufnahme des Kiefers, anzahl: 1, faktor: 1.8, betrag: 46.61 }
+  - { datum: 2026-06-09, art: goz, nummer: "0090", zahn: "35", leistung: Intraorale Infiltrationsanästhesie, anzahl: 2, faktor: 2.3, betrag: 12.44 }
+  - { datum: 2026-06-09, art: goz, nummer: "2200", zahn: "35", leistung: "Versorgung durch eine Vollkrone als Brückenanker, Tangentialpräparation", anzahl: 1, faktor: 2.3, betrag: 218.40 }
+  - { datum: 2026-06-09, art: goz, nummer: "2200", zahn: "37", leistung: "Versorgung durch eine Vollkrone als Brückenanker, Tangentialpräparation", anzahl: 1, faktor: 2.3, betrag: 218.40 }
+  - { datum: 2026-06-09, art: goz, nummer: "5070", zahn: "36", leistung: Brückenspanne je zu ersetzendem Zahn, anzahl: 1, faktor: 2.3, betrag: 96.10 }
+  - { datum: 2026-06-09, art: goz, nummer: "5170", zahn: null, leistung: Anatomische Abformung mit individuellem Löffel, anzahl: 2, faktor: 2.3, betrag: 88.20 }
+  - { datum: 2026-06-09, art: material, nummer: null, zahn: null, leistung: Abformmaterial, anzahl: 1, faktor: null, betrag: 28.90 }
+  - { datum: 2026-07-14, art: goz, nummer: "2197", zahn: "36", leistung: Adhäsive Befestigung der Brücke, anzahl: 2, faktor: 2.3, betrag: 35.70 }
+  - { datum: 2026-07-14, art: labor, nummer: null, zahn: "36", leistung: "Brückengerüst NEM, keramisch verblendet", anzahl: 1, faktor: null, betrag: 742.60 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

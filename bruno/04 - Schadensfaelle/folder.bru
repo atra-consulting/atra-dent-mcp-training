@@ -1,0 +1,86 @@
+meta {
+  name: 04 - Schadensfaelle
+  seq: 4
+}
+
+docs {
+  # Schadensfälle
+
+  Die Schadenhistorie aus `kernsystem/data/schadensfaelle.json`. Der Bestand
+  waechst; diese Sammlung bezieht sich auf die Faelle 50001 bis 50014, die
+  jeden Status und die wichtigsten Ablehnungsgruende einmal zeigen:
+
+  | ID | Kunde | Betrag | Status | Anmerkung |
+  |---|---|---|---|---|
+  | 50001 | 10001 | 1862.10 | ausgezahlt | Brücke, Staffel Jahr 1 deckelt auf 1000 |
+  | 50002 | 10003 | 114.00 | ausgezahlt | Notdienst, voll erstattet |
+  | 50003 | 10001 | 118.00 | ausgezahlt | PZR, Eurodeckel greift |
+  | 50004 | 10003 | 834.00 | ausgezahlt | Funktionsanalyse und Schiene |
+  | 50005 | 10004 | 3984.20 | ausgezahlt | zwei Implantate, Sedierung |
+  | 50006 | 10001 | 1002.10 | ausgezahlt | Inlays |
+  | 50007 | 10002 | 216.00 | abgelehnt | `WARTEZEIT` |
+  | 50008 | 10003 | 390.00 | abgelehnt | `KOSMETIK` |
+  | 50009 | 10003 | 3340.00 | in_pruefung | Kieferorthopädie |
+  | 50010 | 10001 | 2017.10 | genehmigt | Implantat mit Krone |
+  | 50011 | 10004 | 5748.00 | ausgezahlt | Jahreshöchstgrenze 5000 greift |
+  | 50012 | 10002 | 256.00 | abgelehnt | `NICHT_VERSICHERT` |
+  | 50013 | 10002 | 1860.00 | abgelehnt | `FEHLENDE_ZAEHNE` |
+  | 50014 | 10004 | 132.00 | eingereicht | unbearbeitet |
+
+  ## Positionen statt Pauschalen
+
+  Ein Schadensfall ist eine Rechnung mit mehreren Positionen, jede mit eigener
+  GOZ-Nummer und eigenem `leistungsbereich`. Das ist keine Formalie: die Quote
+  hängt am Leistungsbereich, und ein Implantat mit Krone verteilt sich auf
+  `IMP` und `ZE` — zwei Bereiche, zwei Quoten, eine Rechnung. Der
+  GOZ-Nummernkreis legt den Bereich dabei **nicht** fest; die Krone auf einem
+  Implantat ist `ZE`, obwohl die Insertion aus dem implantologischen Abschnitt
+  stammt. Deshalb trägt jede Position ihren Bereich ausdrücklich.
+
+  `rechnungsbetrag` wird nicht übergeben, sondern vom Kernsystem als Summe der
+  Positionsbeträge gebildet — ein Feld weniger, das auseinanderlaufen kann.
+
+  ## Was das Kernsystem nicht tut
+
+  Es rechnet **keine Erstattung**. Der `erstattungsbetrag` wird per PATCH von
+  außen gesetzt. Die sechs Rechenschritte aus der Wurzel-README bleiben
+  bewusst frei — das ist der Platz für ein späteres MCP-Tool.
+
+  Ab "Schadensfall einreichen" wird geschrieben — meistens auf einem Fall,
+  den die Sammlung selbst anlegt (`{{neueSchadensfallId}}`), "Schadensfall
+  ablehnen" auf dem Seed-Fall 50009 und "Schadensfall claimen"/"Schadensfall
+  bewerten" auf 50014 — dem einzigen `eingereicht`-Fall, den kein anderer
+  Request der Sammlung anfasst. Von oben nach unten ausführen.
+
+  Ein zweiter Lauf ohne zurückgesetzten Bestand ist kein Problem mehr:
+  "Schadensfall claimen" holt sich 50014 vorher zurück nach `eingereicht`,
+  und "Schadenhistorie eines Kunden" prüft nicht mehr die Länge der Liste,
+  sondern ihren Inhalt. Der Grund für beides ist derselbe: Der Poller des
+  Schadensfallagenten schreibt in denselben Bestand, und zwar ohne dass
+  jemand einen Request geschickt hätte. Details stehen bei "Schadensfall
+  claimen".
+
+  ## Wer `eingereicht` braucht, kämpft um den Fall
+
+  Der Poller nimmt sich jeden Fall in `eingereicht`, auch den, den dieser
+  Ordner gerade selbst eingereicht hat. Zwei Requests brauchen den Zustand
+  aber — "Schadensfall in Pruefung nehmen" und "Schadensfall claimen" — und
+  beide holen sich den Fall in einem Pre-Request-Script zurück. Das ist kein
+  Trick: `in_pruefung`, `geprueft_freigabe` und `geprueft_eskalation` führen
+  alle wieder nach `eingereicht`, und genau diesen Weg geht auch die
+  Sachbearbeitung mit "Erneut prüfen lassen".
+
+  Zwischen dem Zurückholen und dem eigentlichen Request bleibt ein Rest von
+  Millisekunden, in dem der Takt wieder gewinnen kann. Wie oft, hängt am
+  Timing: Der Bestand trägt genau einen Seed-Fall in `eingereicht` (50014);
+  ist der Takt in der ersten halben Minute nach dem Start noch mit ihm
+  beschäftigt, stört er nicht — danach ist er leer und greift sofort zu.
+  Ein Lauf mit `--delay` vergrößert das Fenster zwischen zwei Requests auf
+  eine Minute und macht den Unterschied sichtbar.
+
+  Wer das Rennen gar nicht führen will, startet das Lab ohne den Takt:
+
+  ```bash
+  SCHADENSFALL_POLL_ENABLED=false ./start.sh
+  ```
+}

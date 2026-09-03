@@ -1,0 +1,39 @@
+meta {
+  name: Kunde stilllegen
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{basisUrl}}/kunden/{{neueKundenId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": "inaktiv"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq inaktiv
+}
+
+docs {
+  Das Ende des Kundenlebenszyklus in dieser API. Es gibt kein `DELETE` — die
+  OAS kennt keine Löschoperation, und ein Versuch darauf beantwortet das
+  Kernsystem mit 405 (siehe Ordner 05).
+
+  Ein stillgelegter Kunde bleibt vollständig lesbar und taucht weiter in
+  `GET /kunden` auf. Nur der Filter `?status=aktiv` blendet ihn aus. Die
+  Schadenhistorie bleibt ebenfalls erhalten — sie ist Beleg, keine
+  Verwaltungsinformation.
+
+  Der Weg zurück ist derselbe Request mit `"status": "aktiv"`.
+}

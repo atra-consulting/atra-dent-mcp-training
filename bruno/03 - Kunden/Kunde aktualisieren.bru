@@ -1,0 +1,43 @@
+meta {
+  name: Kunde aktualisieren
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{basisUrl}}/kunden/{{neueKundenId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "telefon": "+49 351 1112233",
+    "tarifId": "ATRA_DENT_X_SB"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.telefon: eq +49 351 1112233
+  res.body.tarifId: eq ATRA_DENT_X_SB
+  res.body.nachname: eq Hoffmann-Berg
+  res.body.adresse.ort: eq Dresden
+}
+
+docs {
+  Der Gegenentwurf zum PUT darüber: PATCH ändert nur, was im Rumpf steht. Hier
+  ein Tarifwechsel von brillant zu brillant mit Selbstbehalt, dazu eine neue
+  Telefonnummer.
+
+  Die Zusicherungen prüfen deshalb nicht nur die beiden geänderten Felder,
+  sondern auch, dass `nachname` und `adresse` aus dem PUT unberührt geblieben
+  sind — genau das ist der Unterschied zwischen den beiden Verben.
+
+  In `KundeAendern` ist jedes Feld optional; ein leerer Rumpf `{}` ist gültig
+  und ändert nichts außer `geaendertAm`.
+}

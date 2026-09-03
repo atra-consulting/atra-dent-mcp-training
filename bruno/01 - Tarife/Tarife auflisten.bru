@@ -1,0 +1,35 @@
+meta {
+  name: Tarife auflisten
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{rechenkernUrl}}/tarife
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+  res.body: length 4
+}
+
+docs {
+  Alle vier Tarife auf einen Blick — `ATRA_DENT_S`, `ATRA_DENT_B`,
+  `ATRA_DENT_X` und `ATRA_DENT_X_SB`.
+
+  Die `id` ist zugleich der technische Tarifschlüssel aus dem Produktmodell;
+  eine zusätzliche technische ID gibt es nicht. `name` ist der Anzeigename und
+  darf sich ändern, ohne die `id` zu berühren.
+
+  Beachtenswert: `basisbeitragMonatlich` kommt als Dezimalstring (`"15.90"`),
+  nicht als JSON-Zahl. Das ist Absicht — binäres Gleitkomma kann 0,01-Schritte
+  nicht exakt darstellen, und das Produktmodell verlangt kaufmännische
+  Rundung auf zwei Nachkommastellen.
+
+  `basisbeitragMonatlich` ist der Beitrag des jüngsten Eintrittsalters
+  (18-30), also ein Ab-Preis — kein persönlicher Beitrag. Der ergibt sich aus
+  `POST /beitragsberechnung` (siehe Ordner 02).
+}

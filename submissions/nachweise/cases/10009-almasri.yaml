@@ -1,0 +1,95 @@
+
+kundenId: 10009
+praxis: beisser
+
+patient:
+  name: Ibrahim Al-Masri
+  geburtsdatum: 1979-08-09
+  anschrift:
+    strasse: Bergstrasse 41
+    plz: "60311"
+    ort: Frankfurt am Main
+
+befund:
+  datum: 2026-08-01
+  aktenzeichen: "B-2026-0955"
+  zahnstatus:
+    - { zahn: "16", zustand: fuellung }
+    - { zahn: "36", zustand: implantat }
+  diagnosen:
+    - >-
+      Implantatgetragene Krone Regio 36, in situ seit Juni 2026, klinisch und
+      roentgenologisch reizlos.
+    - Vereinzelt Fuellung 16, sonst kariesfreies Gebiss.
+  parodontalbefund: >-
+    Parodontalstatus vom Zeitpunkt der Implantatplanung (Maerz 2026): lokal
+    erhoehte Sondierungstiefen bis 5 mm im Bereich 36/37, sonst unauffaellig.
+    Seither keine erneute Erhebung.
+  empfehlung: >-
+    Recall zur Periimplantitis-Prophylaxe alle sechs Monate empfohlen; ein
+    erster Termin ist bislang nicht vereinbart.
+  hkp_beiliegend: false
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2026-03-11, zahn: "36", behandlung: Implantatplanung, DVT und Parodontalstatus }
+    - { datum: 2026-05-06, zahn: "36", behandlung: Implantatinsertion mit Knochenaufbau Regio 36 }
+    - { datum: 2026-05-27, zahn: "36", behandlung: Implantatfreilegung und Gingivaformer }
+    - { datum: 2026-06-03, zahn: "36", behandlung: Implantatgetragene Vollkrone Regio 36, adhaesive Befestigung }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-05
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: nein
+      freitext: Alles fertig seit dem Sommer.
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: nein
+      freitext: null
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: Die Luecke ist mit einem Implantat versorgt.
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Anfang August, alles gut.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: ja
+      freitext: null
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: 55
+      begruendung: >-
+        Der Befund empfiehlt ausdruecklich einen Recall, aber ohne Termin und
+        ohne Heil- und Kostenplan — angeraten, doch nicht terminiert. Der
+        Patient selbst haelt die Sache im Fragebogen fuer erledigt.
+    ERSATZBEDARF:
+      wert: 0
+      begruendung: >-
+        Aktuell fehlt oder braucht kein Zahn Ersatz; die Luecke ist bereits
+        implantatgetragen versorgt, deckt sich mit fehlendeZaehne 0 in der
+        Akte.
+    SANIERUNGSGRAD:
+      wert: 45
+      begruendung: >-
+        Implantat mit Krone und eine weitere Fuellung zeigen ein bereits
+        erheblich versorgtes Gebiss.
+    PARODONTALBEFUND:
+      wert: 40
+      begruendung: >-
+        Lokal erhoehte Sondierungstiefen sind dokumentiert, stammen aber von
+        der Implantatplanung im Maerz und wurden seither nicht erneut
+        erhoben — beurteilbar, aber nicht mehr aktuell.
+  erwartete_zone: gelb
+  hinweis: >-
+    Eine abgeschlossene, gut verlaufene Behandlung — aber der empfohlene
+    Recall und der Monate alte Parodontalbefund zeigen, dass "fertig" aus
+    Patientensicht nicht dasselbe ist wie "nachgesorgt".

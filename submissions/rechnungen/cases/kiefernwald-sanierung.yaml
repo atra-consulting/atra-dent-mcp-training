@@ -1,0 +1,41 @@
+
+rechnungsnummer: "KKW-2026-002914"
+rechnungsdatum: 2026-07-15
+praxis: kiefernwald
+patient:
+  name: Dr. Reinhold Bachmeier
+  anschrift:
+    strasse: Kurpromenade 22
+    plz: "97688"
+    ort: Bad Molarheim
+  geburtsdatum: 1961-01-14
+positionen:
+  - { datum: 2026-01-13, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-01-13, art: goz, nummer: "0030", zahn: null, leistung: Heil- und Kostenplan, anzahl: 1, faktor: 2.3, betrag: 16.08 }
+  - { datum: 2026-01-13, art: goz, nummer: "1000", zahn: null, leistung: Mundhygienestatus mit Unterweisung, anzahl: 1, faktor: 2.3, betrag: 18.63 }
+  - { datum: 2026-01-13, art: goz, nummer: "1040", zahn: null, leistung: Professionelle Zahnreinigung, anzahl: 26, faktor: 2.3, betrag: 108.50 }
+  - { datum: 2026-02-10, art: goz, nummer: "0090", zahn: "16", leistung: Intraorale Infiltrationsanästhesie, anzahl: 3, faktor: 2.3, betrag: 18.66 }
+  - { datum: 2026-02-10, art: goz, nummer: "2040", zahn: "16", leistung: Anlegen von Spanngummi, anzahl: 2, faktor: 2.3, betrag: 22.38 }
+  - { datum: 2026-02-10, art: goz, nummer: "2060", zahn: "16", leistung: Restauration mit Kompositmaterial, anzahl: 2, faktor: 2.8, betrag: 118.44 }
+  - { datum: 2026-02-10, art: goz, nummer: "2390", zahn: "26", leistung: Trepanation eines Zahnes, anzahl: 1, faktor: 2.3, betrag: 34.90 }
+  - { datum: 2026-03-24, art: goz, nummer: "2150", zahn: "36", leistung: "Einlagefüllung, einflächig", anzahl: 1, faktor: 2.3, betrag: 87.20 }
+  - { datum: 2026-03-24, art: goz, nummer: "2160", zahn: "37", leistung: "Einlagefüllung, zweiflächig", anzahl: 1, faktor: 2.3, betrag: 112.60 }
+  - { datum: 2026-04-21, art: goz, nummer: "9000", zahn: "46", leistung: Implantatbezogene Analyse und Vermessung, anzahl: 1, faktor: 2.3, betrag: 66.30 }
+  - { datum: 2026-04-21, art: goz, nummer: "9010", zahn: "46", leistung: Implantatinsertion, anzahl: 1, faktor: 2.8, betrag: 410.20 }
+  - { datum: 2026-05-19, art: goz, nummer: "9040", zahn: "46", leistung: Freilegen des Implantats und Einfügen von Aufbauelementen, anzahl: 1, faktor: 2.3, betrag: 94.80 }
+  - { datum: 2026-06-16, art: goz, nummer: "2200", zahn: "46", leistung: "Versorgung eines Zahnes oder Implantats durch eine Vollkrone (Tangentialpräparation)", anzahl: 1, faktor: 2.3, betrag: 218.40 }
+  - { datum: 2026-06-16, art: goz, nummer: "2210", zahn: "45", leistung: "Versorgung durch eine Vollkrone, Stufenpräparation", anzahl: 1, faktor: 2.3, betrag: 241.90 }
+  - { datum: 2026-06-16, art: goz, nummer: "5170", zahn: null, leistung: Anatomische Abformung mit individuellem Löffel, anzahl: 2, faktor: 2.3, betrag: 88.20 }
+  - { datum: 2026-06-16, art: goz, nummer: "2197", zahn: "46", leistung: Adhäsive Befestigung, anzahl: 2, faktor: 2.3, betrag: 35.70 }
+  - { datum: 2026-07-07, art: goz, nummer: "1010", zahn: null, leistung: Kontrolle des Übungserfolges, anzahl: 1, faktor: 2.3, betrag: 9.31 }
+  - { datum: 2026-04-21, art: goae, nummer: "5000", zahn: "46", leistung: Röntgenaufnahme Zahnfilm, anzahl: 3, faktor: 1.8, betrag: 26.22 }
+  - { datum: 2026-01-13, art: goae, nummer: "5370", zahn: null, leistung: Panoramaschichtaufnahme des Kiefers, anzahl: 1, faktor: 1.8, betrag: 46.61 }
+  - { datum: 2026-04-21, art: material, nummer: null, zahn: "46", leistung: "Implantatkörper, Verschlussschraube, Gingivaformer", anzahl: 1, faktor: null, betrag: 412.00 }
+  - { datum: 2026-06-16, art: labor, nummer: null, zahn: "46", leistung: "Vollkeramische Krone, Zirkondioxid", anzahl: 1, faktor: null, betrag: 486.30 }
+  - { datum: 2026-06-16, art: labor, nummer: null, zahn: "45", leistung: "Vollkeramische Krone, Zirkondioxid", anzahl: 1, faktor: null, betrag: 486.30 }
+  - { datum: 2026-03-24, art: labor, nummer: null, zahn: "36", leistung: "Keramikinlay, laborgefertigt", anzahl: 2, faktor: null, betrag: 604.80 }
+  - { datum: 2026-06-16, art: labor, nummer: null, zahn: null, leistung: Modellherstellung und Bissregistrierung, anzahl: 1, faktor: null, betrag: 138.90 }
+  - { datum: 2026-02-10, art: verlangen, nummer: null, zahn: "16", leistung: Kofferdam in Sonderausführung auf Wunsch, anzahl: 1, faktor: null, betrag: 32.00 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

@@ -1,0 +1,9 @@
+rechnungsnummer: "2026-T101"
+rechnungsdatum: 2026-03-14
+praxis: beisser
+patient:
+  name: Testpatient Unbekannte GOZ
+  anschrift: { strasse: Teststraße 1, plz: "34117", ort: Kassel }
+positionen:
+  - { datum: 2026-03-01, art: goz, nummer: "9999", leistung: Gibt es nicht, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { art: labor, leistung: Zahntechnische Leistungen, betrag: 148.20 }

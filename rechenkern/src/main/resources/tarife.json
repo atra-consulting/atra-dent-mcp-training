@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ATRA_DENT_S",
+    "name": "atra.dent.smart"
+  },
+  {
+    "id": "ATRA_DENT_B",
+    "name": "atra.dent.balance"
+  },
+  {
+    "id": "ATRA_DENT_X",
+    "name": "atra.dent.brillant"
+  },
+  {
+    "id": "ATRA_DENT_X_SB",
+    "name": "atra.dent.brillant mit Selbstbehalt"
+  }
+]

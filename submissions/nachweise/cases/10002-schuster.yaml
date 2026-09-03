@@ -1,0 +1,100 @@
+
+kundenId: 10002
+praxis: dds
+
+patient:
+  name: Bernd Schuster
+  geburtsdatum: 1958-09-30
+  anschrift:
+    strasse: Hafenweg 7
+    plz: "20457"
+    ort: Hamburg
+
+befund:
+  datum: 2026-07-28
+  aktenzeichen: "WW-2026-3318"
+  zahnstatus:
+    - { zahn: "16", zustand: fehlend }
+    - { zahn: "26", zustand: fehlend }
+    - { zahn: "36", zustand: fehlend }
+    - { zahn: "24", zustand: krone }
+    - { zahn: "35", zustand: ersatzbeduerftig }
+    - { zahn: "37", zustand: krone }
+    - { zahn: "46", zustand: wurzelgefuellt }
+    - { zahn: "47", zustand: fuellung }
+    - { zahn: "15", zustand: fuellung }
+  diagnosen:
+    - Schaltluecke Regio 35-37 nach Verlust von 36; Pfeilerzaehne erhaltungswuerdig.
+    - Generalisierte chronische Parodontitis, Stadium III, Grad B.
+    - Zustand nach Wurzelkanalbehandlung an 46, Fuellung roentgenologisch dicht.
+  parodontalbefund: >-
+    Sondierungstiefen 4 bis 7 mm an 14 Stellen, Blutung auf Sondierung an 38
+    Prozent der Messpunkte. Lockerungsgrad I an 35 und 37. Nach
+    parodontalchirurgischer Therapie im Juli 2026 Reevaluation ausstehend.
+  empfehlung: >-
+    Versorgung der Schaltluecke mit einer dreigliedrigen Bruecke Regio 35-37,
+    Pfeiler 35 und 37 als Vollkronen. Vor prothetischer Versorgung Abschluss
+    der Parodontaltherapie. Der Heil- und Kostenplan ist erstellt und dem
+    Patienten ausgehaendigt.
+  hkp_beiliegend: true
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2026-03-10, zahn: "46", behandlung: Trepanation und Wurzelkanalaufbereitung }
+    - { datum: 2026-03-24, zahn: "46", behandlung: Wurzelkanalfuellung }
+    - { datum: 2026-07-14, zahn: null, behandlung: Entfernung harter und weicher Zahnbelaege }
+    - { datum: 2026-07-20, zahn: null, behandlung: Parodontalchirurgische Therapie, mehrere Zaehne }
+    - { datum: 2026-07-28, zahn: null, behandlung: Befundaufnahme und Planung Zahnersatz }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-06
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: ja
+      freitext: Eine Bruecke unten links. Der Plan liegt bei.
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: ja
+      freitext: Zahnfleischbehandlung, die ist noch nicht ganz durch.
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: ja
+      freitext: Drei Backenzaehne. Oben zwei und unten einer.
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Letzte Woche.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: nein
+      freitext: Erst seit der Zahnfleischsache.
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: 95
+      begruendung: >-
+        Ein Heil- und Kostenplan liegt bei, die Bruecke ist geplant und der
+        Patient bestaetigt es im Fragebogen. Eindeutiger geht es nicht.
+    ERSATZBEDARF:
+      wert: 80
+      begruendung: >-
+        Drei fehlende Zaehne, deckt sich mit fehlendeZaehne 3 in der Akte,
+        dazu 35 als ersatzbeduerftiger Pfeiler.
+    SANIERUNGSGRAD:
+      wert: 70
+      begruendung: Zwei Kronen, eine Wurzelfuellung, zwei Fuellungen bei drei Luecken.
+    PARODONTALBEFUND:
+      wert: 65
+      begruendung: >-
+        Parodontitis Stadium III Grad B mit dokumentierten Sondierungstiefen,
+        Therapie laufend, Reevaluation ausstehend. Beurteilbar und schlecht.
+  erwartete_zone: rot
+  hinweis: >-
+    Absender und Verfasser fallen auseinander — die Abrechnungsstelle
+    uebermittelt, das MVZ hat erhoben. Der Befund ist dennoch vollstaendig;
+    eine Ablehnung stuetzt sich hier auf die Papiere und nicht auf eine
+    Einschaetzung.

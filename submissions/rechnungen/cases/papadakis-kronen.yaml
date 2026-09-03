@@ -1,0 +1,22 @@
+
+rechnungsnummer: "KKW-2026-003288"
+rechnungsdatum: 2026-08-04
+praxis: kiefernwald
+patient:
+  name: Dimitrios Papadakis
+  anschrift:
+    strasse: Isarstrasse 44
+    plz: "80469"
+    ort: Muenchen
+  geburtsdatum: 1971-11-05
+positionen:
+  - { datum: 2026-06-23, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-06-23, art: goz, nummer: "0090", zahn: "15", leistung: Intraorale Infiltrationsanästhesie, anzahl: 2, faktor: 2.3, betrag: 12.44 }
+  - { datum: 2026-06-23, art: goz, nummer: "2210", zahn: "15", leistung: "Versorgung durch eine Vollkrone, Stufenpräparation", anzahl: 1, faktor: 2.3, betrag: 241.90 }
+  - { datum: 2026-06-23, art: goz, nummer: "2210", zahn: "16", leistung: "Versorgung durch eine Vollkrone, Stufenpräparation", anzahl: 1, faktor: 2.3, betrag: 241.90 }
+  - { datum: 2026-06-23, art: goz, nummer: "5170", zahn: null, leistung: Anatomische Abformung mit individuellem Löffel, anzahl: 2, faktor: 2.3, betrag: 88.20 }
+  - { datum: 2026-07-21, art: goz, nummer: "2197", zahn: "15", leistung: Adhäsive Befestigung, anzahl: 2, faktor: 2.3, betrag: 35.70 }
+  - { datum: 2026-07-21, art: labor, nummer: null, zahn: null, leistung: "Zwei vollkeramische Kronen, Zirkondioxid", anzahl: 2, faktor: null, betrag: 972.60 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 500.00

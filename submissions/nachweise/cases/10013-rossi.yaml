@@ -1,0 +1,97 @@
+
+kundenId: 10013
+praxis: kiefernwald
+
+patient:
+  name: Marco Rossi
+  geburtsdatum: 1983-04-05
+  anschrift:
+    strasse: Bahnhofstrasse 88
+    plz: "70190"
+    ort: Stuttgart
+
+befund:
+  datum: 2026-07-31
+  aktenzeichen: "KKW-2026-01133"
+  zahnstatus:
+    - { zahn: "35", zustand: krone }
+    - { zahn: "36", zustand: bruecke }
+    - { zahn: "37", zustand: krone }
+    - { zahn: "17", zustand: fehlend }
+    - { zahn: "27", zustand: fehlend }
+  diagnosen:
+    - Bruecke Regio 35-37 in situ, Eingliederung Januar 2026, funktionell und aesthetisch unauffaellig.
+    - Schaltluecken Regio 17 und 27 nach Extraktion bei fortgeschrittener Karies, bislang unversorgt.
+    - Generalisierte chronische Parodontitis Stadium III, Grad B.
+  parodontalbefund: >-
+    Sondierungstiefen 4 bis 6 mm an zahlreichen Stellen, Blutung auf
+    Sondierung an ueber einem Drittel der Messpunkte. Erhaltungstherapie
+    laeuft, engmaschige Kontrolle vereinbart.
+  empfehlung: >-
+    Versorgung der Schaltluecken 17 und 27 mit implantatgetragenem oder
+    brueckengetragenem Zahnersatz. Der Heil- und Kostenplan liegt bei.
+  hkp_beiliegend: true
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2025-11-08, zahn: "17", behandlung: Extraktion bei nicht erhaltungswuerdiger Karies }
+    - { datum: 2025-12-02, zahn: "27", behandlung: Extraktion bei nicht erhaltungswuerdiger Karies }
+    - { datum: 2026-01-27, zahn: "36", behandlung: Bruecke Regio 35-37 mit Vollkrone 35 }
+    - { datum: 2026-06-30, zahn: null, behandlung: Befundaufnahme und Planung Zahnersatz Regio 17 und 27 }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-05
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: ja
+      freitext: Zwei Brueckenglieder oben, der Kostenplan liegt bei.
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: ja
+      freitext: Ich war gerade zur Planung da.
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: ja
+      freitext: Zwei Backenzaehne oben.
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Ende Juni.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: nein
+      freitext: null
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: 90
+      begruendung: >-
+        Ein Heil- und Kostenplan liegt bei, der Patient bestaetigt die
+        geplante Versorgung im Fragebogen. Eindeutiger geht es nicht.
+    ERSATZBEDARF:
+      wert: 85
+      begruendung: >-
+        Zwei fehlende, unversorgte Zaehne (17, 27) — deckt sich exakt mit
+        fehlendeZaehne 2 in der Akte. Die Bruecke 35-37 zaehlt nicht mit,
+        da 36 bereits versorgt ist.
+    SANIERUNGSGRAD:
+      wert: 65
+      begruendung: >-
+        Eine Bruecke mit zwei Ankerkronen ist bereits eingegliedert —
+        erheblicher, bereits geleisteter prothetischer Aufwand.
+    PARODONTALBEFUND:
+      wert: 60
+      begruendung: >-
+        Parodontitis Stadium III Grad B mit dokumentierten
+        Sondierungstiefen und Blutungswerten. Beurteilbar und deutlich
+        auffaellig.
+  erwartete_zone: rot
+  hinweis: >-
+    Die bereits bezahlte Bruecke ist kein Grund zur Beruhigung: Sie erklaert
+    nur, warum die Akte nicht drei, sondern zwei fehlende Zaehne fuehrt. Die
+    Ablehnung stuetzt sich auf den vorliegenden Heil- und Kostenplan, nicht
+    auf eine Vermutung.

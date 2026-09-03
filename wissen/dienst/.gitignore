@@ -1,0 +1,2 @@
+# Maven-Ausgabe, darunter die aus oas/wissen.yaml erzeugten Interfaces und DTO
+target/

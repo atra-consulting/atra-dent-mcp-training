@@ -1,0 +1,39 @@
+meta {
+  name: Kunden suchen - mehrere Filter
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{basisUrl}}/kunden?nachname=Müller&status=aktiv
+  body: none
+  auth: inherit
+}
+
+params:query {
+  nachname: Müller
+  status: aktiv
+  ~vorname: Anna
+  ~geburtsdatum: 1990-04-12
+}
+
+assert {
+  res.status: eq 200
+  res.body: length 1
+  res.body[0].id: eq 10001
+}
+
+docs {
+  Alle vier Filter — `vorname`, `nachname`, `geburtsdatum`, `status` — werden
+  UND-verknüpft und vergleichen exakt, nicht als Teilstring. `Müll` findet
+  Anna Müller also nicht — und `Mueller` ebenso wenig: Der Bestand schreibt
+  den Namen mit Umlaut, und exakt heißt exakt.
+
+  Zwei der Parameter sind deaktiviert (in Bruno das `~` vor dem Namen).
+  Einhaken, um die Verknüpfung zu sehen: das Ergebnis bleibt Anna, weil alle
+  vier Werte auf sie passen. Ändert man `vorname` auf `Bernd`, ist die Liste
+  leer — eine leere Trefferliste ist ein 200 mit `[]`, kein 404.
+
+  `status` ist ein Enum. Ein anderer Wert als `aktiv` oder `inaktiv` liefert
+  400; siehe "400 - Ungueltiger Statuswert" in Ordner 05.
+}

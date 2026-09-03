@@ -1,0 +1,19 @@
+
+rechnungsnummer: "WR-2025-0143"
+rechnungsdatum: 2025-04-10
+praxis: weissraum
+patient:
+  name: Fatima Yilmaz
+  anschrift:
+    strasse: Karl-Liebknecht-Strasse 21
+    plz: "04107"
+    ort: Leipzig
+  geburtsdatum: 2001-05-19
+positionen:
+  - { datum: 2025-03-20, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2025-03-20, art: goz, nummer: "1000", zahn: null, leistung: Erstellung eines Mundhygienestatus, anzahl: 1, faktor: 2.3, betrag: 18.63 }
+  - { datum: 2025-03-20, art: goz, nummer: "1040", zahn: null, leistung: Professionelle Zahnreinigung, anzahl: 26, faktor: 2.3, betrag: 108.50 }
+  - { datum: 2025-03-20, art: goz, nummer: "1020", zahn: null, leistung: Lokale Fluoridierung, anzahl: 1, faktor: 2.3, betrag: 9.31 }
+zahlung:
+  frist_tage: 21
+  bereits_gezahlt: 0

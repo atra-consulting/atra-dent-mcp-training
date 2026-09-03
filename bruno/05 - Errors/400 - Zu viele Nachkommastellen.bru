@@ -1,0 +1,48 @@
+meta {
+  name: 400 - Zu viele Nachkommastellen
+  type: http
+  seq: 9
+}
+
+patch {
+  url: {{basisUrl}}/schadensfaelle/{{schadensfallId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "erstattungsbetrag": "1130.213"
+  }
+}
+
+assert {
+  res.status: eq 400
+  res.body.status: eq 400
+  res.body.detail: contains erstattungsbetrag
+}
+
+docs {
+  Ein Geldbetrag hat höchstens zwei Nachkommastellen. `1130.213` verletzt das
+  und wird abgewiesen — Fall 50010 bleibt unverändert.
+
+  Die Regel steht im `Geldbetrag`-Schema (`multipleOf: 0.01`), lässt sich dort
+  aber nicht durchsetzen: `multipleOf` erzeugt beim Generator überhaupt keine
+  Annotation, und ein `pattern` ließe sich nur als `@Pattern` an einem
+  BigDecimal erzeugen, was zur Laufzeit scheitert. Das Kernsystem prüft
+  deshalb selbst, an einer Stelle für alle Wege, auf denen Geldbeträge
+  hereinkommen.
+
+  Weniger als zwei Stellen sind unproblematisch: `12.3` und `12.30` meinen
+  denselben Betrag, geprüft wird der Maßstab ohne nachlaufende Nullen. `12.300`
+  geht also durch, `12.301` nicht.
+
+  Das ist zugleich der Grund für das Drahtformat: Geldbeträge sind
+  Dezimalstrings, keine JSON-Zahlen. Binäres Gleitkomma kann 0,01-Schritte
+  nicht exakt darstellen, das Produktmodell verlangt aber kaufmännische
+  Rundung auf zwei Stellen.
+}

@@ -1,0 +1,148 @@
+
+name: atra.dent Schadensfallagent
+
+description: |
+  Prueft eingereichte Schadensfaelle der Zahnzusatzversicherung atra.dent:
+  liest den Fall, prueft seine Positionen dem Grunde nach, berechnet die
+  Erstattung, holt eine zahnmedizinische Fachauskunft ein und schreibt eine
+  Bewertung mit Empfehlung in den Fall.
+
+  ## Er faengt von sich aus an
+
+  Dieser Agent wartet nicht auf eine Nachricht. Er holt sich eingereichte
+  Faelle im Takt aus dem Kernsystem und uebernimmt jeden davon zur Pruefung
+  (Status `in_pruefung`); genau ein Aufrufer gewinnt dabei, ein zweiter
+  bekommt den Fall nicht. Die Fertigkeit `fall_pruefen` ist derselbe Weg auf
+  Anforderung - fuer eine Vorfuehrung und fuer ein "bitte noch einmal
+  pruefen".
+
+  ## Was er entscheidet - und was nicht
+
+  **Er entscheidet nichts abschliessend.** Er setzt ausschliesslich
+  `in_pruefung` (Uebernahme) und `geprueft_freigabe` bzw.
+  `geprueft_eskalation` (seine Empfehlung). `genehmigt`, `abgelehnt` und
+  `ausgezahlt` setzt er nie - die Auszahlungsentscheidung bleibt bei der
+  Sachbearbeitung, und das ist keine technische Einschraenkung, sondern der
+  Punkt: Ein Agent, der auszahlen darf, ist keine Vorpruefung mehr.
+
+  Der Erstattungsvorschlag stammt immer aus der Erstattungsberechnung
+  desselben Zuges und nie aus dem Antworttext eines Modells. Eine Zahl, die
+  ein Modell formuliert hat, ist eine Formulierung und keine Berechnung.
+
+  ## Wann er freigibt
+
+  Freigabe empfiehlt er nur, wenn alle Waechterregeln gruen sind: jede
+  Position ist der GOZ nach zuzuordnen, der vorgeschlagene Betrag stimmt mit
+  der Erstattungsberechnung ueberein und liegt unter der Freigabeschwelle,
+  die Fachauskunft ist da und unauffaellig, der Vertrag ist aktiv und ohne
+  laufende Wartezeit, der Patient gehoert zur Akte, es gibt kein Duplikat und
+  die Rechnungsextraktion ist vollstaendig. Ist auch nur eine Regel rot,
+  empfiehlt er Eskalation und nennt die verletzten Regeln als Gruende - der
+  Fall geht dann an die Sachbearbeitung, nicht in den Papierkorb.
+
+  ## Er fragt zurueck, statt zu raten
+
+  Fehlt die Fallnummer, steht der Task auf `input-required` (im Wire-Format
+  nach A2A 0.3), die Rueckfrage steht in `status.message`, und die Antwort
+  darauf traegt dieselbe `taskId`. Nimmt der Agent ein Anliegen nicht an,
+  steht der Task auf `rejected`; geht bei der Bearbeitung etwas schief, steht
+  er auf `failed`. Beide sind final, anders als `input-required`.
+
+  ## Wer fragt
+
+  An derselben Kundennummer haengen zwei verschiedene Fragen, und sie werden
+  aus zwei verschiedenen Quellen beantwortet.
+
+  **In wessen Namen gelesen wird, steht am Fall** - nicht am Aufrufer. Der
+  Agent liest Vertrag, Verbrauch und Schadenhistorie im Namen der Kundin, der
+  der gepruefte Fall gehoert. Wer die Pruefung angestossen hat, aendert daran
+  nichts. Ein Header, der hier etwas anderes sagte als die Akte, waere eine
+  zweite Wahrheit ueber denselben Fall.
+
+  **Ob dieser Aufrufer nach diesem Fall fragen darf**, beantwortet dagegen
+  nur der Header `x-kunden-id`. Passt er nicht zur Kundennummer des Falls,
+  endet der Task auf `rejected`, ohne Uebernahme und ohne Pruefung. Die
+  Absage nennt dann nichts vom Fall - auch nicht, ob es ihn gibt: Ein
+  unbekannter und ein fremder Fall bekommen denselben Wortlaut, sonst waere
+  das Durchprobieren von Nummern eine Auskunft darueber, welche es gibt. Auch
+  eine Akte ohne lesbare Kundennummer gilt als fremd.
+
+  **Der Header ist Pflicht.** Fehlt er, endet der Task mit genau derselben
+  Absage wie zu einem fremden Fall - gelesen wird der Fall dafuer nicht
+  einmal. Ein eigener Wortlaut waere wieder ein Existenzorakel, diesmal ohne
+  Anmeldung. Der Poller ist davon nicht betroffen: Er ruft diese Fertigkeit
+  nicht auf, sondern die Pruefung unmittelbar. Wer die Fertigkeit von Hand
+  aufruft, setzt die Kopfzeile mit.
+
+  ## Eingabe und Ausgabe
+
+  EINGABE: die Fallnummer, entweder im Text ("Bitte pruefe Fall 50071") oder
+  als data-Part `{"schadensfallId": 50071}`. Mehr braucht er nicht; alles
+  Weitere liest er selbst.
+
+  Im Text gilt nur eine **freistehende fuenfstellige** Zahl als Fallnummer -
+  die Fallnummern des Labs sind alle fuenfstellig, Jahreszahlen, Betraege und
+  Datumsteile nicht. "Pruefe den Fall vom 8.1.2026, Nummer 50071" trifft
+  damit den richtigen Fall. Wer eine Nummer anderer Laenge meint, nimmt den
+  data-Part; ohne fuenfstellige Zahl fragt der Agent zurueck.
+
+  AUSGABE: ein Artefakt namens `bewertung`. Der text-Part traegt die
+  Zusammenfassung in Prosa - was geprueft wurde und was empfohlen wird. Der
+  data-Part traegt die Bewertung: Empfehlung, Erstattungsvorschlag, die
+  Gruende einer Eskalation als Codes, die Positionen mit ihrer Einordnung, die
+  Fachauskunft und das Protokoll der Schritte.
+
+  ## Konventionen
+
+  Fachliche Bezeichner sind durchgaengig deutsch, Umlaute als ae/oe/ue -
+  dieselbe Konvention wie im Kernsystem und im Produktmodell. Die Felder
+  dieser Karte folgen dagegen A2A 0.3 und bleiben englisch. Die Antwort ist
+  gewoehnliches Deutsch mit Umlauten.
+
+  ## Alles erfunden
+
+  atra.dent ist eine erfundene Zahnzusatzversicherung. Tarife, Leistungen,
+  Grenzen, Beitraege, Kunden und Schadensfaelle sind frei erfunden; es besteht
+  kein Bezug zu realen Produkten oder Anbietern.
+
+version: "1.0.0"
+
+provider:
+  organization: atra.consulting
+  url: https://atra.consulting/
+
+capabilities:
+  streaming: true
+  pushNotifications: false
+
+defaultInputModes:
+  - text/plain
+defaultOutputModes:
+  - text/plain
+  - application/json
+
+skills:
+
+  - id: fall_pruefen
+    name: Schadensfall pruefen
+    description: |
+      Prueft einen Schadensfall anhand seiner Nummer: liest Vertrag und Verbrauch
+      im Namen der Kundin, prueft die Positionen dem Grunde nach (goz_pruefen),
+      berechnet die Erstattung (erstattung_berechnen), holt - sofern ihm ein
+      Agent mit der Fertigkeit rechnung-beurteilen zur Verfuegung steht - eine
+      Fachauskunft dazu ein und bewertet: Empfehlung freigabe oder eskalation
+      mit Gruenden. Steht keiner zur Verfuegung, eskaliert der Fall mit dem
+      Grund ARZT_NICHT_VERFUEGBAR, statt ohne die Auskunft freizugeben. Schreibt die Bewertung in den Fall (Status geprueft_freigabe bzw.
+      geprueft_eskalation). Setzt nie genehmigt, abgelehnt oder ausgezahlt.
+      Eingabe: Fallnummer im Text ("Fall 50071", freistehend und fuenfstellig)
+      oder als data-Part {"schadensfallId": 50071}. Der Fall muss eingereicht
+      sein; ist er in Pruefung oder schon entschieden, sagt der Agent das.
+      Fragt eine Kundin nach dem Fall einer anderen - oder fragt jemand, der
+      sich gar nicht ausweist -, lehnt er ab, ohne etwas ueber den Fall zu
+      verraten, auch nicht, ob es ihn gibt.
+      Ausgabe: Artefakt `bewertung` mit Zusammenfassung im text-Part und der
+      Bewertung samt Protokoll im data-Part.
+    tags: [schadensfall, pruefung, erstattung, agent]
+    examples:
+      - Bitte pruefe Fall 50071.
+      - Pruefe den Schadensfall 50014 erneut.

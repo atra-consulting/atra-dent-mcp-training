@@ -1,0 +1,62 @@
+
+rechnungsnummer: "PRUEF-2026-0001"
+rechnungsdatum: 2026-08-01
+praxis: beisser
+patient:
+  name: Lastfall Umbruchprobe
+  anschrift:
+    strasse: "Teststraße 40"
+    plz: "34117"
+    ort: Kassel
+  geburtsdatum: 1970-01-01
+positionen:
+  - { datum: 2026-03-02, art: goz, nummer: "0010", zahn: null, leistung: "Eingehende Untersuchung zur Feststellung von Zahn-, Mund- und Kiefererkrankungen", anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-03-02, art: goz, nummer: "0090", zahn: "16", leistung: "Intraorale Infiltrationsanästhesie", anzahl: 1, faktor: 2.3, betrag: 6.22 }
+  - { datum: 2026-03-02, art: goz, nummer: "1040", zahn: null, leistung: "Professionelle Zahnreinigung", anzahl: 1, faktor: 2.3, betrag: 108.5 }
+  - { datum: 2026-03-02, art: goz, nummer: "2040", zahn: "26", leistung: "Anlegen von Spanngummi, je Kieferhälfte oder Frontzahnbereich", anzahl: 1, faktor: 2.3, betrag: 11.19 }
+  - { datum: 2026-03-02, art: goz, nummer: "2060", zahn: "26", leistung: "Präparieren einer Kavität und Restauration mit Kompositmaterialien in Adhäsivtechnik, einflächig", anzahl: 1, faktor: 2.8, betrag: 59.22 }
+  - { datum: 2026-03-02, art: goz, nummer: "2150", zahn: "36", leistung: "Einlagefüllung, einflächig", anzahl: 1, faktor: 2.3, betrag: 87.2 }
+  - { datum: 2026-03-02, art: goz, nummer: "2200", zahn: "46", leistung: "Versorgung eines Zahnes oder Implantats durch eine Vollkrone (Tangentialpräparation)", anzahl: 1, faktor: 2.3, betrag: 218.4 }
+  - { datum: 2026-03-02, art: goz, nummer: "2390", zahn: "37", leistung: "Trepanation eines Zahnes, als selbstständige Leistung", anzahl: 1, faktor: 2.3, betrag: 34.9 }
+  - { datum: 2026-03-02, art: goz, nummer: "4050", zahn: "14", leistung: "Entfernung harter und weicher Zahnbeläge an einem einwurzeligen Zahn oder Implantat", anzahl: 1, faktor: 2.3, betrag: 7.45 }
+  - { datum: 2026-03-02, art: goz, nummer: "9040", zahn: "46", leistung: "Freilegen eines Implantats und Einfügen von Aufbauelementen", anzahl: 1, faktor: 2.3, betrag: 410.2 }
+  - { datum: 2026-04-13, art: goz, nummer: "0010", zahn: null, leistung: "Eingehende Untersuchung zur Feststellung von Zahn-, Mund- und Kiefererkrankungen", anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-04-13, art: goz, nummer: "0090", zahn: "16", leistung: "Intraorale Infiltrationsanästhesie", anzahl: 1, faktor: 2.3, betrag: 6.22 }
+  - { datum: 2026-04-13, art: goz, nummer: "1040", zahn: null, leistung: "Professionelle Zahnreinigung", anzahl: 1, faktor: 2.3, betrag: 108.5 }
+  - { datum: 2026-04-13, art: goz, nummer: "2040", zahn: "26", leistung: "Anlegen von Spanngummi, je Kieferhälfte oder Frontzahnbereich", anzahl: 1, faktor: 2.3, betrag: 11.19 }
+  - { datum: 2026-04-13, art: goz, nummer: "2060", zahn: "26", leistung: "Präparieren einer Kavität und Restauration mit Kompositmaterialien in Adhäsivtechnik, einflächig", anzahl: 1, faktor: 2.8, betrag: 59.22 }
+  - { datum: 2026-04-13, art: goz, nummer: "2150", zahn: "36", leistung: "Einlagefüllung, einflächig", anzahl: 1, faktor: 2.3, betrag: 87.2 }
+  - { datum: 2026-04-13, art: goz, nummer: "2200", zahn: "46", leistung: "Versorgung eines Zahnes oder Implantats durch eine Vollkrone (Tangentialpräparation)", anzahl: 1, faktor: 2.3, betrag: 218.4 }
+  - { datum: 2026-04-13, art: goz, nummer: "2390", zahn: "37", leistung: "Trepanation eines Zahnes, als selbstständige Leistung", anzahl: 1, faktor: 2.3, betrag: 34.9 }
+  - { datum: 2026-04-13, art: goz, nummer: "4050", zahn: "14", leistung: "Entfernung harter und weicher Zahnbeläge an einem einwurzeligen Zahn oder Implantat", anzahl: 1, faktor: 2.3, betrag: 7.45 }
+  - { datum: 2026-04-13, art: goz, nummer: "9040", zahn: "46", leistung: "Freilegen eines Implantats und Einfügen von Aufbauelementen", anzahl: 1, faktor: 2.3, betrag: 410.2 }
+  - { datum: 2026-05-25, art: goz, nummer: "0010", zahn: null, leistung: "Eingehende Untersuchung zur Feststellung von Zahn-, Mund- und Kiefererkrankungen", anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-05-25, art: goz, nummer: "0090", zahn: "16", leistung: "Intraorale Infiltrationsanästhesie", anzahl: 1, faktor: 2.3, betrag: 6.22 }
+  - { datum: 2026-05-25, art: goz, nummer: "1040", zahn: null, leistung: "Professionelle Zahnreinigung", anzahl: 1, faktor: 2.3, betrag: 108.5 }
+  - { datum: 2026-05-25, art: goz, nummer: "2040", zahn: "26", leistung: "Anlegen von Spanngummi, je Kieferhälfte oder Frontzahnbereich", anzahl: 1, faktor: 2.3, betrag: 11.19 }
+  - { datum: 2026-05-25, art: goz, nummer: "2060", zahn: "26", leistung: "Präparieren einer Kavität und Restauration mit Kompositmaterialien in Adhäsivtechnik, einflächig", anzahl: 1, faktor: 2.8, betrag: 59.22 }
+  - { datum: 2026-05-25, art: goz, nummer: "2150", zahn: "36", leistung: "Einlagefüllung, einflächig", anzahl: 1, faktor: 2.3, betrag: 87.2 }
+  - { datum: 2026-05-25, art: goz, nummer: "2200", zahn: "46", leistung: "Versorgung eines Zahnes oder Implantats durch eine Vollkrone (Tangentialpräparation)", anzahl: 1, faktor: 2.3, betrag: 218.4 }
+  - { datum: 2026-05-25, art: goz, nummer: "2390", zahn: "37", leistung: "Trepanation eines Zahnes, als selbstständige Leistung", anzahl: 1, faktor: 2.3, betrag: 34.9 }
+  - { datum: 2026-05-25, art: goz, nummer: "4050", zahn: "14", leistung: "Entfernung harter und weicher Zahnbeläge an einem einwurzeligen Zahn oder Implantat", anzahl: 1, faktor: 2.3, betrag: 7.45 }
+  - { datum: 2026-05-25, art: goz, nummer: "9040", zahn: "46", leistung: "Freilegen eines Implantats und Einfügen von Aufbauelementen", anzahl: 1, faktor: 2.3, betrag: 410.2 }
+  - { datum: 2026-07-06, art: goz, nummer: "0010", zahn: null, leistung: "Eingehende Untersuchung zur Feststellung von Zahn-, Mund- und Kiefererkrankungen", anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-07-06, art: goz, nummer: "0090", zahn: "16", leistung: "Intraorale Infiltrationsanästhesie", anzahl: 1, faktor: 2.3, betrag: 6.22 }
+  - { datum: 2026-07-06, art: goz, nummer: "1040", zahn: null, leistung: "Professionelle Zahnreinigung", anzahl: 1, faktor: 2.3, betrag: 108.5 }
+  - { datum: 2026-07-06, art: goz, nummer: "2040", zahn: "26", leistung: "Anlegen von Spanngummi, je Kieferhälfte oder Frontzahnbereich", anzahl: 1, faktor: 2.3, betrag: 11.19 }
+  - { datum: 2026-07-06, art: goz, nummer: "2060", zahn: "26", leistung: "Präparieren einer Kavität und Restauration mit Kompositmaterialien in Adhäsivtechnik, einflächig", anzahl: 1, faktor: 2.8, betrag: 59.22 }
+  - { datum: 2026-07-06, art: goz, nummer: "2150", zahn: "36", leistung: "Einlagefüllung, einflächig", anzahl: 1, faktor: 2.3, betrag: 87.2 }
+  - { datum: 2026-07-06, art: goz, nummer: "2200", zahn: "46", leistung: "Versorgung eines Zahnes oder Implantats durch eine Vollkrone (Tangentialpräparation)", anzahl: 1, faktor: 2.3, betrag: 218.4 }
+  - { datum: 2026-07-06, art: goz, nummer: "2390", zahn: "37", leistung: "Trepanation eines Zahnes, als selbstständige Leistung", anzahl: 1, faktor: 2.3, betrag: 34.9 }
+  - { datum: 2026-07-06, art: goz, nummer: "4050", zahn: "14", leistung: "Entfernung harter und weicher Zahnbeläge an einem einwurzeligen Zahn oder Implantat", anzahl: 1, faktor: 2.3, betrag: 7.45 }
+  - { datum: 2026-07-06, art: goz, nummer: "9040", zahn: "46", leistung: "Freilegen eines Implantats und Einfügen von Aufbauelementen", anzahl: 1, faktor: 2.3, betrag: 410.2 }
+  - { datum: 2026-03-02, art: labor, nummer: null, zahn: null, leistung: "Zahntechnische Leistungen nach beigefügtem Laborbeleg, Teil 1", anzahl: 1, faktor: null, betrag: 214.60 }
+  - { datum: 2026-04-13, art: labor, nummer: null, zahn: null, leistung: "Zahntechnische Leistungen nach beigefügtem Laborbeleg, Teil 2", anzahl: 1, faktor: null, betrag: 214.60 }
+  - { datum: 2026-05-25, art: labor, nummer: null, zahn: null, leistung: "Zahntechnische Leistungen nach beigefügtem Laborbeleg, Teil 3", anzahl: 1, faktor: null, betrag: 214.60 }
+  - { datum: 2026-07-06, art: labor, nummer: null, zahn: null, leistung: "Zahntechnische Leistungen nach beigefügtem Laborbeleg, Teil 4", anzahl: 1, faktor: null, betrag: 214.60 }
+  - { datum: 2026-07-06, art: goae, nummer: "5000", zahn: null, leistung: "Röntgenaufnahme eines Zahnfilms, je Aufnahme", anzahl: 4, faktor: 1.8, betrag: 34.96 }
+  - { datum: 2026-07-06, art: material, nummer: null, zahn: null, leistung: "Verbrauchsmaterial nach § 9 GOZ, gesamt", anzahl: 1, faktor: null, betrag: 96.40 }
+  - { datum: 2026-07-06, art: verlangen, nummer: null, zahn: null, leistung: "Leistung auf ausdrückliches Verlangen des Patienten nach § 2 Abs. 3 GOZ", anzahl: 1, faktor: null, betrag: 45.00 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

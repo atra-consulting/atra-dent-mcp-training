@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: agenten-schadensfall
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY:${GOOGLE_API_KEY:}}
+        chat:
+          model: ${AGENTEN_MODELS_SCHADENSFALL:gemini-3.6-flash}
+  task:
+    scheduling:
+      pool:
+        size: 1
+
+server:
+  port: ${AGENTEN_SCHADENSFALL_PORT:8087}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+agenten:
+  base-url: ${AGENTEN_SCHADENSFALL_BASE_URL:http://localhost:8087}
+  card: ${AGENTEN_CARD:../cards/schadensfall.yaml}
+  max-length: 2000
+  subagents:
+    timeout: ${AGENTEN_SUBAGENT_TIMEOUT:60s}
+    card-timeout: ${AGENTEN_SUBAGENT_CARD_TIMEOUT:60s}
+    # api-key wird nur gesetzt, wenn die Karte des Agenten einen verlangt --
+    # in welchem Header, sagt sie selbst. Leer heisst: kein Header.
+    # TODO Workshop
+    # catalog:
+
+  mcp:
+    kernsystem:
+      url: ${AGENTEN_MCP_KERNSYSTEM_URL:http://localhost:8080}
+      endpoint: /mcp
+      api-key: ${AGENTEN_MCP_KERNSYSTEM_KEY:atra-lab-2026}
+    rechenkern:
+      url: ${AGENTEN_MCP_RECHENKERN_URL:http://localhost:8086}
+      endpoint: /mcp
+    wissen:
+      url: ${AGENTEN_MCP_WISSEN_URL:http://localhost:8082}
+      endpoint: /mcp
+    timeout: 30s
+
+kernsystem:
+  rest:
+    url: ${KERNSYSTEM_REST_URL:http://localhost:8080}
+    api-key: ${KERNSYSTEM_REST_KEY:atra-lab-2026}
+
+schadensfall:
+  poll-interval: ${SCHADENSFALL_POLL_INTERVAL:10s}
+  poll-enabled: ${SCHADENSFALL_POLL_ENABLED:true}
+  reconcile-timeout: ${SCHADENSFALL_RECONCILE_TIMEOUT:20m}
+  freigabe-threshold: ${SCHADENSFALL_FREIGABE_THRESHOLD:200.00}
+
+logging:
+  level:
+    consulting.atra.agenten: INFO

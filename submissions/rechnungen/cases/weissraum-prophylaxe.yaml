@@ -1,0 +1,23 @@
+
+rechnungsnummer: "WR-2026-0388"
+rechnungsdatum: 2026-04-02
+praxis: weissraum
+patient:
+  name: Tobias Reinders
+  anschrift:
+    strasse: Poßmoorweg 8
+    plz: "22301"
+    ort: Hamburg
+  geburtsdatum: 1991-11-17
+positionen:
+  - { datum: 2026-02-05, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-02-05, art: goz, nummer: "1000", zahn: null, leistung: "Erstellung eines Mundhygienestatus und eingehende Unterweisung zur Vorbeugung", anzahl: 1, faktor: 2.3, betrag: 18.63 }
+  - { datum: 2026-02-05, art: goz, nummer: "1040", zahn: null, leistung: Professionelle Zahnreinigung, anzahl: 28, faktor: 2.3, betrag: 116.85 }
+  - { datum: 2026-03-12, art: goz, nummer: "1020", zahn: null, leistung: Lokale Fluoridierung, anzahl: 1, faktor: 2.3, betrag: 9.31 }
+  - { datum: 2026-03-12, art: goz, nummer: "2040", zahn: "26", leistung: Anlegen von Spanngummi, anzahl: 1, faktor: 2.3, betrag: 11.19 }
+  - { datum: 2026-03-12, art: goz, nummer: "2390", zahn: "26", leistung: Trepanation eines Zahnes, anzahl: 1, faktor: 2.3, betrag: 34.90 }
+  - { datum: 2026-03-26, art: goz, nummer: "1010", zahn: null, leistung: Kontrolle des Übungserfolges, anzahl: 1, faktor: 2.3, betrag: 9.31 }
+  - { datum: 2026-03-26, art: material, nummer: null, zahn: "26", leistung: Wurzelfüllmaterial, anzahl: 1, faktor: null, betrag: 24.80 }
+zahlung:
+  frist_tage: 21
+  bereits_gezahlt: 50.00

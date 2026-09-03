@@ -1,0 +1,20 @@
+
+rechnungsnummer: "94/2025"
+rechnungsdatum: 2025-06-30
+praxis: plombeck
+patient:
+  name: Fatima Yilmaz
+  anschrift:
+    strasse: Karl-Liebknecht-Strasse 21
+    plz: "04107"
+    ort: Leipzig
+  geburtsdatum: 2001-05-19
+positionen:
+  - { datum: 2025-06-23, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2025-06-23, art: goz, nummer: "0080", zahn: null, leistung: Intraorale Leitungsanästhesie, anzahl: 2, faktor: 2.3, betrag: 16.30 }
+  - { datum: 2025-06-23, art: goz, nummer: "3010", zahn: "38", leistung: Extraktion eines mehrwurzeligen Zahnes, anzahl: 1, faktor: 2.3, betrag: 25.94 }
+  - { datum: 2025-06-23, art: goz, nummer: "3010", zahn: "48", leistung: Extraktion eines mehrwurzeligen Zahnes, anzahl: 1, faktor: 2.3, betrag: 25.94 }
+  - { datum: 2025-06-23, art: material, nummer: null, zahn: null, leistung: Naht- und Verbandmaterial, anzahl: 1, faktor: null, betrag: 6.40 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

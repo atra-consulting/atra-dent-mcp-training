@@ -1,0 +1,1385 @@
+
+stand: GOZ 2012, Anlage 1 (Gebührenverzeichnis für zahnärztliche Leistungen)
+quelle: gesetze-im-internet.de, Anlage 1 zur GOZ, geltende Fassung
+abgerufen: 2026-08-11
+
+hinweis: >
+  Auszug für Schulungszwecke. Abgebildet sind ausschließlich die
+  Gebührennummern der Anlage 1 zur GOZ. Nicht enthalten sind: analoge
+  Berechnungen nach Paragraf 6 Absatz 1 GOZ und der weit überwiegende Teil
+  der Leistungen nach der Gebührenordnung für Ärzte, die der Zahnarzt nach
+  Paragraf 6 Absatz 2 GOZ berechnen darf - von ihnen führt
+  wissen/daten/goae-auszug.yaml nur die wenigen Nummern, die im Lab
+  tatsächlich vorkommen. Positionen ganz ohne Gebührennummer - Material und
+  Labor nach Paragraf 9 GOZ, Verlangensleistungen nach Paragraf 2 Absatz 3
+  GOZ - stehen unter ohne_gebuehrennummer und folgen dort einer Regel statt
+  einer Nummer. Eine Rechnungsprüfung, die nur diese Datei kennt, trifft
+  daher weiterhin auf Positionen, die sie nicht kennt.
+
+abdeckung:
+  - abschnitt: A
+    bezeichnung: Allgemeine zahnärztliche Leistungen
+    grad: vollständig
+    positionen: 12
+    anmerkung: >
+      Überwiegend keinem Leistungsbereich zuzuordnen: Untersuchung, Planung,
+      Abformung und Zuschläge dienen der jeweiligen Hauptbehandlung.
+  - abschnitt: B
+    bezeichnung: Prophylaktische Leistungen
+    grad: vollständig
+    positionen: 5
+    anmerkung: Vollständig PZR.
+  - abschnitt: C
+    bezeichnung: Konservierende Leistungen
+    grad: vollständig
+    positionen: 44
+    anmerkung: >
+      Der Abschnitt trennt die drei im Modell benachbarten Bereiche ZERH, INL
+      und ZE. Hier liegen die meisten Abgrenzungsentscheidungen.
+  - abschnitt: D
+    bezeichnung: Chirurgische Leistungen
+    grad: vollständig
+    positionen: 29
+    anmerkung: >
+      Der dünnste Abschnitt gemessen an der Zuordnungsquote. Zahnentfernung,
+      Blutstillung und Wundversorgung sind weder Zahnerhalt noch Zahnersatz und
+      fallen aus dem Modell heraus.
+  - abschnitt: E
+    bezeichnung: Leistungen bei Erkrankungen der Mundschleimhaut und des Parodontiums
+    grad: vollständig
+    positionen: 21
+    anmerkung: >
+      Überwiegend PAR. Reine Mundschleimhautleistungen betreffen nicht den
+      Zahnhalteapparat und fallen aus dem Modell heraus.
+  - abschnitt: F
+    bezeichnung: Prothetische Leistungen
+    grad: vollständig
+    positionen: 34
+    anmerkung: Bis auf eine Ausnahme vollständig ZE.
+  - abschnitt: G
+    bezeichnung: Kieferorthopädische Leistungen
+    grad: vollständig
+    positionen: 27
+    anmerkung: Vollständig KFO.
+  - abschnitt: H
+    bezeichnung: Eingliederung von Aufbissbehelfen und Schienen
+    grad: vollständig
+    positionen: 11
+    anmerkung: >
+      Nicht deckungsgleich mit FUN. Die Langzeitprovisorien 7080 bis 7100 sind
+      prothetisch, die semipermanente Schiene 7070 parodontal.
+  - abschnitt: J
+    bezeichnung: Funktionsanalytische und funktionstherapeutische Leistungen
+    grad: vollständig
+    positionen: 11
+    anmerkung: Vollständig FUN.
+  - abschnitt: K
+    bezeichnung: Implantologische Leistungen
+    grad: vollständig
+    positionen: 17
+    anmerkung: >
+      Vollständig IMP. Die Krone auf dem Implantat steht nicht hier, sondern
+      unter 2200 und 5000 ff. und gehört zu ZE.
+  - abschnitt: L
+    bezeichnung: Zuschläge zu bestimmten zahnärztlich-chirurgischen Leistungen
+    grad: vollständig
+    positionen: 4
+    anmerkung: Zuschläge ohne eigenen Leistungsinhalt, keinem Bereich zuzuordnen.
+
+bereiche_ohne_position:
+  - leistungsbereich: NAR
+    begruendung: >
+      Die GOZ kennt keine Nummer für Vollnarkose oder Sedierung. Der Zahnarzt
+      berechnet sie nach Paragraf 6 Absatz 2 GOZ über die Gebührenordnung für
+      Ärzte. Die drei Anästhesienummern der GOZ (0080, 0090, 0100) sind
+      örtliche Betäubung und ausdrücklich kein NAR.
+  - leistungsbereich: AKUT
+    begruendung: >
+      AKUT ist im Modell über die Behandlungssituation definiert -
+      unaufschiebbar, akuter Schmerz, gegebenenfalls außerhalb der Sprechzeiten
+      - nicht über die erbrachte Leistung. Dieselbe Nummer, etwa 2390 oder
+      3000, kann im einen Fall AKUT sein und im anderen nicht. Eine Zuordnung
+      allein anhand der Nummer wäre falsch.
+
+ohne_gebuehrennummer:
+  - art: material
+    bezeichnung: Material- und Laborkosten nach Paragraf 9 GOZ
+    leistungsbereich: null
+    fundstelle: Paragraf 5
+    begruendung: >
+      Erstattungsfähig nach Paragraf 5 der Versicherungsbedingungen. Die
+      Position folgt dem Leistungsbereich der Behandlung, für die das
+      Material verwendet oder die Laborarbeit gefertigt wurde - eine Zirkonkrone folgt der Kronenversorgung nach ZE,
+      ein Implantatkörper der Insertion nach IMP. Auf einer Rechnung mit
+      mehreren Behandlungen entscheidet der Zahn, an dem die Position steht.
+      Lässt sich die Hauptbehandlung nicht feststellen, ist die Position
+      nicht zuzuordnen und gehört einem Menschen vorgelegt.
+  - art: verlangen
+    bezeichnung: Verlangensleistungen nach Paragraf 2 Absatz 3 GOZ
+    leistungsbereich: null
+    fundstelle: Paragraf 5
+    begruendung: >
+      Nicht erstattungsfähig. Auf Wunsch des Patienten erbracht und über das
+      medizinisch Notwendige hinaus. Paragraf 5 der Versicherungsbedingungen
+      setzt für jede Erstattung zahnmedizinische Notwendigkeit voraus; die
+      ist hier gerade nicht gegeben. Die Position gehört trotzdem in die
+      Rechnungsprüfung, damit sichtbar bleibt, warum sie nicht erstattet
+      wird.
+
+positionen:
+
+
+  - nummer: "0010"
+    bezeichnung: Eingehende Untersuchung zur Feststellung von Zahn-, Mund- und Kiefererkrankungen
+    abschnitt: A
+    leistungsbereich: null
+    hinweis: Allgemeine Untersuchungsleistung ohne Bezug zu einem einzelnen Leistungsbereich.
+
+  - nummer: "0030"
+    bezeichnung: Aufstellung eines schriftlichen Heil- und Kostenplans nach Befundaufnahme
+    abschnitt: A
+    leistungsbereich: null
+    hinweis: Planungsleistung; sie folgt dem Bereich der geplanten Behandlung, hat aber keinen eigenen.
+
+  - nummer: "0040"
+    bezeichnung: Aufstellung eines schriftlichen Heil- und Kostenplans bei kieferorthopädischer Behandlung oder bei funktionsanalytischen Maßnahmen
+    abschnitt: A
+    leistungsbereich: null
+    hinweis: >
+      Die Nummer ist nur für KFO oder FUN berechnungsfähig. Welcher der
+      beiden Bereiche gilt, sagt die Nummer nicht - das ergibt sich erst aus
+      der Behandlung.
+
+  - nummer: "0050"
+    bezeichnung: Abformung oder Teilabformung eines Kiefers für ein Situationsmodell
+    abschnitt: A
+    leistungsbereich: null
+
+  - nummer: "0060"
+    bezeichnung: Abformung beider Kiefer für Situationsmodelle und einfache Bissfixierung
+    abschnitt: A
+    leistungsbereich: null
+
+  - nummer: "0065"
+    bezeichnung: Optisch-elektronische Abformung einschließlich vorbereitender Maßnahmen
+    abschnitt: A
+    leistungsbereich: null
+
+  - nummer: "0070"
+    bezeichnung: Vitalitätsprüfung eines Zahnes oder mehrerer Zähne einschließlich Vergleichstest
+    abschnitt: A
+    leistungsbereich: null
+    hinweis: Diagnostik; fällt häufig im Zusammenhang mit ZERH an, ist aber selbst keine Erhaltungsmaßnahme.
+
+  - nummer: "0080"
+    bezeichnung: Intraorale Oberflächenanästhesie
+    abschnitt: A
+    leistungsbereich: null
+    hinweis: >
+      Örtliche Betäubung. Nach dem Produktmodell ausdrücklich Teil der
+      jeweiligen Behandlung und kein NAR.
+
+  - nummer: "0090"
+    bezeichnung: Intraorale Infiltrationsanästhesie
+    abschnitt: A
+    leistungsbereich: null
+    hinweis: Örtliche Betäubung, kein NAR.
+
+  - nummer: "0100"
+    bezeichnung: Intraorale Leitungsanästhesie
+    abschnitt: A
+    leistungsbereich: null
+    hinweis: Örtliche Betäubung, kein NAR.
+
+  - nummer: "0110"
+    bezeichnung: Zuschlag für die Anwendung eines Operationsmikroskops
+    abschnitt: A
+    leistungsbereich: null
+    hinweis: Zuschlag ohne eigenen Leistungsinhalt; folgt der Hauptleistung.
+
+  - nummer: "0120"
+    bezeichnung: Zuschlag für die Anwendung eines Lasers
+    abschnitt: A
+    leistungsbereich: null
+    hinweis: Zuschlag ohne eigenen Leistungsinhalt; folgt der Hauptleistung.
+
+
+  - nummer: "1000"
+    bezeichnung: Erstellung eines Mundhygienestatus und eingehende Unterweisung zur Vorbeugung
+    abschnitt: B
+    leistungsbereich: PZR
+
+  - nummer: "1010"
+    bezeichnung: Kontrolle des Übungserfolges einschließlich weiterer Unterweisung
+    abschnitt: B
+    leistungsbereich: PZR
+
+  - nummer: "1020"
+    bezeichnung: Lokale Fluoridierung zur Verbesserung der Zahnhartsubstanz, mit Lack oder Gel
+    abschnitt: B
+    leistungsbereich: PZR
+
+  - nummer: "1030"
+    bezeichnung: Lokale Anwendung von Medikamenten zur Kariesvorbeugung mit einer individuell gefertigten Schiene
+    abschnitt: B
+    leistungsbereich: PZR
+
+  - nummer: "1040"
+    bezeichnung: Professionelle Zahnreinigung
+    abschnitt: B
+    leistungsbereich: PZR
+    hinweis: >
+      Die namensgebende Position des Bereichs. Abzugrenzen von 4050 und 4055,
+      der Zahnsteinentfernung bei parodontalem Befund - die gehört zu PAR.
+
+
+  - nummer: "2000"
+    bezeichnung: Versiegelung von kariesfreien Zahnfissuren mit aushärtenden Kunststoffen, je Zahn
+    abschnitt: C
+    leistungsbereich: PZR
+    hinweis: >
+      Steht im konservierenden Abschnitt, ist aber Vorbeugung ohne
+      Krankheitsbefund. Das Produktmodell nennt die Fissurenversiegelung
+      ausdrücklich bei PZR.
+
+  - nummer: "2010"
+    bezeichnung: Behandlung überempfindlicher Zahnflächen, je Kiefer
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2020"
+    bezeichnung: Temporärer speicheldichter Verschluss einer Kavität
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2030"
+    bezeichnung: Besondere Maßnahmen beim Präparieren oder Füllen von Kavitäten
+    abschnitt: C
+    leistungsbereich: ZERH
+    hinweis: Begleitleistung zur Füllung; fällt auch bei der Präparation für eine Einlagefüllung an.
+
+  - nummer: "2040"
+    bezeichnung: Anlegen von Spanngummi, je Kieferhälfte oder Frontzahnbereich
+    abschnitt: C
+    leistungsbereich: ZERH
+    hinweis: Begleitleistung; fällt bei Füllung, Einlagefüllung und Wurzelbehandlung gleichermaßen an.
+
+  - nummer: "2050"
+    bezeichnung: Präparieren einer Kavität und Restauration mit plastischem Füllungsmaterial, einflächig
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2060"
+    bezeichnung: Präparieren einer Kavität und Restauration mit Kompositmaterialien in Adhäsivtechnik, einflächig
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2070"
+    bezeichnung: Präparieren einer Kavität und Restauration mit plastischem Füllungsmaterial, zweiflächig
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2080"
+    bezeichnung: Präparieren einer Kavität und Restauration mit Kompositmaterialien in Adhäsivtechnik, zweiflächig
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2090"
+    bezeichnung: Präparieren einer Kavität und Restauration mit plastischem Füllungsmaterial, dreiflächig
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2100"
+    bezeichnung: Präparieren einer Kavität und Restauration mit Kompositmaterialien in Adhäsivtechnik, dreiflächig
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2110"
+    bezeichnung: Präparieren einer Kavität und Restauration mit plastischem Füllungsmaterial, mehr als dreiflächig
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2120"
+    bezeichnung: Präparieren einer Kavität und Restauration mit Kompositmaterialien in Adhäsivtechnik, mehr als dreiflächig
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2130"
+    bezeichnung: Kontrolle, Finieren/Polieren einer Restauration in separater Sitzung
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2150"
+    bezeichnung: Einlagefüllung, einflächig
+    abschnitt: C
+    leistungsbereich: INL
+    hinweis: >
+      Einlagefüllung heißt im Labor gefertigt. Genau hier verläuft die im
+      Modell gesetzte Grenze zu ZERH.
+
+  - nummer: "2160"
+    bezeichnung: Einlagefüllung, zweiflächig
+    abschnitt: C
+    leistungsbereich: INL
+
+  - nummer: "2170"
+    bezeichnung: Einlagefüllung, mehr als zweiflächig
+    abschnitt: C
+    leistungsbereich: INL
+
+  - nummer: "2180"
+    bezeichnung: Vorbereitung eines zerstörten Zahnes mit plastischem Aufbaumaterial zur Aufnahme einer Krone
+    abschnitt: C
+    leistungsbereich: ZERH
+    hinweis: >
+      Der Aufbau erhält den eigenen Zahn und wird im Produktmodell
+      ausdrücklich ZERH zugeordnet, auch wenn er der späteren Krone dient.
+
+  - nummer: "2190"
+    bezeichnung: Vorbereitung eines zerstörten Zahnes durch gegossenen Aufbau mit Stiftverankerung
+    abschnitt: C
+    leistungsbereich: ZERH
+    hinweis: Stiftaufbau, im Produktmodell namentlich ZERH zugeordnet.
+
+  - nummer: "2195"
+    bezeichnung: Vorbereitung eines zerstörten Zahnes durch einen Schraubenaufbau oder Glasfaserstift
+    abschnitt: C
+    leistungsbereich: ZERH
+    hinweis: Stiftaufbau, im Produktmodell namentlich ZERH zugeordnet.
+
+  - nummer: "2197"
+    bezeichnung: Adhäsive Befestigung (plastischer Aufbau, Stift, Inlay, Krone, Teilkrone, Veneer)
+    abschnitt: C
+    leistungsbereich: null
+    hinweis: >
+      Reine Befestigungsleistung. Sie folgt dem, was befestigt wird: beim Inlay
+      INL, bei Krone und Veneer ZE, beim Aufbau ZERH. Die Nummer allein
+      entscheidet nicht.
+
+  - nummer: "2200"
+    bezeichnung: Versorgung eines Zahnes oder Implantats durch eine Vollkrone (Tangentialpräparation)
+    abschnitt: C
+    leistungsbereich: ZE
+    hinweis: >
+      Die Nummer erfasst ausdrücklich auch die Krone auf dem Implantat. Nach
+      dem Produktmodell gehört sie zu ZE, nicht zu IMP.
+
+  - nummer: "2210"
+    bezeichnung: Versorgung eines Zahnes durch eine Vollkrone (Hohlkehl- oder Stufenpräparation)
+    abschnitt: C
+    leistungsbereich: ZE
+    hinweis: Im Zusammenhang mit Implantaten nicht berechnungsfähig; dort gilt 2200.
+
+  - nummer: "2220"
+    bezeichnung: Versorgung eines Zahnes durch eine Teilkrone oder ein Veneer
+    abschnitt: C
+    leistungsbereich: ZE
+    hinweis: >
+      Das Veneer steht in derselben Nummer. Ohne medizinische Indikation
+      greift der Ausschluss KOSMETIK des Produktmodells - das entscheidet
+      aber nicht die Nummer, sondern die Indikation.
+
+  - nummer: "2230"
+    bezeichnung: Teilleistung zu den Nummern 2200 bis 2220, Ende mit der Präparation
+    abschnitt: C
+    leistungsbereich: ZE
+
+  - nummer: "2240"
+    bezeichnung: Teilleistung zu den Nummern 2200 bis 2220, weitergehende Maßnahmen
+    abschnitt: C
+    leistungsbereich: ZE
+
+  - nummer: "2250"
+    bezeichnung: Eingliederung einer konfektionierten Krone in der pädiatrischen Zahnheilkunde
+    abschnitt: C
+    leistungsbereich: ZE
+    hinweis: >
+      Kinderleistung. Im Modell mit Eintrittsalter ab 18 Jahren praktisch ohne
+      Bedeutung, der Vollständigkeit halber geführt.
+
+  - nummer: "2260"
+    bezeichnung: Provisorium im direkten Verfahren ohne Abformung, je Zahn oder Implantat
+    abschnitt: C
+    leistungsbereich: ZE
+    hinweis: >
+      Provisorien überbrücken die Zeit bis zur endgültigen Versorgung. Sie
+      werden dem Zahnersatz zugeordnet; bei einer Inlay-Versorgung wäre INL
+      zutreffender.
+
+  - nummer: "2270"
+    bezeichnung: Provisorium im direkten Verfahren mit Abformung, je Zahn oder Implantat
+    abschnitt: C
+    leistungsbereich: ZE
+    hinweis: Siehe 2260.
+
+  - nummer: "2290"
+    bezeichnung: Entfernung einer Einlagefüllung, einer Krone oder eines Brückenankers
+    abschnitt: C
+    leistungsbereich: ZE
+    hinweis: >
+      Drei der vier genannten Fälle betreffen Zahnersatz; bei der Entfernung
+      einer Einlagefüllung wäre INL zutreffender.
+
+  - nummer: "2300"
+    bezeichnung: Entfernung eines Wurzelstiftes
+    abschnitt: C
+    leistungsbereich: ZERH
+    hinweis: Regelmäßig Vorbereitung einer Wurzelkanalrevision.
+
+  - nummer: "2310"
+    bezeichnung: Wiedereingliederung einer Einlagefüllung, einer Teilkrone, eines Veneers oder einer Krone
+    abschnitt: C
+    leistungsbereich: ZE
+    hinweis: Bei der Wiedereingliederung einer Einlagefüllung wäre INL zutreffender.
+
+  - nummer: "2320"
+    bezeichnung: Wiederherstellung einer Krone, einer Teilkrone oder einer Verblendung an festsitzendem Zahnersatz
+    abschnitt: C
+    leistungsbereich: ZE
+
+  - nummer: "2330"
+    bezeichnung: Maßnahmen zur Erhaltung der vitalen Pulpa bei Caries profunda, indirekte Überkappung
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2340"
+    bezeichnung: Maßnahmen zur Erhaltung der freiliegenden vitalen Pulpa, direkte Überkappung
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2350"
+    bezeichnung: Amputation und Versorgung der vitalen Pulpa einschließlich Exkavieren
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2360"
+    bezeichnung: Exstirpation der vitalen Pulpa einschließlich Exkavieren, je Kanal
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2380"
+    bezeichnung: Amputation und endgültige Versorgung der avitalen Milchzahnpulpa
+    abschnitt: C
+    leistungsbereich: ZERH
+    hinweis: Milchzahnleistung; im Modell für Erwachsene praktisch ohne Bedeutung.
+
+  - nummer: "2390"
+    bezeichnung: Trepanation eines Zahnes, als selbstständige Leistung
+    abschnitt: C
+    leistungsbereich: ZERH
+    hinweis: >
+      Als selbstständige Leistung typischerweise Schmerzbehandlung. Ob AKUT
+      vorliegt, entscheidet aber die Behandlungssituation, nicht die Nummer.
+
+  - nummer: "2400"
+    bezeichnung: Elektrometrische Längenbestimmung eines Wurzelkanals
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2410"
+    bezeichnung: Aufbereitung eines Wurzelkanals, auch retrograd, je Kanal
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2420"
+    bezeichnung: Zusätzliche Anwendung elektrophysikalisch-chemischer Methoden, je Kanal
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2430"
+    bezeichnung: Medikamentöse Einlage, je Zahn und Sitzung
+    abschnitt: C
+    leistungsbereich: ZERH
+
+  - nummer: "2440"
+    bezeichnung: Füllung eines Wurzelkanals
+    abschnitt: C
+    leistungsbereich: ZERH
+
+
+  - nummer: "3000"
+    bezeichnung: Entfernung eines einwurzeligen Zahnes oder eines enossalen Implantats
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: >
+      Zahnentfernung. Weder Zahnerhalt noch Zahnersatz; das Modell kennt
+      dafür keinen Bereich.
+
+  - nummer: "3010"
+    bezeichnung: Entfernung eines mehrwurzeligen Zahnes
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: Siehe 3000.
+
+  - nummer: "3020"
+    bezeichnung: Entfernung eines tief frakturierten oder tief zerstörten Zahnes
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: Siehe 3000.
+
+  - nummer: "3030"
+    bezeichnung: Entfernung eines Zahnes oder eines enossalen Implantats durch Osteotomie
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: >
+      Auch die Entfernung eines Implantats fällt hierunter. Sie ist keine
+      Implantatversorgung und daher kein IMP.
+
+  - nummer: "3040"
+    bezeichnung: Entfernung eines retinierten, impaktierten oder verlagerten Zahnes durch Osteotomie
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: Siehe 3000.
+
+  - nummer: "3045"
+    bezeichnung: Entfernen eines extrem verlagerten oder retinierten Zahnes durch umfangreiche Osteotomie
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: Siehe 3000.
+
+  - nummer: "3050"
+    bezeichnung: Stillung einer übermäßigen Blutung im Mund- und Kieferbereich
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: >
+      Häufige Akutsituation, aber die Nummer sagt nichts darüber, ob die
+      Behandlung unaufschiebbar war.
+
+  - nummer: "3060"
+    bezeichnung: Stillung einer Blutung durch Abbinden oder Umstechen des Gefäßes
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: Siehe 3050.
+
+  - nummer: "3070"
+    bezeichnung: Exzision von Schleimhaut oder Granulationsgewebe
+    abschnitt: D
+    leistungsbereich: null
+
+  - nummer: "3080"
+    bezeichnung: Exzision einer Schleimhautwucherung größeren Umfangs
+    abschnitt: D
+    leistungsbereich: null
+
+  - nummer: "3090"
+    bezeichnung: Plastischer Verschluss einer eröffneten Kieferhöhle
+    abschnitt: D
+    leistungsbereich: null
+
+  - nummer: "3100"
+    bezeichnung: Plastische Deckung im Rahmen einer Wundversorgung einschließlich Periostschlitzung
+    abschnitt: D
+    leistungsbereich: null
+
+  - nummer: "3110"
+    bezeichnung: Resektion einer Wurzelspitze an einem Frontzahn
+    abschnitt: D
+    leistungsbereich: ZERH
+    hinweis: >
+      Die Wurzelspitzenresektion ist der chirurgische Weg zum Erhalt des
+      eigenen Zahnes und fällt damit unter ZERH, obwohl sie im chirurgischen
+      Abschnitt steht.
+
+  - nummer: "3120"
+    bezeichnung: Resektion einer Wurzelspitze an einem Seitenzahn
+    abschnitt: D
+    leistungsbereich: ZERH
+    hinweis: Siehe 3110.
+
+  - nummer: "3130"
+    bezeichnung: Hemisektion und Teilextraktion eines mehrwurzeligen Zahnes
+    abschnitt: D
+    leistungsbereich: ZERH
+    hinweis: Der verbleibende Teil des Zahnes wird erhalten.
+
+  - nummer: "3140"
+    bezeichnung: Reimplantation eines Zahnes einschließlich einfacher Fixation
+    abschnitt: D
+    leistungsbereich: ZERH
+    hinweis: Der eigene Zahn wird erhalten.
+
+  - nummer: "3160"
+    bezeichnung: Transplantation eines Zahnes einschließlich operativer Schaffung des Knochenbettes
+    abschnitt: D
+    leistungsbereich: ZERH
+    hinweis: >
+      Ermessensentscheidung. Der eigene Zahn bleibt erhalten und wechselt nur
+      die Position; wer auf das Ergebnis schaut, könnte auch ZE vertreten.
+
+  - nummer: "3190"
+    bezeichnung: Operation einer Zyste durch Zystektomie in Verbindung mit Osteotomie oder Wurzelspitzenresektion
+    abschnitt: D
+    leistungsbereich: ZERH
+    hinweis: >
+      Ermessensentscheidung. Zugeordnet nach dem häufigeren Anlass, der
+      Wurzelspitzenresektion. In Verbindung mit einer Osteotomie zur
+      Zahnentfernung fällt die Leistung aus dem Modell heraus.
+
+  - nummer: "3200"
+    bezeichnung: Operation einer Zyste durch Zystektomie, als selbstständige Leistung
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: Ohne Bezug zu einem einzelnen Zahn kein Leistungsbereich des Modells.
+
+  - nummer: "3210"
+    bezeichnung: Beseitigung störender Schleimhautbänder
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: Kann prothetisch, parodontal oder kieferorthopädisch veranlasst sein.
+
+  - nummer: "3230"
+    bezeichnung: Knochenresektion am Alveolarfortsatz zur Formung des Prothesenlagers
+    abschnitt: D
+    leistungsbereich: ZE
+    hinweis: >
+      Der Leistungstext nennt den Zweck selbst: Formung des Prothesenlagers.
+      Damit prothetisch veranlasst.
+
+  - nummer: "3240"
+    bezeichnung: Vestibulumplastik oder Mundbodenplastik kleineren Umfangs
+    abschnitt: D
+    leistungsbereich: ZE
+    hinweis: >
+      Ermessensentscheidung. Dient regelmäßig der Vorbereitung des
+      Prothesenlagers, kann aber auch parodontal veranlasst sein.
+
+  - nummer: "3250"
+    bezeichnung: Tuberplastik, einseitig
+    abschnitt: D
+    leistungsbereich: ZE
+    hinweis: Formung des Prothesenlagers im Oberkiefer.
+
+  - nummer: "3260"
+    bezeichnung: Freilegen eines retinierten oder verlagerten Zahnes zur orthopädischen Einstellung
+    abschnitt: D
+    leistungsbereich: KFO
+    hinweis: Der Leistungstext nennt den kieferorthopädischen Zweck selbst.
+
+  - nummer: "3270"
+    bezeichnung: Germektomie
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: >
+      Entfernung eines Zahnkeims, häufig kieferorthopädisch veranlasst. Als
+      Entfernungsleistung im Modell nicht abgebildet.
+
+  - nummer: "3280"
+    bezeichnung: Lösen, Verlegen und Fixieren des Lippenbändchens bei echtem Diastema
+    abschnitt: D
+    leistungsbereich: KFO
+    hinweis: Beseitigung einer Zahnfehlstellung; die verwandte Nummer 6250 steht im KFO-Abschnitt.
+
+  - nummer: "3290"
+    bezeichnung: Kontrolle nach chirurgischem Eingriff, als selbstständige Leistung
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: Folgt dem Bereich des vorangegangenen Eingriffs.
+
+  - nummer: "3300"
+    bezeichnung: Nachbehandlung nach chirurgischem Eingriff, als selbstständige Leistung
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: Folgt dem Bereich des vorangegangenen Eingriffs.
+
+  - nummer: "3310"
+    bezeichnung: Chirurgische Wundrevision
+    abschnitt: D
+    leistungsbereich: null
+    hinweis: Folgt dem Bereich des vorangegangenen Eingriffs.
+
+
+  - nummer: "4000"
+    bezeichnung: Erstellen und Dokumentieren eines Parodontalstatus
+    abschnitt: E
+    leistungsbereich: PAR
+
+  - nummer: "4005"
+    bezeichnung: Erhebung eines Gingivalindex oder eines Parodontalindex
+    abschnitt: E
+    leistungsbereich: PAR
+
+  - nummer: "4020"
+    bezeichnung: Lokalbehandlung von Mundschleimhauterkrankungen, je Sitzung
+    abschnitt: E
+    leistungsbereich: null
+    hinweis: >
+      Betrifft die Mundschleimhaut, nicht den Zahnhalteapparat. Fällt damit
+      aus PAR heraus, ohne in einen anderen Bereich zu fallen.
+
+  - nummer: "4025"
+    bezeichnung: Subgingivale medikamentöse antibakterielle Lokalapplikation, je Zahn
+    abschnitt: E
+    leistungsbereich: PAR
+
+  - nummer: "4030"
+    bezeichnung: Beseitigung von scharfen Zahnkanten, störenden Prothesenrändern und Fremdreizen am Parodontium
+    abschnitt: E
+    leistungsbereich: PAR
+    hinweis: Vorbehandlung; das Produktmodell zählt die Vorbehandlung ausdrücklich zu PAR.
+
+  - nummer: "4040"
+    bezeichnung: Beseitigung grober Vorkontakte der Okklusion und Artikulation durch Einschleifen
+    abschnitt: E
+    leistungsbereich: PAR
+    hinweis: >
+      Abzugrenzen von 8100: dort das systematische Einschleifen im Rahmen der
+      Funktionstherapie, das zu FUN gehört.
+
+  - nummer: "4050"
+    bezeichnung: Entfernung harter und weicher Zahnbeläge an einem einwurzeligen Zahn oder Implantat
+    abschnitt: E
+    leistungsbereich: PAR
+    hinweis: >
+      Zahnsteinentfernung bei parodontalem Befund. Nicht zu verwechseln mit
+      der professionellen Zahnreinigung nach 1040, die zu PZR gehört.
+
+  - nummer: "4055"
+    bezeichnung: Entfernung harter und weicher Zahnbeläge an einem mehrwurzeligen Zahn
+    abschnitt: E
+    leistungsbereich: PAR
+    hinweis: Siehe 4050.
+
+  - nummer: "4060"
+    bezeichnung: Kontrolle nach Entfernung von Zahnbelägen oder professioneller Zahnreinigung mit Nachreinigung
+    abschnitt: E
+    leistungsbereich: null
+    hinweis: >
+      Die Nummer verweist im Leistungstext ausdrücklich auf beide Vorleistungen:
+      nach 1040 gehört sie zu PZR, nach 4050 oder 4055 zu PAR. Die Nummer
+      allein entscheidet nicht.
+
+  - nummer: "4070"
+    bezeichnung: Parodontalchirurgische Therapie an einem einwurzeligen Zahn oder Implantat, geschlossenes Vorgehen
+    abschnitt: E
+    leistungsbereich: PAR
+
+  - nummer: "4075"
+    bezeichnung: Parodontalchirurgische Therapie an einem mehrwurzeligen Zahn, geschlossenes Vorgehen
+    abschnitt: E
+    leistungsbereich: PAR
+
+  - nummer: "4080"
+    bezeichnung: Gingivektomie, Gingivoplastik, je Parodontium
+    abschnitt: E
+    leistungsbereich: PAR
+
+  - nummer: "4090"
+    bezeichnung: Lappenoperation, offene Kürettage einschließlich Osteoplastik an einem Frontzahn
+    abschnitt: E
+    leistungsbereich: PAR
+
+  - nummer: "4100"
+    bezeichnung: Lappenoperation, offene Kürettage einschließlich Osteoplastik an einem Seitenzahn
+    abschnitt: E
+    leistungsbereich: PAR
+
+  - nummer: "4110"
+    bezeichnung: Auffüllen von parodontalen Knochendefekten mit Aufbaumaterial
+    abschnitt: E
+    leistungsbereich: PAR
+    hinweis: >
+      Parodontaler Knochenaufbau. Abzugrenzen vom implantatbezogenen
+      Knochenaufbau nach 9090 bis 9150, der zu IMP gehört.
+
+  - nummer: "4120"
+    bezeichnung: Verlegen eines gestielten Schleimhautlappens
+    abschnitt: E
+    leistungsbereich: PAR
+
+  - nummer: "4130"
+    bezeichnung: Gewinnung und Transplantation von Schleimhaut, je Transplantat
+    abschnitt: E
+    leistungsbereich: PAR
+    hinweis: Kann auch im Rahmen einer Implantatversorgung anfallen; dann wäre IMP zutreffender.
+
+  - nummer: "4133"
+    bezeichnung: Gewinnung und Transplantation von Bindegewebe, je Zahnzwischenraum
+    abschnitt: E
+    leistungsbereich: PAR
+    hinweis: Siehe 4130.
+
+  - nummer: "4136"
+    bezeichnung: Osteoplastik, auch Kronenverlängerung oder Tunnelierung, als selbstständige Leistung
+    abschnitt: E
+    leistungsbereich: PAR
+    hinweis: >
+      Ermessensentscheidung. Die chirurgische Kronenverlängerung kann auch
+      rein prothetisch veranlasst sein.
+
+  - nummer: "4138"
+    bezeichnung: Verwendung einer Membran zur Behandlung eines Knochendefektes einschließlich Fixierung
+    abschnitt: E
+    leistungsbereich: PAR
+    hinweis: Bei implantatbezogenem Knochenaufbau wäre IMP zutreffender.
+
+  - nummer: "4150"
+    bezeichnung: Kontrolle und Nachbehandlung nach parodontalchirurgischen Maßnahmen
+    abschnitt: E
+    leistungsbereich: PAR
+    hinweis: Nachsorge; das Produktmodell zählt die Nachsorge ausdrücklich zu PAR.
+
+
+  - nummer: "5000"
+    bezeichnung: Brücken- oder Prothesenanker mit einer Vollkrone (Tangentialpräparation), je Pfeilerzahn oder Implantat
+    abschnitt: F
+    leistungsbereich: ZE
+    hinweis: Erfasst ausdrücklich auch das Implantat als Anker; die Versorgung darauf bleibt ZE.
+
+  - nummer: "5010"
+    bezeichnung: Brücken- oder Prothesenanker mit einer Vollkrone (Hohlkehl- und Stufenpräparation) oder Einlagefüllung
+    abschnitt: F
+    leistungsbereich: ZE
+    hinweis: >
+      Auch in der Ausführung als Einlagefüllung ZE, nicht INL: Gegenstand
+      der Leistung ist der Brückenanker, nicht die Einzelzahnversorgung.
+
+  - nummer: "5020"
+    bezeichnung: Brücken- oder Prothesenanker mit einer Teilkrone
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5030"
+    bezeichnung: Brücken- oder Prothesenanker mit einer Wurzelkappe mit Stift
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5040"
+    bezeichnung: Brücken- oder Prothesenanker mit einer Teleskopkrone, auch Konuskrone
+    abschnitt: F
+    leistungsbereich: ZE
+    hinweis: Teleskope sind im Produktmodell namentlich ZE zugeordnet.
+
+  - nummer: "5050"
+    bezeichnung: Teilleistung zu den Nummern 5000 bis 5040, Ende mit der Präparation
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5060"
+    bezeichnung: Teilleistung zu den Nummern 5000 bis 5040, weitergehende Maßnahmen
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5070"
+    bezeichnung: Verbindung von Kronen oder Einlagefüllungen durch Brückenglieder, Prothesenspannen oder Stege
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5080"
+    bezeichnung: Zusammengesetzte Brücke oder Prothese, je Verbindungselement
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5090"
+    bezeichnung: Wiederherstellung der Funktion eines Verbindungselements
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5100"
+    bezeichnung: Erneuern des Sekundärteils einer Teleskopkrone einschließlich Abformung
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5110"
+    bezeichnung: Wiedereingliederung einer endgültigen Brücke
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5120"
+    bezeichnung: Provisorische Brücke im direkten Verfahren mit Abformung, je Zahn oder Implantat
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5140"
+    bezeichnung: Provisorische Brücke im direkten Verfahren mit Abformung, je Brückenspanne oder Freiendsattel
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5150"
+    bezeichnung: Durch Adhäsivtechnik befestigte Brücke, erste zu überbrückende Spanne
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5160"
+    bezeichnung: Versorgung eines Lückengebisses nach der Nummer 5150, jede weitere zu überbrückende Spanne
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5170"
+    bezeichnung: Anatomische Abformung des Kiefers mit individuellem Löffel
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5180"
+    bezeichnung: Funktionelle Abformung des Oberkiefers mit individuellem Löffel
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5190"
+    bezeichnung: Funktionelle Abformung des Unterkiefers mit individuellem Löffel
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5200"
+    bezeichnung: Teilprothese mit einfachen, gebogenen Haftelementen
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5210"
+    bezeichnung: Modellgussprothese mit gegossenen Halte- und Stützelementen
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5220"
+    bezeichnung: Totale Prothese oder Deckprothese im Oberkiefer
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5230"
+    bezeichnung: Totale Prothese oder Deckprothese im Unterkiefer
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5240"
+    bezeichnung: Teilleistungen zu den Nummern 5200 bis 5230
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5250"
+    bezeichnung: Wiederherstellung der Funktion oder Erweiterung einer abnehmbaren Prothese, ohne Abformung
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5260"
+    bezeichnung: Wiederherstellung der Funktion oder Erweiterung einer abnehmbaren Prothese, mit Abformung
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5270"
+    bezeichnung: Teilunterfütterung einer Prothese
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5280"
+    bezeichnung: Vollständige Unterfütterung einer Prothese
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5290"
+    bezeichnung: Vollständige Unterfütterung einschließlich funktioneller Randgestaltung, im Oberkiefer
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5300"
+    bezeichnung: Vollständige Unterfütterung einschließlich funktioneller Randgestaltung, im Unterkiefer
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5310"
+    bezeichnung: Vollständige Unterfütterung bei einer Defektprothese einschließlich funktioneller Randgestaltung
+    abschnitt: F
+    leistungsbereich: ZE
+
+  - nummer: "5320"
+    bezeichnung: Eingliederung eines Obturators zum Verschluss von Defekten des Gaumens
+    abschnitt: F
+    leistungsbereich: ZE
+    hinweis: Defektversorgung; im Modell dem Zahnersatz zugeordnet, weil sie prothetisch erbracht wird.
+
+  - nummer: "5330"
+    bezeichnung: Eingliederung einer Resektionsprothese zum Verschluss und Ausgleich von Defekten der Kiefer
+    abschnitt: F
+    leistungsbereich: ZE
+    hinweis: Siehe 5320.
+
+  - nummer: "5340"
+    bezeichnung: Eingliederung einer Prothese oder Epithese zum Ersatz fehlender Gesichtsteile
+    abschnitt: F
+    leistungsbereich: null
+    hinweis: >
+      Ersetzt Gesichtsteile, keine Zähne. Fällt nicht unter Zahnersatz im
+      Sinne des Modells und ist die einzige Nummer des Abschnitts F außerhalb
+      von ZE.
+
+
+  - nummer: "6000"
+    bezeichnung: Profil- oder Enfacefotografie einschließlich kieferorthopädischer Auswertung
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6010"
+    bezeichnung: Anwendung von Methoden zur Analyse von Kiefermodellen
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6020"
+    bezeichnung: Anwendung von Methoden zur Untersuchung des Gesichtsschädels
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6030"
+    bezeichnung: Maßnahmen zur Umformung eines Kiefers einschließlich Retention, geringer Umfang
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6040"
+    bezeichnung: Maßnahmen zur Umformung eines Kiefers einschließlich Retention, mittlerer Umfang
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6050"
+    bezeichnung: Maßnahmen zur Umformung eines Kiefers einschließlich Retention, hoher Umfang
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6060"
+    bezeichnung: Maßnahmen zur Einstellung der Kiefer in den Regelbiss während der Wachstumsphase, geringer Umfang
+    abschnitt: G
+    leistungsbereich: KFO
+    hinweis: Wachstumsbezogen; im Erwachsenentarif praktisch ohne Bedeutung.
+
+  - nummer: "6070"
+    bezeichnung: Maßnahmen zur Einstellung der Kiefer in den Regelbiss während der Wachstumsphase, mittlerer Umfang
+    abschnitt: G
+    leistungsbereich: KFO
+    hinweis: Siehe 6060.
+
+  - nummer: "6080"
+    bezeichnung: Maßnahmen zur Einstellung der Kiefer in den Regelbiss während der Wachstumsphase, hoher Umfang
+    abschnitt: G
+    leistungsbereich: KFO
+    hinweis: Siehe 6060.
+
+  - nummer: "6090"
+    bezeichnung: Maßnahmen zur Einstellung der Okklusion durch alveolären Ausgleich bei abgeschlossener Wachstumsphase
+    abschnitt: G
+    leistungsbereich: KFO
+    hinweis: Die kieferorthopädische Position, die im Erwachsenentarif regelmäßig anfällt.
+
+  - nummer: "6100"
+    bezeichnung: Eingliederung eines Klebebrackets
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6110"
+    bezeichnung: Entfernung eines Klebebrackets einschließlich Polieren
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6120"
+    bezeichnung: Eingliederung eines Bandes
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6130"
+    bezeichnung: Entfernung eines Bandes einschließlich Polieren
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6140"
+    bezeichnung: Eingliederung eines Teilbogens
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6150"
+    bezeichnung: Eingliederung eines ungeteilten Bogens, alle Zahngruppen umfassend, je Kiefer
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6160"
+    bezeichnung: Eingliederung einer intraoralen oder extraoralen Verankerung
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6170"
+    bezeichnung: Eingliederung einer Kopf-Kinn-Kappe
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6180"
+    bezeichnung: Wiederherstellung der Funktionsfähigkeit oder Erweiterung von herausnehmbaren Behandlungsgeräten
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6190"
+    bezeichnung: Beratendes und belehrendes Gespräch zur Beseitigung von schädlichen Gewohnheiten und Dysfunktionen
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6200"
+    bezeichnung: Eingliedern von Hilfsmitteln zur Beseitigung von Funktionsstörungen
+    abschnitt: G
+    leistungsbereich: KFO
+    hinweis: >
+      Trotz des Wortes Funktionsstörung kieferorthopädisch und nicht FUN;
+      FUN meint die Kiefergelenkdiagnostik und Schienentherapie des
+      Abschnitts J.
+
+  - nummer: "6210"
+    bezeichnung: Kontrolle des Behandlungsverlaufs oder Weiterführung der Retention
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6220"
+    bezeichnung: Vorbereitende Maßnahmen zur Herstellung von kieferorthopädischen Behandlungsmitteln
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6230"
+    bezeichnung: Eingliederung von kieferorthopädischen Behandlungsmitteln, je Kiefer
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6240"
+    bezeichnung: Maßnahmen zur Verhütung von Folgen vorzeitigen Zahnverlustes
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6250"
+    bezeichnung: Beseitigung des Diastemas, als selbstständige Leistung
+    abschnitt: G
+    leistungsbereich: KFO
+
+  - nummer: "6260"
+    bezeichnung: Maßnahmen zur Einordnung eines verlagerten Zahnes in den Zahnbogen
+    abschnitt: G
+    leistungsbereich: KFO
+
+
+  - nummer: "7000"
+    bezeichnung: Eingliederung eines Aufbissbehelfs ohne adjustierte Oberfläche
+    abschnitt: H
+    leistungsbereich: FUN
+
+  - nummer: "7010"
+    bezeichnung: Eingliederung eines Aufbissbehelfs mit adjustierter Oberfläche
+    abschnitt: H
+    leistungsbereich: FUN
+
+  - nummer: "7020"
+    bezeichnung: Umarbeitung einer vorhandenen Prothese zum Aufbissbehelf
+    abschnitt: H
+    leistungsbereich: FUN
+
+  - nummer: "7030"
+    bezeichnung: Wiederherstellung der Funktion eines Aufbissbehelfs
+    abschnitt: H
+    leistungsbereich: FUN
+
+  - nummer: "7040"
+    bezeichnung: Kontrolle eines Aufbissbehelfs
+    abschnitt: H
+    leistungsbereich: FUN
+
+  - nummer: "7050"
+    bezeichnung: Kontrolle eines Aufbissbehelfs mit adjustierter Oberfläche, subtraktive Maßnahmen
+    abschnitt: H
+    leistungsbereich: FUN
+
+  - nummer: "7060"
+    bezeichnung: Kontrolle eines Aufbissbehelfs mit adjustierter Oberfläche, additive Maßnahmen
+    abschnitt: H
+    leistungsbereich: FUN
+
+  - nummer: "7070"
+    bezeichnung: Semipermanente Schiene unter Anwendung der Ätztechnik, je Interdentalraum
+    abschnitt: H
+    leistungsbereich: PAR
+    hinweis: >
+      Ermessensentscheidung. Der Leistungstext nennt keinen Zweck. Die Schiene
+      verblockt gelockerte Zähne und wird daher parodontal eingeordnet, nicht
+      als Aufbissschiene im Sinne von FUN. Bei traumatisch gelockerten Zähnen
+      wäre ZERH zutreffender.
+
+  - nummer: "7080"
+    bezeichnung: Festsitzendes laborgefertigtes Provisorium im indirekten Verfahren, je Zahn oder Implantat
+    abschnitt: H
+    leistungsbereich: ZE
+    hinweis: >
+      Langzeitprovisorium mit einer Tragezeit von mindestens drei Monaten.
+      Trotz Abschnitt H prothetische Versorgung.
+
+  - nummer: "7090"
+    bezeichnung: Laborgefertigtes Provisorium im indirekten Verfahren, je Brückenglied
+    abschnitt: H
+    leistungsbereich: ZE
+    hinweis: Siehe 7080.
+
+  - nummer: "7100"
+    bezeichnung: Wiederherstellung der Funktion eines Langzeitprovisoriums
+    abschnitt: H
+    leistungsbereich: ZE
+    hinweis: Siehe 7080.
+
+
+  - nummer: "8000"
+    bezeichnung: Klinische Funktionsanalyse einschließlich Dokumentation
+    abschnitt: J
+    leistungsbereich: FUN
+
+  - nummer: "8010"
+    bezeichnung: Registrieren der gelenkbezüglichen Zentrallage des Unterkiefers
+    abschnitt: J
+    leistungsbereich: FUN
+
+  - nummer: "8020"
+    bezeichnung: Arbiträre Scharnierachsenbestimmung
+    abschnitt: J
+    leistungsbereich: FUN
+
+  - nummer: "8030"
+    bezeichnung: Kinematische Scharnierachsenbestimmung
+    abschnitt: J
+    leistungsbereich: FUN
+
+  - nummer: "8035"
+    bezeichnung: Kinematische Scharnierachsenbestimmung mittels elektronischer Aufzeichnung
+    abschnitt: J
+    leistungsbereich: FUN
+
+  - nummer: "8050"
+    bezeichnung: Registrieren von Unterkieferbewegungen zur Einstellung halbindividueller Artikulatoren
+    abschnitt: J
+    leistungsbereich: FUN
+
+  - nummer: "8060"
+    bezeichnung: Registrieren von Unterkieferbewegungen zur Einstellung voll adjustierbarer Artikulatoren
+    abschnitt: J
+    leistungsbereich: FUN
+
+  - nummer: "8065"
+    bezeichnung: Registrieren von Unterkieferbewegungen mittels elektronischer Aufzeichnung
+    abschnitt: J
+    leistungsbereich: FUN
+
+  - nummer: "8080"
+    bezeichnung: Diagnostische Maßnahmen an Modellen im Artikulator
+    abschnitt: J
+    leistungsbereich: FUN
+
+  - nummer: "8090"
+    bezeichnung: Diagnostischer Aufbau von Funktionsflächen
+    abschnitt: J
+    leistungsbereich: FUN
+
+  - nummer: "8100"
+    bezeichnung: Systematische subtraktive Maßnahmen am natürlichen Gebiss oder am Zahnersatz
+    abschnitt: J
+    leistungsbereich: FUN
+    hinweis: Abzugrenzen von 4040, dem Einschleifen grober Vorkontakte im parodontalen Zusammenhang.
+
+
+  - nummer: "9000"
+    bezeichnung: Implantatbezogene Analyse und Vermessung des Alveolarfortsatzes
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9003"
+    bezeichnung: Verwenden einer Orientierungs- oder Positionierungsschablone zur Implantation
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9005"
+    bezeichnung: Verwenden einer Navigationsschablone oder chirurgischen Führungsschablone zur Implantation
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9010"
+    bezeichnung: Implantatinsertion, je Implantat
+    abschnitt: K
+    leistungsbereich: IMP
+    hinweis: Die Kernleistung des Bereichs; sie bestimmt die Zählung der Fälle im Produktmodell.
+
+  - nummer: "9020"
+    bezeichnung: Insertion eines Implantats zum temporären Verbleib, auch orthodontisches Implantat
+    abschnitt: K
+    leistungsbereich: IMP
+    hinweis: >
+      Ermessensentscheidung. Als kieferorthopädische Verankerung wäre KFO
+      zutreffender; die Nummer allein sagt den Anlass nicht.
+
+  - nummer: "9040"
+    bezeichnung: Freilegen eines Implantats und Einfügen von Aufbauelementen
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9050"
+    bezeichnung: Entfernen, Wiedereinsetzen und Auswechseln von Aufbauelementen während der rekonstruktiven Phase
+    abschnitt: K
+    leistungsbereich: IMP
+    hinweis: Der Aufbau gehört zu IMP, die darauf gesetzte Krone zu ZE.
+
+  - nummer: "9060"
+    bezeichnung: Auswechseln von Aufbauelementen im Reparaturfall
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9090"
+    bezeichnung: Knochengewinnung, Knochenaufbereitung und Knochenimplantation
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9100"
+    bezeichnung: Aufbau des Alveolarfortsatzes durch Augmentation ohne zusätzliche Stabilisierungsmaßnahmen
+    abschnitt: K
+    leistungsbereich: IMP
+    hinweis: Knochenaufbau; das Produktmodell zählt ihn ausdrücklich zu IMP.
+
+  - nummer: "9110"
+    bezeichnung: Geschlossene Sinusbodenelevation vom Kieferkamm aus, interner Sinuslift
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9120"
+    bezeichnung: Sinusbodenelevation durch externe Knochenfensterung, externer Sinuslift
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9130"
+    bezeichnung: Spaltung und Spreizung von Knochensegmenten, Bone Splitting
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9140"
+    bezeichnung: Intraorale Entnahme von Knochen außerhalb des Aufbaugebietes
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9150"
+    bezeichnung: Fixation oder Stabilisierung des Augmentates durch Osteosynthesemaßnahmen
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9160"
+    bezeichnung: Entfernung unter der Schleimhaut liegender Materialien
+    abschnitt: K
+    leistungsbereich: IMP
+
+  - nummer: "9170"
+    bezeichnung: Entfernung im Knochen liegender Materialien durch Osteotomie
+    abschnitt: K
+    leistungsbereich: IMP
+
+
+  - nummer: "0500"
+    bezeichnung: Zuschlag bei nichtstationärer Durchführung, 250 bis 499 Punkte
+    abschnitt: L
+    leistungsbereich: null
+    hinweis: Folgt der zugeordneten chirurgischen Hauptleistung aus Abschnitt D, E oder K.
+
+  - nummer: "0510"
+    bezeichnung: Zuschlag bei nichtstationärer Durchführung, 500 bis 799 Punkte
+    abschnitt: L
+    leistungsbereich: null
+    hinweis: Siehe 0500.
+
+  - nummer: "0520"
+    bezeichnung: Zuschlag bei nichtstationärer Durchführung, 800 bis 1199 Punkte
+    abschnitt: L
+    leistungsbereich: null
+    hinweis: Siehe 0500.
+
+  - nummer: "0530"
+    bezeichnung: Zuschlag bei nichtstationärer Durchführung, 1200 Punkte und mehr
+    abschnitt: L
+    leistungsbereich: null
+    hinweis: Siehe 0500.

@@ -1,0 +1,156 @@
+meta {
+  name: Fall einreichen (Kunde 10001)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{basisUrl}}/schadensfaelle
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "kundenId": 10001,
+    "behandlungsdatum": "2026-06-05",
+    "positionen": [
+      {
+        "goz": "0010",
+        "betrag": "10.72",
+        "beschreibung": "Eingehende Untersuchung",
+        "datum": "2026-06-05",
+        "anzahl": 1
+      },
+      {
+        "goz": "0090",
+        "betrag": "6.22",
+        "beschreibung": "Intraorale Infiltrationsanaesthesie",
+        "zahn": "36",
+        "datum": "2026-06-05",
+        "anzahl": 1
+      },
+      {
+        "goz": "2040",
+        "betrag": "11.19",
+        "beschreibung": "Anlegen von Spanngummi",
+        "zahn": "36",
+        "datum": "2026-06-05",
+        "anzahl": 1
+      },
+      {
+        "goz": "2080",
+        "betrag": "118.30",
+        "beschreibung": "Restauration mit Kompositmaterial, dreiflaechig",
+        "zahn": "36",
+        "datum": "2026-06-05",
+        "anzahl": 1
+      },
+      {
+        "betrag": "16.40",
+        "beschreibung": "Fuellungsmaterial",
+        "zahn": "36",
+        "datum": "2026-06-05",
+        "anzahl": 1
+      }
+    ],
+    "rechnung": {
+      "rechnungsnummer": "2026-04892",
+      "rechnungsdatum": "2026-06-19",
+      "absender": "Zahnarztpraxis Dr. med. dent. Hartmut Beisser",
+      "patient": "Anna Müller",
+      "gesamtbetrag": "162.83"
+    }
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.headers.location: isDefined
+  res.body.kundenId: eq 10001
+  res.body.status: eq eingereicht
+  res.body.erstattungsbetrag: isNull
+  res.body.bewertung: isNull
+}
+
+script:post-response {
+  bru.setVar("agentFallId", res.getBody().id);
+  console.log("Neuer Fall fuer den Schadensfallagenten:", bru.getVar("agentFallId"));
+}
+
+tests {
+  test("rechnungsbetrag ist die Summe der eingereichten Positionen", function() {
+    expect(res.getBody().rechnungsbetrag).to.equal("162.83");
+  });
+
+  test("rechnungsbetrag und Gesamtbetrag der Rechnung sind dieselbe Zahl", function() {
+    // Der Kern von #19: Weil ALLE Positionen mitkommen, ist der Fallbetrag
+    // der Rechnungsbetrag. Vor dem 2026-08-19 standen hier 146,43 gegen
+    // 162,83 -- die 16,40 Fuellungsmaterial fielen aus dem Fall.
+    expect(res.getBody().rechnungsbetrag).to.equal(res.getBody().rechnung.gesamtbetrag);
+  });
+
+  test("die Materialposition kommt ohne Gebuehrenziffer mit", function() {
+    const ohneZiffer = res.getBody().positionen.filter((position) => position.goz === null);
+    expect(ohneZiffer).to.have.lengthOf(1);
+    expect(ohneZiffer[0].beschreibung).to.equal("Fuellungsmaterial");
+    expect(ohneZiffer[0].zahn).to.equal("36");
+  });
+
+  test("kein Leistungsbereich -- den traegt erst die Bewertung nach", function() {
+    res.getBody().positionen.forEach(function(position) {
+      expect(position.leistungsbereich, position.beschreibung).to.be.null;
+    });
+  });
+}
+
+docs {
+  Die Kompositfüllung aus `submissions/rechnungen/cases/mueller-fuellung.yaml` für Anna
+  Müller (10001) — genau so, wie sie aus der Annahme im Beratungsagenten
+  herausfällt, wenn eine Kundin das PDF in den Chat lädt. Die Fallnummer
+  landet in `{{agentFallId}}`; die vier folgenden Requests arbeiten damit.
+
+  Der Weg über REST ist hier eine **Abkürzung um den Chat herum**, kein
+  eigener Kanal: Dieselbe Rechnung, dieselben Felder, nur ohne PDF, ohne
+  Extraktion und ohne Orchestrator. Wer den ganzen Weg sehen will, lädt
+  `submissions/rechnungen/pdf/mueller-fuellung.pdf` in den Kunden-Chat.
+
+  ## Drei Dinge stehen hier bewusst anders als in Ordner 04
+
+  **Kein `leistungsbereich`.** Eine Rechnung nennt Gebührennummern, keine
+  Leistungsbereiche — die Zuordnung ist Produktwissen und wird erst mit der
+  Bewertung nachgetragen. Das Schema lässt das Feld deshalb beim Einreichen
+  weg (`Schadenposition`, `oas/openapi.yaml`), und die Annahme setzt es
+  nicht. Genau daran hängt der interessanteste Teil der Prüfung: `0010`
+  („Eingehende Untersuchung") hat gar keinen eigenen Leistungsbereich, sie
+  teilt den der Behandlung, zu der sie gehört. Wer das zuordnet, ist das
+  Modell — und der Freigabewächter prüft die Zuordnung gegen die
+  RawFindings.
+
+  **Ein `rechnung`-Kopf.** Rechnungsnummer, Datum, Absender, Patientenname
+  und ausgewiesener Gesamtbetrag, so wie sie die Extraktion im Kernsystem
+  liefert. Der Agent braucht ihn: `PATIENT_UNCLEAR` vergleicht den Namen auf
+  der Rechnung mit dem Namen in der Akte, und die Vollständigkeit des Kopfes
+  ist selbst eine Wächterregel.
+
+  **`gesamtbetrag` und `rechnungsbetrag` sind seit dem 2026-08-19 dieselbe
+  Zahl: 162,83 EUR.** Die fünfte Position — 16,40 EUR Füllungsmaterial —
+  trägt **keine** `goz`, und genau das ist der Punkt: Material, Labor (§ 9
+  GOZ) und Verlangensleistungen stehen ohne Ziffer auf der Rechnung und
+  gehören trotzdem in den Fall. Vorher ließ die Annahme sie weg, der Fall
+  stand über 146,43 EUR, und jede Schwelle maß etwas anderes als das, was auf
+  der Rechnung steht
+  ([#19](https://github.com/atra-consulting/atra-mcp-a2a-lab/issues/19),
+  geschlossen).
+
+  Woher die Materialposition ihren Leistungsbereich bekommt, entscheidet die
+  Prüfung: Sie folgt der Hauptbehandlung **am selben Zahn** (hier die 2080 an
+  Zahn 36 → ZERH), und der Freigabewächter lässt nur die Bereiche zu, die
+  `goz_pruefen` dort selbst als `ENTHALTEN` gemeldet hat. Deshalb reisen
+  `zahn` und `datum` je Position mit
+  ([#18](https://github.com/atra-consulting/atra-mcp-a2a-lab/issues/18)).
+}

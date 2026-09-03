@@ -1,0 +1,26 @@
+
+rechnungsnummer: "DDS-2026-121033"
+rechnungsdatum: 2026-04-22
+praxis: dds
+patient:
+  name: Bernd Schuster
+  anschrift:
+    strasse: Hafenweg 7
+    plz: "20457"
+    ort: Hamburg
+  geburtsdatum: 1958-09-30
+vorgang:
+  kundennummer: "5102447"
+  vorgangsnummer: "2026/ENDO/2214"
+positionen:
+  - { datum: 2026-03-10, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-03-10, art: goz, nummer: "0090", zahn: "46", leistung: Intraorale Infiltrationsanästhesie, anzahl: 2, faktor: 2.3, betrag: 12.44 }
+  - { datum: 2026-03-10, art: goz, nummer: "2390", zahn: "46", leistung: Trepanation eines Zahnes, anzahl: 1, faktor: 2.3, betrag: 34.90 }
+  - { datum: 2026-03-10, art: goz, nummer: "2410", zahn: "46", leistung: Aufbereitung eines Wurzelkanals, anzahl: 3, faktor: 2.3, betrag: 61.53 }
+  - { datum: 2026-03-24, art: goz, nummer: "2440", zahn: "46", leistung: Füllung eines Wurzelkanals, anzahl: 3, faktor: 2.3, betrag: 58.80 }
+  - { datum: 2026-03-24, art: material, nummer: null, zahn: "46", leistung: Guttapercha und Sealer, anzahl: 1, faktor: null, betrag: 12.60 }
+  - { datum: 2026-04-07, art: goz, nummer: "2050", zahn: "46", leistung: Aufbaufüllung in Adhäsivtechnik, anzahl: 1, faktor: 2.3, betrag: 42.30 }
+  - { datum: 2026-04-07, art: goz, nummer: "2197", zahn: "46", leistung: Adhäsive Befestigung, anzahl: 1, faktor: 2.3, betrag: 17.85 }
+zahlung:
+  frist_tage: 14
+  bereits_gezahlt: 0

@@ -1,0 +1,105 @@
+
+kundenId: 10003
+praxis: dds
+
+patient:
+  name: Clara Weiss
+  geburtsdatum: 1978-07-22
+  anschrift:
+    strasse: Domgasse 3
+    plz: "50667"
+    ort: Köln
+
+befund:
+  datum: 2026-08-03
+  aktenzeichen: "WW-2026-1204"
+  zahnstatus:
+    - { zahn: "16", zustand: fuellung }
+    - { zahn: "26", zustand: fuellung }
+    - { zahn: "37", zustand: fuellung }
+  diagnosen:
+    - >-
+      Leichte Draengstellung im Oberkiefer, in laufender kieferorthopaedischer
+      Behandlung mit festsitzender Multiband-Apparatur seit Mai 2026.
+    - >-
+      Zustand nach craniomandibulaerer Dysfunktion mit naechtlichem Knirschen,
+      seit September 2025 nachts getragene Aufbissschiene, Beschwerden
+      rueckläufig.
+    - >-
+      Vereinzelt Sondierungstiefen bis 4 mm im Bereich der unteren
+      Frontzaehne, Gingiva dort leicht gereizt, sonst reizlos.
+  parodontalbefund: >-
+    Lokal begrenzt erhoehte Sondierungstiefen bis 4 mm an 31-41, keine
+    Blutung auf Sondierung an diesen Stellen. Uebrige Bezahnung mit
+    physiologischen Werten. Kein Attachmentverlust.
+  empfehlung: >-
+    Fortfuehrung der laufenden kieferorthopaedischen Behandlung. Nach
+    Entbaenderung Nachkontrolle der Sondierungstiefen im Unterkiefer-
+    Frontzahnbereich empfohlen; ein Termin dafuer ist bislang nicht
+    vereinbart.
+  hkp_beiliegend: false
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2025-03-08, zahn: null, behandlung: Akute Entfernung einer ueberzaehligen, einwurzeligen Zahnanlage im Notdienst }
+    - { datum: 2025-09-12, zahn: null, behandlung: Klinische und instrumentelle Funktionsanalyse, Eingliederung Aufbissschiene }
+    - { datum: 2026-03-14, zahn: null, behandlung: Bleaching beider Kiefer, Selbstzahlerleistung nach Ablehnung durch die Versicherung }
+    - { datum: 2026-05-04, zahn: null, behandlung: Kieferorthopaedische Behandlungsplanung, Eingliederung festsitzender Apparatur Ober- und Unterkiefer }
+    - { datum: 2026-07-09, zahn: null, behandlung: Kieferorthopaedische Kontrolle }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-07
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: ja
+      freitext: Ich trage noch eine feste Zahnspange, das laeuft weiter.
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: ja
+      freitext: Kieferorthopaedische Behandlung, noch nicht abgeschlossen.
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: null
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Vor ein paar Wochen beim Kieferorthopaeden.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: ja
+      freitext: null
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: 60
+      begruendung: >-
+        Der Befund nennt eine konkrete Nachkontrolle nach Entbaenderung, aber
+        kein Termin ist vereinbart und kein Heil- und Kostenplan liegt vor —
+        angeraten, doch nicht terminiert.
+    ERSATZBEDARF:
+      wert: 0
+      begruendung: >-
+        Kein Zahn fehlt oder ist ersatzbeduerftig; deckt sich mit
+        fehlendeZaehne 0 in der Akte. Die entfernte Zahnanlage war
+        ueberzaehlig und hinterliess keine Luecke.
+    SANIERUNGSGRAD:
+      wert: 30
+      begruendung: >-
+        Drei Fuellungen und eine laufende kieferorthopaedische Apparatur
+        zeigen ein moderat behandeltes, aber nicht saniertes Gebiss.
+    PARODONTALBEFUND:
+      wert: 20
+      begruendung: >-
+        Lokal begrenzt erhoehte Sondierungstiefen sind dokumentiert und
+        eindeutig beurteilbar, aber nicht schwerwiegend.
+  erwartete_zone: gelb
+  hinweis: >-
+    Absender und Verfasser fallen auseinander — die Abrechnungsstelle
+    uebermittelt, das MVZ hat erhoben. Nichts hier ist einzeln alarmierend;
+    das gelbe Bild entsteht erst aus der Summe aus laufender Behandlung und
+    offener Nachkontrolle.

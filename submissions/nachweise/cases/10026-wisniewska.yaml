@@ -1,0 +1,81 @@
+
+kundenId: 10026
+praxis: weissraum
+
+patient:
+  name: Zofia Wisniewska
+  geburtsdatum: 1986-04-28
+  anschrift:
+    strasse: Seestrasse 61
+    plz: "18055"
+    ort: Rostock
+
+befund:
+  datum: 2026-07-22
+  aktenzeichen: "MK-2026-0705"
+  zahnstatus:
+    - { zahn: "25", zustand: krone }
+    - { zahn: "36", zustand: fuellung }
+  diagnosen:
+    - >-
+      Ausgedehnter Substanzverlust an 25 nach frueherer Fuellungstherapie,
+      Versorgung mit Vollkrone im Maerz 2026.
+    - Kompositfuellung an 36 aus fruehen Jahren, unauffaellig.
+  parodontalbefund: >-
+    Sondierungstiefen unauffaellig, keine Blutung auf Sondierung, guter
+    Mundhygienezustand.
+  empfehlung: null
+  hkp_beiliegend: false
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2022-05-19, zahn: null, behandlung: Kontrolluntersuchung, ohne Befund }
+    - { datum: 2026-03-16, zahn: "25", behandlung: Vollkrone, adhaesive Befestigung }
+    - { datum: 2026-06-05, zahn: "25", behandlung: Nachkontrolle, Krone reizlos }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-02
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: nein
+      freitext: null
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: nein
+      freitext: null
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: null
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Im Juni, zur Nachkontrolle der Krone.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: ja
+      freitext: null
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: 0
+      begruendung: >-
+        Der Befund nennt keine Empfehlung, der Fragebogen verneint die Frage,
+        und die letzte Historie ist eine unauffaellige Nachkontrolle.
+    ERSATZBEDARF:
+      wert: 0
+      begruendung: Kein Zahn fehlt oder ist ersatzbeduerftig; deckt sich mit fehlendeZaehne 0 in der Akte.
+    SANIERUNGSGRAD:
+      wert: 15
+      begruendung: Eine Krone und eine alte Fuellung, ansonsten unversorgt — fuer das Alter unauffaellig.
+    PARODONTALBEFUND:
+      wert: 5
+      begruendung: Sondierungstiefen unauffaellig, keine Blutung — beurteilbar und gut.
+  erwartete_zone: gruen
+  hinweis: >-
+    Eine abgeschlossene Kronenversorgung ist kein offener Punkt, sondern
+    ein erledigter.

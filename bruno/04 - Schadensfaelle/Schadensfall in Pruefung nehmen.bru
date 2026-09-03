@@ -1,0 +1,66 @@
+meta {
+  name: Schadensfall in Pruefung nehmen
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{basisUrl}}/schadensfaelle/{{neueSchadensfallId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": "in_pruefung"
+  }
+}
+
+script:pre-request {
+  // Derselbe Griff wie bei "Schadensfall claimen", aus demselben Grund: Der
+  // Poller des Schadensfallagenten holt sich jeden Fall in `eingereicht`
+  // binnen zehn Sekunden -- auch den, den der Request davor gerade selbst
+  // eingereicht hat. Zwischen den beiden Requests liegt beim Lauf mit
+  // `--delay` eine Minute, und hat der Takt sonst nichts zu tun, ist der Fall
+  // in dieser Minute sicher weg. Also vorher zurueckholen: `in_pruefung`,
+  // `geprueft_freigabe` und `geprueft_eskalation` fuehren alle wieder nach
+  // `eingereicht`, und derselbe Status noch einmal ist kein Uebergang.
+  await bru.sendRequest({
+    method: "PATCH",
+    url: bru.getEnvVar("basisUrl") + "/schadensfaelle/" + bru.getVar("neueSchadensfallId"),
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": bru.getEnvVar("apiKey")
+    },
+    data: { status: "eingereicht" }
+  });
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq in_pruefung
+  res.body.erstattungsbetrag: isNull
+}
+
+docs {
+  Erster Schritt der Bearbeitung: der Fall wird in Prüfung genommen.
+
+  `SchadensfallAendern` kennt nur fünf Felder — `status`, `erstattungsbetrag`,
+  `ablehnungsgrund`, `ablehnungshinweis` und `akteur`. Positionen,
+  Behandlungsdatum und Kundennummer lassen sich nach dem Einreichen nicht
+  mehr ändern; die Rechnung ist Beleg, kein Arbeitsvorrat.
+
+  Das Kernsystem erzwingt seit `StatusTransition` eine **feste Matrix**
+  erlaubter Übergänge (409 sonst) — anders als früher lässt sich der Weg über
+  `in_pruefung` nicht mehr überspringen: `eingereicht` kommt nur über
+  `genehmigt` nach `ausgezahlt`, ein direkter Sprung ist kein gültiger
+  Übergang. Welcher Akteur (Agent, Sachbearbeitung, System) einen Übergang
+  setzt, steht dort als Vorgabe fest, nicht im Prompt eines Agenten. Teilen
+  sich zwei Aufrufer eine Kante — `in_pruefung → eingereicht` gehört Reconcile
+  und dem Knopf "Erneut prüfen lassen" —, nennt der Aufrufer sich mit
+  `akteur`, sonst gilt die Vorgabe der Kante.
+}

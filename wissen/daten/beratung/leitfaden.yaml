@@ -1,0 +1,182 @@
+
+stand: 2026-01-01
+vertraulichkeit: intern
+gilt_fuer: Telefonberatung und persoenliche Beratung, Erwachsene
+
+
+grundsatz:
+  vorrang: >
+    Massgeblich ist der Bedarf der Kundin oder des Kunden. Die Beratung
+    ermittelt zuerst, was gebraucht wird, und waehlt danach den Tarif. Nicht
+    umgekehrt.
+  begruendung: >
+    Ein Tarif, der nicht passt, wird storniert, sobald der erste Leistungsfall
+    enttaeuscht. Eine Empfehlung gegen den erkennbaren Bedarf schadet damit
+    auch dem Vertrieb, nicht nur der Kundin oder dem Kunden.
+  pflicht_zur_offenheit: >
+    Passt ein guenstigerer Tarif ebenso gut, wird er genannt. Die Entscheidung
+    trifft die Kundin oder der Kunde, nicht der Berater.
+
+
+empfehlungsreihenfolge:
+  reihenfolge:
+    - ATRA_DENT_X
+    - ATRA_DENT_X_SB
+    - ATRA_DENT_B
+    - ATRA_DENT_S
+  gilt_nur_bei: gleichwertiger Eignung
+  begruendung: >
+    Bei Zahnzusatzversicherungen ist die Nachversicherung der Regelfall, in
+    dem etwas schiefgeht: Wer zunaechst klein einsteigt und spaeter aufstocken
+    will, trifft auf eine erneute Gesundheitspruefung, eine erneute Wartezeit
+    und eine erneut beginnende Zahnstaffel. Deshalb wird bei sonst gleicher
+    Eignung der umfassendere Tarif zuerst dargestellt.
+  vorrang_des_bedarfs: >
+    Die Reihenfolge entscheidet den Zweifelsfall, nicht den Bedarfsfall.
+    Ergibt die Bedarfsanalyse, dass ein anderer Tarif besser passt, wird
+    dieser empfohlen — auch wenn er in der Reihenfolge weiter hinten steht.
+    Eine Abweichung braucht keine Begruendung gegenueber dem Vertrieb; eine
+    Empfehlung gegen den erkennbaren Bedarf braucht sie sehr wohl.
+  reihenfolge_greift_nicht_wenn:
+    - schluessel: ALTER
+      text: Die Kundin oder der Kunde ist ueber 65 — brillant ist dann nicht abschliessbar.
+    - schluessel: BUDGET_GENANNT
+      text: >
+        Es wurde ein Budgetrahmen genannt, den der vorrangige Tarif ueberschreitet.
+        Dann wird der Rahmen respektiert und der passende Tarif empfohlen, nicht
+        der Rahmen in Frage gestellt.
+    - schluessel: BEDARF_ENGER
+      text: >
+        Der Bedarf ist erkennbar auf einen Bereich begrenzt, den auch ein
+        kleinerer Tarif abdeckt.
+
+
+zielkunden:
+
+  - tarif: ATRA_DENT_S
+    kurzformel: Grundschutz fuer Zahnersatz und Zahnerhalt
+    passt_wenn:
+      - Gebiss ohne bekannte Vorschaeden, keine absehbare groessere Behandlung
+      - Ausdruecklicher Wunsch nach einem niedrigen Beitrag
+      - Junge Versicherte, die frueh einsteigen und lange Zeit haben, die Staffel zu durchlaufen
+    passt_nicht_wenn:
+      - Implantate sind absehbar oder gewuenscht — in smart nicht versichert
+      - Parodontosebehandlung ist absehbar — in smart nicht versichert
+      - Kieferorthopaedie fuer Erwachsene ist ein Thema — in smart nicht versichert
+      - Schutz wird kurzfristig gebraucht — acht Monate Wartezeit
+    hinweispflicht: >
+      Bei smart ist ausdruecklich zu nennen, dass Implantate, Parodontose,
+      Kieferorthopaedie, Funktionsanalyse und Narkose nicht versichert sind.
+      Diese Luecken sind der haeufigste Grund fuer spaetere Enttaeuschung.
+
+  - tarif: ATRA_DENT_B
+    kurzformel: Breiter Schutz mit ueberschaubarem Selbstbehalt
+    passt_wenn:
+      - Alle Leistungsbereiche sollen abgedeckt sein, ohne Vollschutzbeitrag
+      - Ein Selbstbehalt von 100 EUR im Jahr wird akzeptiert
+      - Kieferorthopaedie fuer Erwachsene ist ein Thema (bis 1.200 EUR gesamt)
+      - Einstiegsalter zwischen 66 und 70 — brillant ist dann nicht mehr moeglich
+    passt_nicht_wenn:
+      - Mehr als vier Implantate in fuenf Jahren sind absehbar
+      - Ein Selbstbehalt wird grundsaetzlich abgelehnt und Vollschutz ist bezahlbar
+    hinweispflicht: >
+      Der Selbstbehalt von 100 EUR gilt einmal im Versicherungsjahr ueber alle
+      Leistungsbereiche zusammen, nicht je Bereich. Das ist erfahrungsgemaess
+      der am haeufigsten missverstandene Punkt.
+
+  - tarif: ATRA_DENT_X
+    kurzformel: Vollschutz ohne Selbstbehalt
+    passt_wenn:
+      - Umfassender Schutz ohne Eigenbeteiligung ist gewuenscht
+      - Mehrere Implantate sind absehbar (bis zu acht in fuenf Jahren)
+      - Bis zu zwei Zaehne fehlen bereits — nur hier gibt es dafuer eine Ausnahme
+      - Ein lueckenloser Vorversicherungsschutz besteht — die Wartezeit entfaellt
+      - Die Zahnstaffel soll schnell durchlaufen sein (drei statt vier Jahre)
+    passt_nicht_wenn:
+      - Eintrittsalter ueber 65 — dann nicht abschliessbar
+      - Der genannte Budgetrahmen wird deutlich ueberschritten
+    hinweispflicht: >
+      Die Jahreshoechstgrenze von 5.000 EUR und die Zahnstaffel sind zu nennen.
+      "Vollschutz" heisst nicht "unbegrenzt", und diese Erwartung entsteht
+      leicht.
+
+  - tarif: ATRA_DENT_X_SB
+    kurzformel: Leistung wie brillant, mit 250 EUR Selbstbehalt
+    passt_wenn:
+      - Der Leistungsumfang von brillant wird gewuenscht, der Beitrag soll aber niedriger sein
+      - Kleinere Rechnungen werden ohnehin selbst getragen
+      - Die Kundin oder der Kunde erwartet Leistungen eher selten, dann aber grosse
+    passt_nicht_wenn:
+      - Regelmaessige kleinere Behandlungen sind absehbar — der Selbstbehalt greift dann jedes Jahr
+      - Eintrittsalter ueber 65
+    hinweispflicht: >
+      Der Leistungsumfang ist mit brillant identisch. Der Unterschied liegt
+      ausschliesslich im Selbstbehalt von 250 EUR je Versicherungsjahr. Diese
+      Variante darf nicht als "kleinerer Schutz" dargestellt werden.
+
+
+harte_kriterien:
+  - schluessel: EINTRITTSALTER
+    pruefung: Alter gegen eintrittsalter des Tarifs
+    wirkung: Tarif entfaellt vollstaendig aus der Empfehlung
+    hinweis: brillant und brillant mit Selbstbehalt nur bis 65, smart und balance bis 70
+  - schluessel: BEREICH_NICHT_VERSICHERT
+    pruefung: genannter Behandlungsbedarf gegen leistungen des Tarifs
+    wirkung: Tarif wird nicht empfohlen, wenn der Hauptbedarf dort nicht versichert ist
+  - schluessel: FEHLENDE_ZAEHNE
+    pruefung: bei Vertragsschluss fehlende Zaehne
+    wirkung: >
+      Nur brillant und brillant mit Selbstbehalt sehen eine Ausnahme vor, und
+      zwar fuer bis zu zwei fehlende Zaehne bei Behandlungsbeginn nach zwoelf
+      Monaten. In allen anderen Tarifen ist der Ersatz fehlender Zaehne
+      ausgeschlossen.
+
+
+gespraechsanlaesse:
+  - schluessel: VOR_DER_DIAGNOSE
+    text: >
+      Noch keine Behandlung angeraten. Der guenstigste Zeitpunkt ueberhaupt,
+      weil der Ausschluss angeratener Behandlungen noch nicht greift.
+  - schluessel: VORVERSICHERUNG
+    text: >
+      Lueckenloser Vorversicherungsschutz besteht. Bei brillant entfaellt
+      dadurch die Wartezeit.
+  - schluessel: FAMILIENZUWACHS
+    text: Anlass, den eigenen Schutz zu pruefen, auch wenn Kindertarife nicht Teil des Modells sind.
+  - schluessel: BERUFSEINSTIEG
+    text: Frueher Einstieg, lange Zeit zum Durchlaufen der Zahnstaffel.
+
+
+compliance_grenzen:
+  - schluessel: KEINE_ERSTATTUNGSZUSAGE
+    text: >
+      Keine Zusage ueber die Hoehe einer konkreten Erstattung. Quote, Staffel,
+      Selbstbehalt, Sublimit und die Vorleistung der gesetzlichen
+      Krankenversicherung wirken zusammen; verbindlich rechnet nur die
+      Leistungsabteilung.
+  - schluessel: KEINE_HEILVERSPRECHEN
+    text: >
+      Keine Aussage darueber, ob eine Behandlung medizinisch notwendig oder
+      sinnvoll ist. Das entscheidet die Zahnaerztin oder der Zahnarzt.
+  - schluessel: AUSSCHLUESSE_NENNEN
+    text: >
+      Angeratene und begonnene Behandlungen sowie bei Vertragsschluss
+      fehlende Zaehne sind aktiv anzusprechen, nicht erst auf Nachfrage. Wer
+      bereits einen Heil- und Kostenplan hat, muss wissen, dass dafuer nicht
+      geleistet wird.
+  - schluessel: WARTEZEIT_NENNEN
+    text: Die Wartezeit des empfohlenen Tarifs ist ungefragt zu nennen.
+  - schluessel: KEIN_DRAENGEN
+    text: >
+      Kein Zeitdruck, keine kuenstliche Verknappung, keine Andeutung, ein
+      Angebot gelte nur heute. Der Wunsch nach Bedenkzeit oder Ruecksprache
+      wird ohne Gegenrede akzeptiert.
+  - schluessel: KEINE_GESUNDHEITSDATEN_UEBER_DRITTE
+    text: >
+      Angaben zum Gesundheitszustand werden nur mit der versicherten Person
+      selbst besprochen, nicht mit Angehoerigen am Telefon.
+  - schluessel: BEDINGUNGEN_HABEN_VORRANG
+    text: >
+      Bei Widerspruch zwischen diesem Leitfaden und einem Bedingungswerk gilt
+      das Bedingungswerk. Auf Nachfrage wird die Bedingungsstelle genannt,
+      nicht dieser Leitfaden.

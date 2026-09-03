@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: agenten-orchestrator
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY:${GOOGLE_API_KEY:}}
+        chat:
+          model: ${AGENTEN_MODELS_ORCHESTRATOR:gemini-3.5-flash-lite}
+
+server:
+  port: ${AGENTEN_ORCHESTRATOR_PORT:8084}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+agenten:
+  base-url: ${AGENTEN_ORCHESTRATOR_BASE_URL:http://localhost:8084}
+  card: ${AGENTEN_CARD:../cards/orchestrator.yaml}
+  max-length: 2000
+  mcp:
+    kernsystem:
+      url: ${AGENTEN_MCP_KERNSYSTEM_URL:http://localhost:8080}
+      endpoint: /mcp
+      api-key: ${AGENTEN_MCP_KERNSYSTEM_KEY:atra-lab-2026}
+    timeout: 30s
+  subagents:
+    timeout: ${AGENTEN_SUBAGENT_TIMEOUT:4m}
+    card-timeout: ${AGENTEN_SUBAGENT_CARD_TIMEOUT:60s}
+    # api-key wird nur gesetzt, wenn die Karte des Agenten einen verlangt --
+    # in welchem Header, sagt sie selbst. Leer heisst: kein Header.
+    catalog:
+      beratung:
+        url: ${AGENTEN_BERATUNG_URL:http://localhost:8085}
+        api-key:
+      schadensfall:
+        url: ${AGENTEN_SCHADENSFALL_URL:http://localhost:8087}
+        api-key:
+#     TODO Workshop
+
+logging:
+  level:
+    consulting.atra.agenten: INFO

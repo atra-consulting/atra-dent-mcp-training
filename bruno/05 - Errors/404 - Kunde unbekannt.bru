@@ -1,0 +1,31 @@
+meta {
+  name: 404 - Kunde unbekannt
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{basisUrl}}/kunden/99999
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 404
+  res.body.status: eq 404
+  res.body.title: eq Ressource nicht gefunden
+  res.body.type: eq https://atra.example/fehler/nicht-gefunden
+  res.body.detail: contains 99999
+}
+
+docs {
+  Kundennummer 99999 gibt es nicht. Die Nummer steht im Pfad, adressiert also
+  eine Ressource — folglich 404.
+
+  Der Gegenpol steht direkt daneben: `GET /kunden?nachname=Gibtsnicht` liefert
+  **200 mit `[]`**. Dort ist der Wert ein Suchkriterium, und eine leere
+  Trefferliste ist kein Fehler.
+
+  Dieselbe 404 gibt es an `/kunden/99999/schadensfaelle` — auch dieser Pfad
+  prüft zuerst, ob es den Kunden gibt.
+}

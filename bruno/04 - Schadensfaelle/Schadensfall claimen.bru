@@ -1,0 +1,88 @@
+meta {
+  name: Schadensfall claimen
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{basisUrl}}/schadensfaelle/50014
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": "in_pruefung",
+    "erwarteterStatus": "eingereicht"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq in_pruefung
+}
+
+script:pre-request {
+  // Der Poller des Schadensfallagenten holt sich jeden Fall in `eingereicht`
+  // binnen zehn Sekunden -- auch 50014, und zwar Sekunden nach dem Start des
+  // Labs. Dieser Request nimmt ihn dem Takt deshalb unmittelbar vorher wieder
+  // ab, statt darauf zu hoffen, dass der Fall noch dort steht. Derselbe Griff
+  // macht den Request wiederholbar: `geprueft_freigabe -> eingereicht` und
+  // `geprueft_eskalation -> eingereicht` sind erlaubte Kanten der
+  // Sachbearbeitung, derselbe Status noch einmal ist kein Uebergang.
+  await bru.sendRequest({
+    method: "PATCH",
+    url: bru.getEnvVar("basisUrl") + "/schadensfaelle/50014",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": bru.getEnvVar("apiKey")
+    },
+    data: { status: "eingereicht" }
+  });
+}
+
+docs {
+  Das Claiming des Schadensfallagenten — anders als "Schadensfall in Prüfung
+  nehmen" kein einfacher PATCH, sondern ein Compare-and-Set:
+  `erwarteterStatus: eingereicht` sorgt dafür, dass die Änderung nur greift,
+  wenn der Fall genau dort noch steht. Ein zweiter gleichzeitiger Aufruf mit
+  demselben `erwarteterStatus` bekäme 409 — genau einer gewinnt.
+
+  50014 ist der einzige `eingereicht`-Fall im Bestand, den kein anderer
+  Request der Sammlung anfasst (Dimitrios, PZR). Der nächste Request
+  bewertet ihn.
+
+  ## Der Poller ist schneller
+
+  Kein Request der Sammlung fasst 50014 an — der Schadensfallagent schon.
+  Sein Poller sieht alle zehn Sekunden nach Fällen in `eingereicht` und
+  übernimmt jeden davon, auch die Seed-Fälle und auch Sekunden nach dem
+  Start des Labs. Auf einem frisch zurückgesetzten Bestand steht 50014 nach
+  einer halben Minute auf `geprueft_eskalation`, ohne dass jemand einen
+  Request geschickt hätte. Dieses Compare-and-Set gegen `eingereicht` wäre
+  damit nie zu gewinnen.
+
+  Das Pre-Request-Script nimmt dem Takt den Fall deshalb unmittelbar vorher
+  wieder ab: ein PATCH zurück auf `eingereicht`. Das ist kein Kunstgriff um
+  der grünen Farbe willen, sondern derselbe Weg, den die Sachbearbeitung mit
+  „Erneut prüfen lassen" geht — `geprueft_freigabe → eingereicht` und
+  `geprueft_eskalation → eingereicht` sind Kanten der Übergangsmatrix. Steht
+  der Fall schon auf `eingereicht`, ist derselbe Status noch einmal kein
+  Übergang und das Script folgenlos.
+
+  Damit ist der Request auch wiederholbar — anders als früher, wo ein zweiter
+  Lauf ohne zurückgesetzten Bestand hier mit 409 abbrach. Was bleibt, ist ein
+  Fenster von einer Anfragedauer zwischen dem Zurücksetzen und dem
+  Compare-and-Set. Trifft der Takt genau hinein, gewinnt er, und dieser
+  Request bekommt seine 409 — dann noch einmal abschicken.
+
+  Wer den Ordner ohne dieses Rennen fahren will, startet ohne Takt:
+
+  ```bash
+  SCHADENSFALL_POLL_ENABLED=false ./start.sh
+  ```
+}

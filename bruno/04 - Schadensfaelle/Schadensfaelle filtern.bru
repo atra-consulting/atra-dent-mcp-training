@@ -1,0 +1,44 @@
+meta {
+  name: Schadensfaelle filtern
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{basisUrl}}/schadensfaelle?kundenId=10002&status=abgelehnt
+  body: none
+  auth: inherit
+}
+
+params:query {
+  kundenId: 10002
+  status: abgelehnt
+}
+
+assert {
+  res.status: eq 200
+  res.body: length 3
+  res.body[0].ablehnungsgrund: eq WARTEZEIT
+}
+
+docs {
+  Die drei abgelehnten Fälle von Bernd Schuster (10002) — und damit drei
+  verschiedene Gründe an einem Kunden:
+
+  - **50007 `WARTEZEIT`** — Behandlung am 05.03.2026, Vertragsbeginn
+    01.11.2025, atra.dent.smart hat acht Monate Wartezeit. Die läuft bis
+    Juli 2026.
+  - **50012 `NICHT_VERSICHERT`** — Parodontose ist in smart kein versicherter
+    Leistungsbereich.
+  - **50013 `FEHLENDE_ZAEHNE`** — Bernd hatte bei Antragstellung drei fehlende
+    Zähne. Die Ausnahme für bis zu zwei fehlende Zähne gibt es nur in den
+    brillant-Tarifen, und auch dort erst nach 12 Monaten Laufzeit.
+
+  Beide Filter sind optional und werden UND-verknüpft. Weglassen von
+  `kundenId` zeigt alle Ablehnungen im Bestand, weglassen von `status` Bernds
+  komplette Historie.
+
+  Die Ablehnungsgründe sind ein Enum, kein Freitext — die ersten vier Werte
+  entsprechen genau den Ausschluss-Schlüsseln aus `docs/tarife.yaml`. Für
+  alles andere gibt es `SONSTIGES` plus `ablehnungshinweis`.
+}

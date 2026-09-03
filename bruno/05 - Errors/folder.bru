@@ -1,0 +1,41 @@
+meta {
+  name: 05 - Errors
+  seq: 5
+}
+
+docs {
+  # Errors
+
+  Jede Fehlerantwort der API hat dieselbe Form — `application/problem+json`
+  nach RFC 7807, mit `type`, `title`, `status` und `detail`:
+
+  ```json
+  {
+    "type": "https://atra.example/fehler/nicht-gefunden",
+    "title": "Ressource nicht gefunden",
+    "status": 404,
+    "detail": "Kunde 99999 wurde nicht gefunden"
+  }
+  ```
+
+  Die Feldnamen sind die einzige Stelle der Spezifikation, die englisch bleibt:
+  sie sind durch den Medientyp festgelegt, eine Übersetzung würde dessen
+  Kontrakt brechen.
+
+  Fünf `type`-URIs kommen vor:
+
+  | URI-Ende | Anlass |
+  |---|---|
+  | `/validierung` | 400 — Rumpf oder Parameter halten den Kontrakt nicht ein |
+  | `/authentifizierung` | 401 — `x-api-key` fehlt oder stimmt nicht |
+  | `/nicht-gefunden` | 404 — die adressierte Ressource gibt es nicht |
+  | `/anfrage` | 405, 406, 415 — die Anfrage passt nicht zur Ressource |
+  | `/interner-fehler` | 5xx — nach außen ohne jedes Detail |
+
+  Bemerkenswert ist, wo die Grenze zwischen 400 und 404 verläuft. Eine
+  unbekannte Nummer im **Pfad** ist ein fehlender Pfad, also 404. Dieselbe
+  Nummer als Feld im **Rumpf** ist ein Eingabefehler, also 400. Beide Fälle
+  stehen hier nebeneinander.
+
+  Alle Requests dieses Ordners lesen oder scheitern — geschrieben wird nichts.
+}

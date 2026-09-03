@@ -1,0 +1,46 @@
+meta {
+  name: Beitrag berechnen - Bernd, smart
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{rechenkernUrl}}/beitragsberechnung
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "geburtsdatum": "1958-09-30",
+    "tarifId": "ATRA_DENT_S",
+    "gewuenschterBeginn": "2025-11-01"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("Eintrittsalter 67 trifft das oberste Band von smart", function() {
+    expect(res.getBody().monatsbeitrag).to.equal("28.90");
+  });
+}
+
+docs {
+  Bernd Schuster (Kunde 10002) zum tatsächlichen Beginn seines Vertrags,
+  01.11.2025. Geboren am 30.09.1958 ist er da 67 und landet im obersten Band
+  61–70 von atra.dent.smart: **28.90 EUR**.
+
+  Der Gegenpol zu Anna: derselbe Rechenweg, anderes Ende der Alterstabelle. Wer
+  sehen will, wo die Grenze liegt, schiebt den `gewuenschterBeginn` auf
+  `2029-11-01` — mit 71 gibt es kein Band mehr und die API antwortet mit 400.
+
+  Ohne `kundenId` — der Rechenkern kennt keinen Kunden, das Feld gibt es in
+  seinem Kontrakt nicht.
+}

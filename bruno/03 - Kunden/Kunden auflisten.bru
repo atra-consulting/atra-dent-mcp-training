@@ -1,0 +1,27 @@
+meta {
+  name: Kunden auflisten
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{basisUrl}}/kunden
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+  res.body.length: gte 5
+}
+
+docs {
+  Ohne Filter die vollständige Kundenliste — im Ausgangszustand die fünf
+  Seed-Kunden.
+
+  Die Zusicherung lautet bewusst `gte 5` und nicht `eq 5`: sobald "Kunde
+  anlegen" weiter unten gelaufen ist, steht ein sechster Datensatz in
+  `data/kunden.json`, und der bleibt dort, bis jemand `git checkout data`
+  ausführt.
+}

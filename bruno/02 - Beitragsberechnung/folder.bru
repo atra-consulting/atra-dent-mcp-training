@@ -1,0 +1,33 @@
+meta {
+  name: 02 - Beitragsberechnung
+  seq: 2
+}
+
+docs {
+  # Beitragsberechnung
+
+  Zustandslos: aus Geburtsdatum, Tarif und gewünschtem Beginn wird das
+  Eintrittsalter ermittelt und daraus das Altersband nachgeschlagen. Es wird
+  nichts gespeichert. Der Rechenkern kennt keinen Kunden — anders als früher
+  im Kernsystem gibt es kein optionales `kundenId`-Feld.
+
+  Die Bänder stehen in `rechenkern/src/main/resources/beitraege.json`:
+
+  | Alter | smart | balance | brillant | brillant SB |
+  |---|---|---|---|---|
+  | 18–30 | 8.90 | 15.90 | 24.90 | 19.90 |
+  | 31–40 | 11.90 | 20.90 | 32.90 | 26.90 |
+  | 41–50 | 15.90 | 27.90 | 42.90 | 34.90 |
+  | 51–60 | 21.90 | 36.90 | 55.90 | 44.90 |
+  | 61–… | 28.90 (bis 70) | 47.90 (bis 70) | 69.90 (bis 65) | 55.90 (bis 65) |
+
+  Das oberste Band endet nicht überall gleich: smart und balance laufen bis 70,
+  die beiden brillant-Varianten nur bis 65. Das spiegelt die
+  `eintrittsalter`-Angaben aus `wissen/daten/tarife.yaml`.
+
+  Die Altersgrenzen stehen bewusst nicht im Code: dass ein Tarif ab 18 und bis
+  70 beziehungsweise 65 abgeschlossen werden darf, ergibt sich allein daraus,
+  dass es außerhalb kein Band gibt. Ein Eintrittsalter darunter oder darüber
+  ist deshalb ein 400, kein Beitrag von null — siehe "400 - Eintrittsalter
+  ausserhalb der Grenzen" in Ordner 05.
+}

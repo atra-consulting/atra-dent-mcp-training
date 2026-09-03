@@ -1,0 +1,95 @@
+meta {
+  name: Schadensfall bewerten
+  type: http
+  seq: 11
+}
+
+put {
+  url: {{basisUrl}}/schadensfaelle/50014/bewertung
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "bewertung": {
+      "empfehlung": "freigabe",
+      "erstattungsvorschlag": "336.00",
+      "eskalationsgruende": [],
+      "positionen": [
+        {
+          "goz": "2150",
+          "leistungsbereich": "INL",
+          "zustand": "ENTHALTEN",
+          "begruendung": "Inlay ist im Leistungsbereich INL versichert (Par. 4 Abs. 2)"
+        },
+        {
+          "goz": "2197",
+          "leistungsbereich": "INL",
+          "zustand": "ENTHALTEN",
+          "begruendung": "Befestigung gehoert zur Inlayversorgung"
+        }
+      ],
+      "arztauskunft": {
+        "plausibilitaet": "plausibel",
+        "notwendigkeit": "ueblich",
+        "text": "Zweiflaechiges Inlay mit adhaesiver Befestigung ist eine uebliche Kombination.",
+        "hinweis": "Fachauskunft eines Sprachmodells, nicht belegt, keine Entscheidung."
+      },
+      "begruendung": "Beide Positionen versichert, Verbrauch im Jahr unter der Staffel.",
+      "agent": "schadensfall",
+      "modell": "gemini-3.6-flash"
+    },
+    "protokoll": [
+      {
+        "zeitpunkt": "2026-08-18T10:00:00Z",
+        "akteur": "agent",
+        "schritt": "Vertrag gelesen",
+        "detail": "ATRA_DENT_B, aktiv",
+        "calls": [
+          {
+            "zeitpunkt": "2026-08-18T10:00:00Z",
+            "art": "tool",
+            "name": "mein_vertrag_lesen",
+            "ergebnisKurz": "ATRA_DENT_B",
+            "dauerMs": 120
+          }
+        ]
+      },
+      {
+        "zeitpunkt": "2026-08-18T10:00:02Z",
+        "akteur": "agent",
+        "schritt": "GOZ-Pruefung",
+        "detail": "2 von 2 ENTHALTEN"
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq geprueft_freigabe
+}
+
+docs {
+  Dasselbe `BEWERTUNG_FREIGABE`-JSON wie in
+  `SchadensfaelleControllerTest.the_bewertung_sets_geprueft_freigabe_fills_in_leistungsbereiche_and_logs` —
+  eine Freigabe mit Erstattungsvorschlag, zwei geprüften Positionen,
+  Arztauskunft und zwei Protokollschritten.
+
+  Die `goz`-Werte in `bewertung.positionen` (2150, 2197) gehören zum
+  Testfall der Unit-Tests, nicht zu Fall 50014 (goz 1040, PZR). Das ist hier
+  bewusst so belassen: `leistungsbereicheNachtragen` überspringt jede
+  Position, die schon einen `leistungsbereich` trägt (50014s einzige
+  Position hat bereits `PZR`) — unabhängig von der GOZ-Nummer bliebe hier
+  also nichts nachzutragen. Der Statuswechsel nach `geprueft_freigabe` und
+  das Speichern der Bewertung sind davon unabhängig.
+
+  Voraussetzung: der vorige Request hat 50014 auf `in_pruefung` gestellt.
+  Ohne das liefert dieser PUT einen 409 — eine Bewertung ist nur aus
+  `in_pruefung` möglich.
+}

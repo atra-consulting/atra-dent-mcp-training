@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -68 1320 1262" width="1320" height="1262" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif">
+
+  <title>Architektur des atra.dent MCP- und A2A-Labs</title>
+
+  <defs>
+    <marker id="pfeil" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#777777"/>
+    </marker>
+    <marker id="pfeil-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc421e"/>
+    </marker>
+    <marker id="pfeil-demo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f766e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="-68" width="1320" height="1262" fill="#ffffff"/>
+
+  <text x="132" y="30" font-size="13" fill="#777777" text-anchor="middle" letter-spacing="0.6">SACHBEARBEITUNG</text>
+  <text x="628" y="30" font-size="13" fill="#777777" text-anchor="middle" letter-spacing="0.6">KUNDE</text>
+  <line x1="132" y1="40" x2="132" y2="104" stroke="#777777" stroke-width="1.6" marker-end="url(#pfeil)"/>
+  <line x1="628" y1="40" x2="628" y2="104" stroke="#777777" stroke-width="1.6" marker-end="url(#pfeil)"/>
+
+  <rect x="36" y="60" width="800" height="988" rx="18" fill="#f7f8fa" stroke="#dedede" stroke-width="2" stroke-dasharray="9 6"/>
+  <text x="64" y="1036" font-size="13" fill="#777777" letter-spacing="0.8">SERVICEGRENZE — ALLES LOKAL</text>
+
+  <rect x="64" y="106" width="356" height="128" rx="10" fill="#ffffff" stroke="#264892" stroke-width="2.5"/>
+  <text x="88" y="140" font-size="19" font-weight="700" fill="#264892">Sachbearbeiter-UI</text>
+  <text x="88" y="168" font-size="13.5" fill="#6b6b6b">Kundenakte, Tarifvergleich, Schadenshistorie.</text>
+  <text x="88" y="189" font-size="13.5" fill="#6b6b6b">Sieht und pflegt alles — aber über</text>
+  <text x="88" y="210" font-size="13.5" fill="#6b6b6b">Formulare, ohne Agenten dazwischen.</text>
+
+  <path d="M 350 106 V -32 H 1200 V 306" fill="none" stroke="#dc421e" stroke-width="2" marker-end="url(#pfeil-orange)"/>
+  <rect x="680" y="-45" width="56" height="26" rx="6" fill="#dc421e"/>
+  <text x="708" y="-27" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.6">A2A</text>
+  <text x="752" y="-27" font-size="11" fill="#dc421e" opacity="0.9">aus dem Formular, kein Agent entscheidet</text>
+
+  <rect x="444" y="106" width="368" height="128" rx="10" fill="#ffffff" stroke="#264892" stroke-width="2.5"/>
+  <text x="468" y="140" font-size="19" font-weight="700" fill="#264892">Chat-UI</text>
+  <text x="468" y="168" font-size="13.5" fill="#6b6b6b">Ein Feld, ein Gegenüber. Der Kunde schildert</text>
+  <text x="468" y="189" font-size="13.5" fill="#6b6b6b">sein Anliegen in eigenen Worten; was daraus</text>
+  <text x="468" y="210" font-size="13.5" fill="#6b6b6b">wird, entscheiden Agenten.</text>
+
+  <line x1="628" y1="234" x2="628" y2="282" stroke="#dc421e" stroke-width="2" marker-end="url(#pfeil-orange)"/>
+  <rect x="536" y="247" width="56" height="26" rx="6" fill="#dc421e"/>
+  <text x="564" y="265" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.6">A2A</text>
+  <text x="658" y="259" font-size="11" fill="#dc421e" opacity="0.9">x-kunden-id, nie in der Nachricht</text>
+
+  <rect x="444" y="286" width="368" height="64" rx="9" fill="#dc421e"/>
+  <text x="628" y="315" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">Orchestrator-Agent</text>
+  <text x="628" y="335" font-size="11.5" fill="#ffffff" text-anchor="middle" opacity="0.9">ordnet per Modell ein und reicht weiter — kein Fachwerkzeug</text>
+
+  <path d="M 560 350 C 560 374, 532 372, 532 392" fill="none" stroke="#dc421e" stroke-width="2" marker-end="url(#pfeil-orange)"/>
+  <path d="M 696 350 C 696 374, 724 372, 724 392" fill="none" stroke="#dc421e" stroke-width="2" marker-end="url(#pfeil-orange)"/>
+  <rect x="600" y="360" width="56" height="26" rx="6" fill="#dc421e"/>
+  <text x="628" y="378" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.6">A2A</text>
+
+  <rect x="444" y="396" width="176" height="64" rx="8" fill="#dc421e"/>
+  <text x="532" y="423" font-size="14.5" font-weight="700" fill="#ffffff" text-anchor="middle">Beratungsagent</text>
+  <text x="532" y="442" font-size="11" fill="#ffffff" text-anchor="middle" opacity="0.9">Tarifwahl, Tarifwechsel</text>
+
+  <rect x="636" y="396" width="176" height="64" rx="8" fill="#dc421e"/>
+  <text x="724" y="423" font-size="14.5" font-weight="700" fill="#ffffff" text-anchor="middle">Schadensfallagent</text>
+  <text x="724" y="442" font-size="11" fill="#ffffff" text-anchor="middle" opacity="0.9">Beleg, Prüfung, Erstattung</text>
+
+  <line x1="532" y1="460" x2="532" y2="488" stroke="#777777" stroke-width="1.6"/>
+  <line x1="186" y1="488" x2="532" y2="488" stroke="#777777" stroke-width="1.6"/>
+  <line x1="186" y1="488" x2="186" y2="512" stroke="#777777" stroke-width="1.6" marker-end="url(#pfeil)"/>
+  <line x1="438" y1="488" x2="438" y2="776" stroke="#777777" stroke-width="1.6" marker-end="url(#pfeil)"/>
+  <line x1="578" y1="488" x2="578" y2="512" stroke="#777777" stroke-width="1.6" marker-end="url(#pfeil)"/>
+  <line x1="724" y1="460" x2="724" y2="488" stroke="#777777" stroke-width="1.6"/>
+  <line x1="532" y1="488" x2="724" y2="488" stroke="#777777" stroke-width="1.6"/>
+
+  <line x1="122" y1="234" x2="122" y2="512" stroke="#777777" stroke-width="1.6" marker-end="url(#pfeil)"/>
+
+  <path d="M 470 234 C 420 330, 230 380, 140 509" fill="none" stroke="#0f766e" stroke-width="1.4" marker-end="url(#pfeil-demo)"/>
+  <text x="288" y="330" font-size="12" font-weight="600" fill="#0f766e" text-anchor="middle">Demo-Login</text>
+  <text x="288" y="346" font-size="11.5" fill="#0f766e" text-anchor="middle">Kundenliste statt Auth</text>
+
+  <rect x="64" y="526" width="356" height="216" rx="10" fill="#ffffff" stroke="#264892" stroke-width="2.5"/>
+  <text x="88" y="570" font-size="19" font-weight="700" fill="#264892">Versicherungs-Kernsystem</text>
+  <text x="88" y="604" font-size="13.5" fill="#264892" font-weight="500">Stammdaten<tspan fill="#6b6b6b" font-weight="400"> — Kunden, Verträge</tspan></text>
+  <text x="88" y="630" font-size="13.5" fill="#264892" font-weight="500">Rechnungsextraktion<tspan fill="#6b6b6b" font-weight="400"> — PDF/A, ohne Modell</tspan></text>
+  <text x="88" y="656" font-size="13.5" fill="#264892" font-weight="500">Schadenshistorie<tspan fill="#6b6b6b" font-weight="400"> — Fälle, Verbrauch</tspan></text>
+  <line x1="88" y1="680" x2="396" y2="680" stroke="#dedede" stroke-width="1.5"/>
+  <text x="88" y="704" font-size="12" fill="#777777">Kennt den Kunden. Sagt, was er hat</text>
+  <text x="88" y="722" font-size="12" fill="#777777">und was es kostet.</text>
+
+  <rect x="92" y="513" width="56" height="26" rx="6" fill="#ffffff" stroke="#264892" stroke-width="1.8"/>
+  <text x="120" y="531" font-size="11.5" font-weight="700" fill="#264892" text-anchor="middle" letter-spacing="0.6">REST</text>
+  <rect x="158" y="513" width="56" height="26" rx="6" fill="#264892"/>
+  <text x="186" y="531" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.6">MCP</text>
+
+  <rect x="456" y="526" width="356" height="216" rx="10" fill="#ffffff" stroke="#264892" stroke-width="2.5"/>
+  <text x="480" y="570" font-size="19" font-weight="700" fill="#264892">Wissenssystem</text>
+  <text x="480" y="602" font-size="13.5" fill="#264892" font-weight="500">Bedingungswerke<tspan fill="#6b6b6b" font-weight="400"> — AVB, Vergleich, GOZ</tspan></text>
+  <text x="480" y="626" font-size="13.5" fill="#264892" font-weight="500">Bedingungssuche<tspan fill="#6b6b6b" font-weight="400"> — zitierfähig, je §</tspan></text>
+  <text x="480" y="650" font-size="13.5" fill="#264892" font-weight="500">GOZ-Prüfung<tspan fill="#6b6b6b" font-weight="400"> — vier Zustände</tspan></text>
+  <text x="480" y="674" font-size="13.5" fill="#264892" font-weight="500">Beratungsleitfaden<tspan fill="#6b6b6b" font-weight="400"> — intern, eigener Index</tspan></text>
+  <line x1="480" y1="694" x2="788" y2="694" stroke="#dedede" stroke-width="1.5"/>
+  <text x="480" y="716" font-size="12" fill="#777777">Kennt keinen Kunden. Sagt, was das</text>
+  <text x="480" y="732" font-size="12" fill="#777777">Produkt bedeutet.</text>
+
+  <rect x="484" y="513" width="56" height="26" rx="6" fill="#ffffff" stroke="#264892" stroke-width="1.8"/>
+  <text x="512" y="531" font-size="11.5" font-weight="700" fill="#264892" text-anchor="middle" letter-spacing="0.6">REST</text>
+  <rect x="550" y="513" width="56" height="26" rx="6" fill="#264892"/>
+  <text x="578" y="531" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.6">MCP</text>
+
+  <line x1="372" y1="742" x2="372" y2="776" stroke="#777777" stroke-width="1.6" marker-end="url(#pfeil)"/>
+  <text x="356" y="766" font-size="11" fill="#777777" text-anchor="end">delegiert die Beitragsberechnung</text>
+
+  <rect x="316" y="790" width="356" height="216" rx="10" fill="#ffffff" stroke="#264892" stroke-width="2.5"/>
+  <text x="340" y="834" font-size="19" font-weight="700" fill="#264892">Versicherungs-Rechenkern</text>
+  <text x="340" y="868" font-size="13.5" fill="#264892" font-weight="500">Tarifstammdaten<tspan fill="#6b6b6b" font-weight="400"> — Schlüssel und Name</tspan></text>
+  <text x="340" y="894" font-size="13.5" fill="#264892" font-weight="500">Beitragsberechnung<tspan fill="#6b6b6b" font-weight="400"> — Eintrittsalter je Tarif</tspan></text>
+  <text x="340" y="920" font-size="13.5" fill="#264892" font-weight="500">Erstattung<tspan fill="#6b6b6b" font-weight="400"> — Quote, Selbstbehalt, Staffel</tspan></text>
+  <line x1="340" y1="944" x2="648" y2="944" stroke="#dedede" stroke-width="1.5"/>
+  <text x="340" y="968" font-size="12" fill="#777777">Kennt keinen Kunden und hält keinen</text>
+  <text x="340" y="986" font-size="12" fill="#777777">Zustand. Sagt, was aus Tarif und Zahlen folgt.</text>
+
+  <rect x="344" y="777" width="56" height="26" rx="6" fill="#ffffff" stroke="#264892" stroke-width="1.8"/>
+  <text x="372" y="795" font-size="11.5" font-weight="700" fill="#264892" text-anchor="middle" letter-spacing="0.6">REST</text>
+  <rect x="410" y="777" width="56" height="26" rx="6" fill="#264892"/>
+  <text x="438" y="795" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.6">MCP</text>
+
+  <text x="940" y="256" font-size="12.5" fill="#dc421e" font-weight="500" opacity="0.9">Zwei Aufrufe verlassen das Lab</text>
+
+  <rect x="940" y="272" width="344" height="396" rx="18" fill="#f7f8fa" stroke="#dedede" stroke-width="2" stroke-dasharray="9 6"/>
+  <text x="964" y="656" font-size="13" fill="#777777" letter-spacing="0.8">FREMD GEHOSTET — CLOUD RUN</text>
+
+  <rect x="964" y="306" width="296" height="328" rx="10" fill="#dc421e"/>
+  <text x="988" y="346" font-size="19" font-weight="700" fill="#ffffff">Arztservice</text>
+  <text x="988" y="374" font-size="13.5" fill="#ffffff" opacity="0.88">Eigenes Repo, eigenes Projekt,</text>
+  <text x="988" y="395" font-size="13.5" fill="#ffffff" opacity="0.88">Cloud Run in europe-west1.</text>
+  <text x="988" y="416" font-size="13.5" fill="#ffffff" opacity="0.88">Blackbox — kein Vertrag über</text>
+  <text x="988" y="437" font-size="13.5" fill="#ffffff" opacity="0.88">seine Innereien, nur über das,</text>
+  <text x="988" y="458" font-size="13.5" fill="#ffffff" opacity="0.88">was er kann.</text>
+
+  <line x1="988" y1="476" x2="1236" y2="476" stroke="#ffffff" stroke-width="1.5" opacity="0.35"/>
+  <text x="988" y="500" font-size="12.5" fill="#ffffff" font-weight="700">Fachfrage<tspan font-weight="400" opacity="0.88"> — Auskunft, kein Beleg</tspan></text>
+  <text x="988" y="522" font-size="12.5" fill="#ffffff" font-weight="700">Rechnungsbeurteilung<tspan font-weight="400" opacity="0.88"> — begründet</tspan></text>
+  <text x="988" y="544" font-size="12.5" fill="#ffffff" font-weight="700">Risikoeinschätzung<tspan font-weight="400" opacity="0.88"> — schätzt nur ein</tspan></text>
+
+  <line x1="988" y1="564" x2="1236" y2="564" stroke="#ffffff" stroke-width="1.5" opacity="0.35"/>
+  <text x="988" y="588" font-size="12" fill="#ffffff" opacity="0.8">Fachzugang nur mit x-api-key.</text>
+  <text x="988" y="606" font-size="12" fill="#ffffff" opacity="0.8">Die Agent Card bleibt offen.</text>
+
+  <line x1="780" y1="460" x2="780" y2="474" stroke="#dc421e" stroke-width="2"/>
+  <line x1="780" y1="474" x2="806" y2="474" stroke="#dc421e" stroke-width="2"/>
+  <line x1="866" y1="474" x2="960" y2="474" stroke="#dc421e" stroke-width="2" marker-end="url(#pfeil-orange)"/>
+  <rect x="808" y="461" width="56" height="26" rx="6" fill="#dc421e"/>
+  <text x="836" y="479" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.6">A2A</text>
+
+  <line x1="36" y1="1080" x2="1284" y2="1080" stroke="#dedede" stroke-width="1.5"/>
+
+  <rect x="36" y="1098" width="56" height="26" rx="6" fill="#ffffff" stroke="#264892" stroke-width="1.8"/>
+  <text x="64" y="1116" font-size="11.5" font-weight="700" fill="#264892" text-anchor="middle" letter-spacing="0.6">REST</text>
+  <text x="102" y="1110" font-size="12.5" fill="#4a4a4a">Für Menschen und Oberflächen.</text>
+  <text x="102" y="1127" font-size="12.5" fill="#777777">Feste Ressourcen, feste Formulare.</text>
+
+  <rect x="360" y="1098" width="56" height="26" rx="6" fill="#264892"/>
+  <text x="388" y="1116" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.6">MCP</text>
+  <text x="426" y="1110" font-size="12.5" fill="#4a4a4a">Dieselbe Fachlogik als Werkzeug.</text>
+  <text x="426" y="1127" font-size="12.5" fill="#777777">Der Agent wählt, was er aufruft.</text>
+
+  <rect x="700" y="1098" width="56" height="26" rx="6" fill="#dc421e"/>
+  <text x="728" y="1116" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.6">A2A</text>
+  <text x="766" y="1110" font-size="12.5" fill="#4a4a4a">Zwischen Agenten, auch im eigenen Service.</text>
+  <text x="766" y="1127" font-size="12.5" fill="#777777">Ein Gegenüber mit eigener Absicht.</text>
+
+  <rect x="1060" y="1094" width="20" height="20" rx="5" fill="#dc421e"/>
+  <text x="1090" y="1109" font-size="12.5" fill="#4a4a4a">Agent — entscheidet den Aufruf</text>
+  <rect x="1060" y="1122" width="20" height="20" rx="5" fill="#ffffff" stroke="#264892" stroke-width="2"/>
+  <text x="1090" y="1137" font-size="12.5" fill="#4a4a4a">System oder Oberfläche</text>
+  <rect x="1060" y="1150" width="20" height="20" rx="5" fill="#f7f8fa" stroke="#dedede" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="1090" y="1165" font-size="12.5" fill="#4a4a4a">Grenze des Hostings</text>
+
+</svg>

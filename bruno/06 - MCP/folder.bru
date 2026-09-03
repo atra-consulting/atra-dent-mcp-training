@@ -1,0 +1,66 @@
+meta {
+  name: 06 - MCP
+  seq: 6
+}
+
+docs {
+  # MCP
+
+  Derselbe Dienst, anderes Protocol. Die Ordner 01 bis 05 sprechen die
+  REST-Ressourcen unter `{{basisUrl}}` an; hier geht es an denselben Prozess
+  über `{{mcpUrl}}` — Streamable HTTP, JSON-RPC 2.0, ein einziger Endpunkt.
+
+  Bruno ist kein MCP-Client. Diese Requests bauen die Nachrichten von Hand und
+  taugen deshalb als Rauchtest und zum Nachlesen, wie das Protocol auf dem
+  Draht aussieht — nicht als bequemer Weg, die Tools zu benutzen.
+
+  ## Was dabei anders ist als bei REST
+
+  **Zwei Header statt einem.** `x-api-key` gilt wie überall und kommt über die
+  Sammlung. Dazu kommt `x-kunden-id`: er sagt, für wen gehandelt wird. Kein
+  Tool nimmt eine Kundennummer als Parameter entgegen, und es gibt keinen
+  Aufruf, der an eine fremde Akte kommt. Request 04 zeigt, was ohne den Header
+  passiert.
+
+  **`Accept` muss beides nennen** — `application/json` und
+  `text/event-stream`. Der Transport lehnt sonst mit 400 ab, auch wenn er
+  faktisch nur noch JSON zurückgibt: Die Spezifikation verlangt vom Client,
+  beides zu können, weil erst der Server entscheidet, welches von beidem er
+  schickt.
+
+  **Keine Session.** Der Server läuft zustandslos
+  (`spring.ai.mcp.server.protocol: STATELESS`). Das `initialize` gibt keine
+  `Mcp-Session-Id` zurück, es gibt nichts mitzuschicken, und jede Anfrage steht
+  für sich.
+
+  **Der Handshake bleibt trotzdem Pflicht.** Die Spezifikation verlangt ihn als
+  erste Interaktion; zustandslos heisst nur, dass der Server das nicht mehr
+  prüfen kann. Dass die Requests 02 bis 04 auch einzeln antworten, ist eine
+  Eigenschaft dieses Servers und keine Einladung, Request 01 zu überspringen.
+  Deshalb tragen sie alle den ausgehandelten Header `MCP-Protocol-Version` —
+  ohne ihn nimmt ein Server laut Spezifikation `2025-03-26` an.
+
+  Nachgeprüft wird der Header hier allerdings nicht: Die Spezifikation verlangt
+  bei einer nicht unterstützten Version ein `400`, dieser Server antwortet auch
+  auf `MCP-Protocol-Version: 2026-07-28` mit `200` und der vollen Toolliste.
+  Das ist eine Lücke in Spring AI, kein Merkmal des Protokolls — und ein
+  brauchbarer Hinweis darauf, dass "spricht MCP" und "hält sich an MCP" zwei
+  verschiedene Aussagen sind.
+
+  Die Spezifikation stellt das frei: Ein Server *darf* beim `initialize` eine
+  Session-Id vergeben, wenn er Zustand halten will. Dieser hier will nicht.
+  Was er dafür aufgibt, braucht er nicht — Sampling, Elicitation und
+  Server-Notifications kommen in diesem Lab nicht vor, und die Mandantengrenze
+  hing noch nie an der Session, sondern immer am Header jeder einzelnen
+  Anfrage.
+
+  **Die Antwort ist gewöhnliches JSON.** Ein zustandsloser Server hat nichts zu
+  streamen und antwortet mit `Content-Type: application/json`. `res.body` ist
+  damit ein Objekt, und die Requests prüfen wieder in `assert`-Blöcken. Ein
+  `GET` auf denselben Endpunkt — der Kanal, über den ein Server von sich aus
+  etwas schickt — kommt folgerichtig mit 405 zurück.
+
+  **Ein Fehler ist kein HTTP-Fehler.** Ein Tool, das ablehnt, antwortet mit
+  HTTP 200 und `"isError": true` im Ergebnis. Der Text dahinter ist für ein
+  Modell geschrieben und sagt, was zu tun wäre.
+}

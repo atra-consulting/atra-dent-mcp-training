@@ -1,0 +1,27 @@
+meta {
+  name: Tarif lesen
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{rechenkernUrl}}/tarife/{{tarifId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+  res.body.id: eq ATRA_DENT_B
+  res.body.name: eq atra.dent.balance
+}
+
+docs {
+  Ein Tarif über seinen Schlüssel. `{{tarifId}}` steht in der Umgebung `Lokal`
+  auf `ATRA_DENT_B` (atra.dent.balance).
+
+  Zum Ausprobieren einfach in der URL ersetzen: `ATRA_DENT_S`, `ATRA_DENT_X`
+  oder `ATRA_DENT_X_SB`. Ein Schlüssel außerhalb dieser vier ist kein 404,
+  sondern ein 400 — `tarifId` ist ein Enum des Kontrakts, kein Freitext; siehe
+  "400 - Unbekannter Tarifschluessel" in Ordner 05.
+}

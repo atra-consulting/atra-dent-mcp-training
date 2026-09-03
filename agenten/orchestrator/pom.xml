@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>consulting.atra</groupId>
+    <artifactId>agenten</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <artifactId>agenten-orchestrator</artifactId>
+  <name>atra.dent Agenten - Orchestrator</name>
+  <description>
+    Nimmt das Anliegen der Kundin entgegen, ordnet es ein und reicht es an den
+    zustaendigen Agenten weiter. A2A-Server gegenueber der Chat-UI, A2A-Client
+    gegenueber den Subagenten. Er beantwortet selbst nichts Fachliches.
+  </description>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>consulting.atra</groupId>
+      <artifactId>agenten-a2a</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>consulting.atra</groupId>
+      <artifactId>agenten-model</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>consulting.atra</groupId>
+      <artifactId>agenten-mcp</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-webmvc-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>consulting.atra.agenten.orchestrator.OrchestratorApplication</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

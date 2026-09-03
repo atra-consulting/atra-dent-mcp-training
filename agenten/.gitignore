@@ -1,0 +1,3 @@
+# Maven-Ausgabe der drei Agentenmodule. Modul-lokal wie in kernsystem/, statt
+# einer Regel in der Wurzel-.gitignore.
+target/

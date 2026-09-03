@@ -1,0 +1,69 @@
+meta {
+  name: Kunde anlegen
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{basisUrl}}/kunden
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "vorname": "Greta",
+    "nachname": "Hoffmann",
+    "geburtsdatum": "1988-02-29",
+    "email": "greta.hoffmann@example.com",
+    "telefon": "+49 351 5566778",
+    "adresse": {
+      "strasse": "Elbufer 44",
+      "plz": "01067",
+      "ort": "Dresden",
+      "land": "DE"
+    },
+    "tarifId": "ATRA_DENT_X",
+    "versicherungsbeginn": "2026-09-01",
+    "vorversicherung": true,
+    "fehlendeZaehne": 0
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.headers.location: isDefined
+  res.body.id: isNumber
+  res.body.status: eq aktiv
+}
+
+script:post-response {
+  bru.setVar("neueKundenId", res.getBody().id);
+  console.log("Neue Kundennummer:", bru.getVar("neueKundenId"));
+}
+
+docs {
+  Legt Greta Hoffmann an und merkt sich ihre Kundennummer als
+  Laufzeitvariable `{{neueKundenId}}`. Die drei folgenden Requests arbeiten
+  ausschließlich mit dieser Nummer — der Seed-Bestand bleibt unangetastet.
+
+  Zwei Dinge lohnen den Blick in die Antwort:
+
+  - **201 mit `Location`-Header.** Er zeigt auf `/api/v1/kunden/{id}` und ist
+    die einzige Stelle, an der die API die neue Ressource adressiert. Der
+    Rumpf enthält denselben Kunden noch einmal vollständig.
+  - **`status` wurde ergänzt.** Das Feld ist im Rumpf nicht mitgeschickt
+    worden; beim Anlegen setzt das Kernsystem `aktiv` als Vorgabe.
+
+  `vorversicherung: true` ist bei ATRA_DENT_X nicht kosmetisch — bei diesem
+  Tarif entfällt damit die dreimonatige Wartezeit. Das Kernsystem wertet das
+  Feld allerdings nicht aus; es hält den Wert nur vor. Die Regel steht im
+  Produktmodell und wäre der Job eines prüfenden Agenten.
+
+  Der 29.02.1988 als Geburtsdatum ist Absicht: ein Schalttag, an dem sich
+  Altersberechnungen gern verrechnen.
+}

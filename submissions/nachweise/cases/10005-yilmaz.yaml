@@ -1,0 +1,81 @@
+
+kundenId: 10005
+praxis: beisser
+
+patient:
+  name: Fatima Yilmaz
+  geburtsdatum: 2001-05-19
+  anschrift:
+    strasse: Karl-Liebknecht-Strasse 21
+    plz: "04107"
+    ort: Leipzig
+
+befund:
+  datum: 2026-07-31
+  aktenzeichen: "B-2026-0402"
+  zahnstatus:
+    - { zahn: "16", zustand: fuellung }
+  diagnosen:
+    - Kariesfreies Gebiss bis auf die versorgte Laesion an 16.
+    - Mundhygiene gut, keine Belagsbildung von Belang.
+  parodontalbefund: >-
+    Gingiva reizlos, Sondierungstiefen durchgehend unter 3 mm, keine Blutung
+    auf Sondierung. Kein Attachmentverlust.
+  empfehlung: null
+  hkp_beiliegend: false
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2019-08-02, zahn: "16", behandlung: Kompositfuellung einflaechig, Selbstzahlerleistung vor Vertragsbeginn }
+    - { datum: 2023-02-14, zahn: null, behandlung: Kontrolluntersuchung, ohne Befund }
+    - { datum: 2025-01-20, zahn: null, behandlung: Professionelle Zahnreinigung, Selbstzahlerleistung }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-04
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: nein
+      freitext: null
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: nein
+      freitext: null
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: null
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Vor eineinhalb Jahren zur Reinigung.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: nein
+      freitext: Nicht regelmaessig, eher wenn ich dran denke.
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: 0
+      begruendung: >-
+        Der Befund nennt keine Empfehlung, und der Fragebogen verneint die
+        Frage uebereinstimmend.
+    ERSATZBEDARF:
+      wert: 0
+      begruendung: Kein Zahn fehlt oder ist ersatzbeduerftig; deckt sich mit fehlendeZaehne 0 in der Akte.
+    SANIERUNGSGRAD:
+      wert: 10
+      begruendung: Eine einzelne, laengst verheilte Fuellung bei sonst unversehrtem Gebiss.
+    PARODONTALBEFUND:
+      wert: 5
+      begruendung: >-
+        Sondierungstiefen und Blutungsneigung sind dokumentiert und
+        durchgehend unauffaellig.
+  erwartete_zone: gruen
+  hinweis: >-
+    Der Kunde ist seit dem 29.08.2025 inaktiv. Eine Risikopruefung faende
+    hier gar nicht erst statt — dieses Material ist trotzdem vollstaendig
+    und widerspruchsfrei ausgefuellt.

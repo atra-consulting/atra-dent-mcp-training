@@ -1,0 +1,63 @@
+meta {
+  name: Schadensfall genehmigen
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{basisUrl}}/schadensfaelle/{{neueSchadensfallId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": "genehmigt",
+    "erstattungsbetrag": "1872.10"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq genehmigt
+}
+
+tests {
+  test("erstattungsbetrag bleibt als Dezimalstring erhalten", function() {
+    expect(res.getBody().erstattungsbetrag).to.equal("1872.10");
+  });
+}
+
+docs {
+  Der Schritt, an dem das Kernsystem bewusst aufhört zu denken: der
+  `erstattungsbetrag` kommt fertig von außen. Wer ihn ausrechnet — ein
+  MCP-Tool, ein Agent, ein Sachbearbeiter — ist dieser API gleichgültig. Die
+  1872.10 sind hier von Hand nach den sechs Rechenschritten der Wurzel-README
+  ermittelt:
+
+  | Schritt | Rechnung | Ergebnis |
+  |---|---|---|
+  | 1 Erstattungsfähig | alle Positionen versichert | 1872.10 |
+  | 2 Quote | `IMP` 100 %, `ZE` 100 % in brillant | 1872.10 |
+  | 3 Sublimit | für `IMP` und `ZE` keines | 1872.10 |
+  | 4 GKV | im Modell nicht abgebildet | 1872.10 |
+  | 5 Selbstbehalt | brillant hat keinen | 1872.10 |
+  | 6 Staffel | Jahr 2, Deckel 3000, verbraucht 714 | **1872.10** |
+
+  Zu Schritt 6: Claras Vertrag läuft seit 01.02.2025, die Behandlung vom
+  07.08.2026 fällt also ins zweite Versicherungsjahr — STAFFEL_X deckelt dort
+  die Summe aller Erstattungen seit Vertragsbeginn auf 3000. Verbraucht sind
+  bislang 714.00 (Fall 50002 mit 114.00 und Fall 50004 mit 600.00); Fall 50009
+  steht noch in Prüfung und zählt deshalb nicht mit. Es bleiben 2286.00 —
+  mehr als hier gebraucht wird, die Staffel greift also nicht. Die
+  Jahreshöchstgrenze von 5000 greift laut Produktmodell ohnehin erst nach
+  Ablauf der Staffel.
+
+  Der Betrag geht als Dezimalstring über den Draht, nicht als JSON-Zahl.
+  Höchstens zwei Nachkommastellen — drei sind ein 400, siehe
+  "400 - Zu viele Nachkommastellen" in Ordner 05.
+}

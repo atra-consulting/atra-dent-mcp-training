@@ -1,0 +1,37 @@
+meta {
+  name: 405 - Loeschen gibt es nicht
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{basisUrl}}/kunden/{{kundenId}}
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 405
+  res.body.status: eq 405
+  res.body.title: eq Methode nicht erlaubt
+  res.body.type: eq https://atra.example/fehler/anfrage
+}
+
+docs {
+  Die OAS kennt keine Löschoperation, also gibt es sie auch nicht. Anna
+  Mueller bleibt, wo sie ist.
+
+  Der Weg, einen Kunden außer Betrieb zu nehmen, ist `PATCH` mit
+  `{"status": "inaktiv"}` — siehe "Kunde stilllegen" in Ordner 03. Das ist
+  eine fachliche Entscheidung: die Schadenhistorie hängt an der Kundennummer,
+  und ein gelöschter Kunde würde Belege entwerten, die weiterhin gebraucht
+  werden.
+
+  Interessant ist hier weniger der Statuscode als die Form der Antwort. Ein
+  405 entsteht in Spring, lange bevor ein Controller ins Spiel kommt, und käme
+  normalerweise im Standardformat des Frameworks heraus. Die Fehlerbehandlung
+  des Kernsystems fängt auch diese Fälle ab und übersetzt sie ins
+  `Fehler`-Schema — jede Antwort hat dieselbe Form, gleich wer sie erzeugt hat.
+  Dasselbe gilt für 406 und 415, etwa bei kaputtem JSON oder falschem
+  `Content-Type`.
+}

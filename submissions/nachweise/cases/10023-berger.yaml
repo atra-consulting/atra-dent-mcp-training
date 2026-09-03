@@ -1,0 +1,99 @@
+
+kundenId: 10023
+praxis: kiefernwald
+
+patient:
+  name: Wolfgang Berger
+  geburtsdatum: 1964-01-30
+  anschrift:
+    strasse: Tulpenweg 8
+    plz: "86150"
+    ort: Augsburg
+
+befund:
+  datum: 2026-07-27
+  aktenzeichen: "KKW-2026-1147"
+  zahnstatus:
+    - { zahn: "36", zustand: wurzelgefuellt }
+    - { zahn: "46", zustand: fehlend }
+    - { zahn: "15", zustand: ersatzbeduerftig }
+    - { zahn: "25", zustand: ersatzbeduerftig }
+    - { zahn: "17", zustand: krone }
+  diagnosen:
+    - Zahn 36 nach Wurzelkanalbehandlung klinisch reizlos, Kompositaufbau intakt.
+    - >-
+      Freiendluecke Regio 46 nach Extraktion vor mehreren Jahren, Pfeilerzaehne
+      45 und 47 erhaltungswuerdig fuer eine geplante Bruecke.
+    - Sekundaerkaries unter insuffizienter Fuellung an 15, Fraktur der Altfuellung an 25.
+    - Generalisiert maessige Plaque- und Zahnsteinbildung.
+  parodontalbefund: >-
+    Sondierungstiefen 4 bis 6 mm an mehreren Molaren, Blutung auf Sondierung
+    an rund 30 Prozent der Messpunkte. Diagnose chronische Parodontitis
+    Stadium II, Grad B. Parodontaltherapie bislang nicht begonnen.
+  empfehlung: >-
+    Erneuerung der insuffizienten Fuellungen an 15 und 25. Versorgung der
+    Freiendluecke Regio 46 mit Bruecke oder Implantat, Heil- und Kostenplan
+    liegt bei. Vor der prothetischen Versorgung wird eine parodontale
+    Vorbehandlung empfohlen.
+  hkp_beiliegend: true
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2025-11-11, zahn: "36", behandlung: Trepanation, Wurzelkanalaufbereitung und Wurzelkanalfuellung, Kompositfuellung }
+    - { datum: 2026-02-16, zahn: "15", behandlung: Diagnose Sekundaerkaries unter Altfuellung }
+    - { datum: 2026-06-22, zahn: "15", behandlung: Fuellungstherapie auf Verlangen mit Sedierungswunsch }
+    - { datum: 2026-07-27, zahn: "46", behandlung: Befundaufnahme und Planung Bruecke oder Implantat, Heil- und Kostenplan erstellt }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-04
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: ja
+      freitext: Ja, eine Bruecke oder ein Implantat hinten rechts unten. Der Kostenplan liegt bei.
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: ja
+      freitext: Es sind noch Fuellungen offen.
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: ja
+      freitext: Ein Backenzahn unten rechts.
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Vor ein paar Wochen.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: nein
+      freitext: Eher unregelmaessig.
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: 90
+      begruendung: >-
+        Ein Heil- und Kostenplan liegt bei, die Empfehlung nennt konkret
+        Fuellungserneuerung und prothetische Versorgung, der Patient
+        bestaetigt es im Fragebogen.
+    ERSATZBEDARF:
+      wert: 70
+      begruendung: >-
+        Ein fehlender Zahn deckt sich mit fehlendeZaehne 1 in der Akte,
+        dazu zwei ersatzbeduerftige Zaehne mit insuffizienten Fuellungen.
+    SANIERUNGSGRAD:
+      wert: 55
+      begruendung: >-
+        Wurzelfuellung, Krone und zwei insuffiziente Fuellungen bei nur
+        maessigem Gesamtsanierungsgrad.
+    PARODONTALBEFUND:
+      wert: 55
+      begruendung: >-
+        Parodontitis Stadium II Grad B mit dokumentierten Sondierungstiefen,
+        Therapie noch nicht begonnen — beurteilbar und schlecht.
+  erwartete_zone: rot
+  hinweis: >-
+    Ein geretteter Zahn taeuscht nicht daruber hinweg, dass an anderer Stelle
+    ein Heil- und Kostenplan liegt und die Luecke aus der Akte unversorgt ist.

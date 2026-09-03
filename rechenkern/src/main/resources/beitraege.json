@@ -1,0 +1,42 @@
+[
+  {
+    "tarifId": "ATRA_DENT_S",
+    "baender": [
+      { "von": 18, "bis": 30, "monatsbeitrag": "8.90" },
+      { "von": 31, "bis": 40, "monatsbeitrag": "11.90" },
+      { "von": 41, "bis": 50, "monatsbeitrag": "15.90" },
+      { "von": 51, "bis": 60, "monatsbeitrag": "21.90" },
+      { "von": 61, "bis": 70, "monatsbeitrag": "28.90" }
+    ]
+  },
+  {
+    "tarifId": "ATRA_DENT_B",
+    "baender": [
+      { "von": 18, "bis": 30, "monatsbeitrag": "15.90" },
+      { "von": 31, "bis": 40, "monatsbeitrag": "20.90" },
+      { "von": 41, "bis": 50, "monatsbeitrag": "27.90" },
+      { "von": 51, "bis": 60, "monatsbeitrag": "36.90" },
+      { "von": 61, "bis": 70, "monatsbeitrag": "47.90" }
+    ]
+  },
+  {
+    "tarifId": "ATRA_DENT_X",
+    "baender": [
+      { "von": 18, "bis": 30, "monatsbeitrag": "24.90" },
+      { "von": 31, "bis": 40, "monatsbeitrag": "32.90" },
+      { "von": 41, "bis": 50, "monatsbeitrag": "42.90" },
+      { "von": 51, "bis": 60, "monatsbeitrag": "55.90" },
+      { "von": 61, "bis": 65, "monatsbeitrag": "69.90" }
+    ]
+  },
+  {
+    "tarifId": "ATRA_DENT_X_SB",
+    "baender": [
+      { "von": 18, "bis": 30, "monatsbeitrag": "19.90" },
+      { "von": 31, "bis": 40, "monatsbeitrag": "26.90" },
+      { "von": 41, "bis": 50, "monatsbeitrag": "34.90" },
+      { "von": 51, "bis": 60, "monatsbeitrag": "44.90" },
+      { "von": 61, "bis": 65, "monatsbeitrag": "55.90" }
+    ]
+  }
+]

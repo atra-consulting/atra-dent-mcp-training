@@ -1,0 +1,88 @@
+
+kundenId: 10042
+praxis: dds
+
+patient:
+  name: Paula Lehmann
+  geburtsdatum: 1980-01-08
+  anschrift:
+    strasse: Nelkenstrasse 21
+    plz: "97070"
+    ort: Würzburg
+
+befund:
+  datum: 2026-07-31
+  aktenzeichen: "WW-2026-4102"
+  zahnstatus:
+    - { zahn: "46", zustand: implantat }
+    - { zahn: "47", zustand: krone }
+  diagnosen:
+    - Implantatversorgung Regio 46, Osseointegration roentgenologisch regelrecht.
+    - Zustand nach Vollkronenversorgung 47, Rand suffizient.
+  parodontalbefund: >-
+    Periimplantaere Sondierungstiefen an 46 bis 4 mm, leichte Rötung ohne
+    Blutung. Uebrige Bezahnung unauffaellig.
+  empfehlung: >-
+    Kontrolle der periimplantaeren Verhaeltnisse an 46 in sechs Monaten
+    empfohlen, um eine beginnende Periimplantitis rechtzeitig zu erkennen.
+  hkp_beiliegend: false
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2026-02-10, zahn: "46", behandlung: Implantatinsertion mit Knochenaufbau (auswaertig durchgefuehrt) }
+    - { datum: 2026-06-24, zahn: "47", behandlung: Praeparation und Eingliederung Vollkrone }
+    - { datum: 2026-07-31, zahn: "46", behandlung: Nachkontrolle Implantat, periimplantaere Messung }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-05
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: nein
+      freitext: Das Implantat ist fertig, die Krone auch. Es ist nichts mehr offen.
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: nein
+      freitext: null
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: null
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Ende Juli.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: ja
+      freitext: null
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: NICHT_BEURTEILBAR
+      begruendung: >-
+        Der Befund empfiehlt ausdruecklich eine Kontrolle in sechs Monaten,
+        der Fragebogen verneint jede angeratene Behandlung im selben
+        Zeitraum. Beide Quellen sind lesbar, sie widersprechen sich schlicht.
+    ERSATZBEDARF:
+      wert: 0
+      begruendung: >-
+        Kein Zahn fehlt: 46 ist implantatgetragen, 47 kronenversorgt. Beide
+        Quellen stimmen hier ueberein, deckt sich mit fehlendeZaehne 0.
+    SANIERUNGSGRAD:
+      wert: 40
+      begruendung: Ein Implantat und eine Krone binnen weniger Monate — umfangreichere, aber abgeschlossene Versorgung.
+    PARODONTALBEFUND:
+      wert: 25
+      begruendung: >-
+        Periimplantaere Sondierungstiefen bis 4 mm mit leichter Roetung sind
+        dokumentiert und beurteilbar, wenn auch nicht unauffaellig.
+  erwartete_zone: kein_score
+  hinweis: >-
+    Die Ablehnung der Implantatkosten wegen des nicht approbierten
+    Behandlers ist Vorgeschichte, nicht die Pointe: Die Versorgung sitzt,
+    unabhaengig davon, wer sie gelegt hat. Die Pointe ist der Widerspruch
+    zwischen Empfehlung und Fragebogenantwort.

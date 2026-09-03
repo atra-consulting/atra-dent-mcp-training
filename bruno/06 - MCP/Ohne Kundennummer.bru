@@ -1,0 +1,65 @@
+meta {
+  name: Ohne Kundennummer
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{mcpUrl}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json, text/event-stream
+  MCP-Protocol-Version: 2025-06-18
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": 4,
+    "method": "tools/call",
+    "params": {
+      "name": "mein_vertrag_lesen",
+      "arguments": {}
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.result.isError: eq true
+}
+
+tests {
+  test("die Meldung nennt den Header und schliesst einen Parameter aus", function() {
+    const meldung = res.getBody().result.content[0].text;
+    expect(meldung).to.contain("x-kunden-id");
+    expect(meldung).to.contain("kein Parameter");
+  });
+}
+
+docs {
+  Derselbe Aufruf, nur ohne `x-kunden-id`. Das Ergebnis ist die Mandantengrenze
+  in einem Request.
+
+  Zwei Dinge sind hier absichtlich so:
+
+  **HTTP 200.** Ein abgelehnter Tool-Aufruf ist kein Transportfehler. Der
+  Fehler steht als `"isError": true` im Ergebnis, weil er zum Gespräch gehört
+  und nicht zur Leitung.
+
+  **Die Meldung ist für ein Modell geschrieben.** Sie sagt nicht nur, dass
+  etwas fehlt, sondern dass die Kundennummer kein Parameter ist und auch nicht
+  nachgereicht werden kann — sonst versucht ein Modell genau das als Nächstes.
+  Und sie nennt die Tools, die ohne Kundenbezug trotzdem antworten.
+
+  Genau das trennt die fachliche Ablehnung von der technischen. Solange der
+  Server Sessions führte, beantwortete er dieselbe Anfrage ohne Session-Id mit
+  `"Session ID missing"` und einem Java-Stacktrace im Rumpf — richtig, aber an
+  ein Modell gerichtet nutzlos. Zustandslos gibt es diese zweite Fehlerart
+  nicht mehr; jede Anfrage kommt so weit, dass die Mandantengrenze antworten
+  kann.
+}

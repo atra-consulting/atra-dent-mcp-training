@@ -1,0 +1,81 @@
+
+kundenId: 10006
+praxis: weissraum
+
+patient:
+  name: Max Friedmann
+  geburtsdatum: 1988-06-03
+  anschrift:
+    strasse: Rheinallee 18
+    plz: "40213"
+    ort: Düsseldorf
+
+befund:
+  datum: 2026-08-10
+  aktenzeichen: "WR-2026-0219"
+  zahnstatus:
+    - { zahn: "37", zustand: fuellung }
+    - { zahn: "46", zustand: fuellung }
+  diagnosen:
+    - Kompositfuellung 37 laesionsgerecht versorgt, Umgebung reizlos.
+    - Ansonsten kariesfreies Gebiss, ältere Fuellung 46 unauffaellig.
+  parodontalbefund: >-
+    Gingiva reizlos, Sondierungstiefen durchgehend unter 3 mm, keine Blutung
+    auf Sondierung.
+  empfehlung: null
+  hkp_beiliegend: false
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2026-05-28, zahn: null, behandlung: Professionelle Zahnreinigung }
+    - { datum: 2026-08-06, zahn: "37", behandlung: Kompositfuellung zweiflaechig }
+
+fragebogen:
+  ausgefuellt_am: 2026-08-11
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: nein
+      freitext: null
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: nein
+      freitext: Die Fuellung letzte Woche ist fertig.
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: nein
+      freitext: null
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Anfang August, da wurde auch die Fuellung gemacht.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: ja
+      freitext: null
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: 0
+      begruendung: >-
+        Der Befund nennt keine Empfehlung, der Fragebogen verneint die Frage,
+        und die Historie endet mit einer abgeschlossenen Fuellung.
+    ERSATZBEDARF:
+      wert: 0
+      begruendung: Kein Zahn fehlt oder ist ersatzbeduerftig; deckt sich mit fehlendeZaehne 0 in der Akte.
+    SANIERUNGSGRAD:
+      wert: 15
+      begruendung: Zwei kleine Fuellungen, sonst unversorgtes und kariesfreies Gebiss.
+    PARODONTALBEFUND:
+      wert: 5
+      begruendung: >-
+        Sondierungstiefen und Blutungsneigung sind dokumentiert und
+        durchgehend unauffaellig.
+  erwartete_zone: gruen
+  hinweis: >-
+    Ein frischer Vertrag mit einer druckfrischen Rechnung — die Fuellung war
+    bei Abfassung des Befunds gerade erst eingereicht. Auch das aendert
+    nichts am unauffaelligen Bild.

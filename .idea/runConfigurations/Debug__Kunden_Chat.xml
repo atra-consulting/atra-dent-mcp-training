@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Debug: Kunden-Chat" type="ChromiumRemoteDebugType" factoryName="Chromium Remote" host="127.0.0.1" port="6174">
+    <method v="2" />
+  </configuration>
+</component>

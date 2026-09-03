@@ -1,0 +1,83 @@
+meta {
+  name: Handshake
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{mcpUrl}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json, text/event-stream
+  x-kunden-id: {{kundenId}}
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2025-06-18",
+      "capabilities": {},
+      "clientInfo": {
+        "name": "bruno",
+        "version": "1.0.0"
+      }
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.result.serverInfo.name: eq atra-dent-kernsystem
+  res.body.result.capabilities.tools: isDefined
+}
+
+tests {
+  test("der Server eroeffnet keine Session", function() {
+    expect(res.getHeader("mcp-session-id")).to.equal(undefined);
+  });
+
+  test("die Anweisungen nennen die Herkunft der Kundennummer", function() {
+    expect(res.getBody().result.instructions).to.contain("x-kunden-id");
+  });
+}
+
+docs {
+  Client und Server einigen sich auf eine Protocol-Version und sagen einander,
+  was sie können — der Server meldet hier `tools` und sonst nichts: keine
+  Resources, keine Prompts, kein `logging`.
+
+  Interessant ist das Feld `instructions`. Es ist das, was ein Modell über den
+  Server als Ganzes erfährt, bevor es die einzelnen Tool-Beschreibungen
+  liest: was dieser Server führt, was er nicht beantwortet, und dass die
+  Kundennummer aus dem Header kommt und kein Parameter ist.
+
+  **Es kommt keine `Mcp-Session-Id` zurück.** Dieser Server läuft zustandslos
+  (`spring.ai.mcp.server.protocol: STATELESS`), und die Spezifikation stellt
+  ihm das frei: eine Session-Id *darf* er beim `initialize` vergeben, muss es
+  aber nicht. Er merkt sich zwischen zwei Anfragen nichts.
+
+  **Pflicht bleibt der Handshake trotzdem.** Die Spezifikation ist eindeutig:
+  Die Initialisierung "MUST be the first interaction between client and
+  server", und vorher soll ein Client nichts ausser einem Ping schicken.
+  Zustandslos heisst nur, dass der Server das nicht mehr *durchsetzen* kann —
+  er hat kein Gedächtnis, in dem stünde, ob dieser Client schon initialisiert
+  hat. Die Pflicht des Clients bleibt davon unberührt.
+
+  Dass die Requests 02 bis 04 hier auch ohne vorherigen Handshake antworten,
+  ist deshalb eine Beobachtung und keine Empfehlung. Wer ihn weglässt, zahlt
+  ausserdem: Die Protokollversion wird genau hier ausgehandelt, und ohne sie
+  und ohne den Header `MCP-Protocol-Version` faellt ein Server laut
+  Spezifikation auf die Annahme `2025-03-26` zurueck — zwei Revisionen aelter
+  als das, was dieser Server spricht.
+
+  Erst die Revision 2026-07-28 macht daraus wirklich eine Kür: Dort tritt
+  `server/discover` an die Stelle des Handshakes, und den müssen Server zwar
+  anbieten, Clients dürfen ihn aber überspringen.
+}

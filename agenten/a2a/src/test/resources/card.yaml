@@ -1,0 +1,36 @@
+
+name: Testagent
+
+description: |
+  Ein Agent, den es nur im Test gibt.
+
+version: "1.0.0"
+
+provider:
+  organization: atra.consulting (fiktiv)
+  url: https://atra.example.invalid
+
+supportedInterfaces:
+  - url: /a2a/rpc
+    protocolBinding: JSONRPC
+    protocolVersion: "0.3.0"
+
+capabilities:
+  streaming: true
+  pushNotifications: false
+
+defaultInputModes:
+  - text/plain
+defaultOutputModes:
+  - text/plain
+  - application/json
+
+skills:
+  - id: test-faehigkeit
+    name: Testfaehigkeit
+    description: |
+      Beantwortet eine Testfrage.
+    tags:
+      - test
+    examples:
+      - Was empfiehlst du mir?

@@ -1,0 +1,12 @@
+rechnungsnummer: "2026-T001"
+rechnungsdatum: 2026-03-14
+praxis: beisser
+patient:
+  name: Testpatient Minimal
+  anschrift: { strasse: Teststraße 1, plz: "34117", ort: Kassel }
+positionen:
+  - { datum: 2026-03-01, art: goz, nummer: "0010", leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { art: goae, nummer: "5000", leistung: Röntgen Zahnfilm, betrag: 8.74 }
+  - { art: material, leistung: Verbrauchsmaterial, betrag: 12.50 }
+  - { art: labor, leistung: Zahntechnische Leistungen, betrag: 148.20 }
+  - { art: verlangen, leistung: Kunststofffüllung auf Wunsch, betrag: 45.00 }

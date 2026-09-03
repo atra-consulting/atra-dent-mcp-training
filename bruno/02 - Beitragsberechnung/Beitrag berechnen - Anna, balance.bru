@@ -1,0 +1,53 @@
+meta {
+  name: Beitrag berechnen - Anna, balance
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{rechenkernUrl}}/beitragsberechnung
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "geburtsdatum": "1990-04-12",
+    "tarifId": "ATRA_DENT_B",
+    "gewuenschterBeginn": "2026-01-01"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.monatsbeitrag: isDefined
+}
+
+tests {
+  test("Eintrittsalter 35 trifft das Band 31-40 von balance", function() {
+    expect(res.getBody().monatsbeitrag).to.equal("20.90");
+  });
+}
+
+docs {
+  Anna Mueller (Kundin 10001), geboren am 12.04.1990, möchte zum 01.01.2026 in
+  atra.dent.balance. Am Beginn ist sie 35 — der Geburtstag im April liegt noch
+  vor ihr. Das trifft das Band 31–40, also **20.90 EUR**.
+
+  Auffällig: Anna zahlt hier mehr als die 15.90 aus `GET /tarife`
+  (`basisbeitragMonatlich`). Der Wert dort ist der Einstiegsbeitrag des
+  jüngsten Bands, nicht ihr Beitrag.
+
+  Der Rechenkern kennt keinen Kunden — anders als beim früheren Endpunkt im
+  Kernsystem gibt es hier kein optionales `kundenId`-Feld. Wer den eigenen
+  Vertrag durchrechnen will, nutzt `mein_beitrag_berechnen` im Kernsystem;
+  das liest das Geburtsdatum selbst aus der Akte.
+
+  Der Test prüft den Dezimalstring `"20.90"` bewusst als String. Ein
+  `assert`-Block würde den Erwartungswert zur Zahl 20.9 parsen und damit am
+  Drahtformat vorbeivergleichen.
+}

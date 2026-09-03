@@ -1,0 +1,94 @@
+
+kundenId: 10035
+praxis: plombeck
+
+patient:
+  name: Igor Melnyk
+  geburtsdatum: 1968-03-03
+  anschrift:
+    strasse: Lerchenstrasse 30
+    plz: "39104"
+    ort: Magdeburg
+
+befund:
+  datum: 2025-06-24
+  aktenzeichen: "PL-2025-0273"
+  zahnstatus:
+    - { zahn: "16", zustand: fehlend }
+    - { zahn: "26", zustand: fehlend }
+    - { zahn: "36", zustand: fehlend }
+    - { zahn: "46", zustand: fehlend }
+    - { zahn: "35", zustand: ersatzbeduerftig }
+    - { zahn: "24", zustand: krone }
+    - { zahn: "37", zustand: wurzelgefuellt }
+  diagnosen:
+    - Generalisierte chronische Parodontitis, Stadium III, Grad C, mit vier Freiendluecken nach Zahnverlust.
+    - Zahn 35 gelockert und nicht erhaltungswuerdig, Extraktion angeraten.
+    - Nach parodontalchirurgischer Therapie 2024 erneuter Attachmentverlust an mehreren Zaehnen.
+  parodontalbefund: >-
+    Sondierungstiefen 5 bis 9 mm an ueber der Haelfte der Messpunkte,
+    Blutung auf Sondierung an 61 Prozent, Lockerungsgrad II an 35 und 37.
+    Therapie 2024 hat den Verlauf nicht aufgehalten.
+  empfehlung: >-
+    Umfassende prothetische Neuversorgung nach Extraktion 35, Heil- und
+    Kostenplan fuer Teleskopprothese ist erstellt und beigefuegt.
+  hkp_beiliegend: true
+
+maengel:
+  seite_fehlt: null
+  seiten_gesamt: null
+  unleserlich: []
+  veraltet: false
+
+historie:
+  eintraege:
+    - { datum: 2024-10-08, zahn: null, behandlung: Entfernung harter und weicher Zahnbelaege }
+    - { datum: 2024-10-08, zahn: null, behandlung: Parodontalchirurgische Therapie, ein- und mehrwurzelige Zaehne }
+    - { datum: 2025-06-24, zahn: null, behandlung: Reevaluation und Planung prothetische Neuversorgung }
+
+fragebogen:
+  ausgefuellt_am: 2025-06-28
+  antworten:
+    - frage: Sind Ihnen derzeit Behandlungen angeraten oder empfohlen worden?
+      ankreuz: ja
+      freitext: Eine neue Prothese, der Plan liegt bei.
+    - frage: Befinden Sie sich zurzeit in zahnaerztlicher Behandlung?
+      ankreuz: ja
+      freitext: Zahnfleischbehandlung laeuft schon laenger.
+    - frage: Fehlen Ihnen Zaehne? Wenn ja, welche?
+      ankreuz: ja
+      freitext: Vier Backenzaehne, zwei oben und zwei unten.
+    - frage: Wann waren Sie zuletzt zur Kontrolle?
+      typ: offen
+      ankreuz: null
+      freitext: Vor ein paar Tagen.
+    - frage: Nehmen Sie regelmaessig eine professionelle Zahnreinigung wahr?
+      ankreuz: nein
+      freitext: Wegen des Zahnfleischs eher unregelmaessig.
+
+erwartung:
+  merkmale:
+    ANGERATENE_BEHANDLUNG:
+      wert: 90
+      begruendung: >-
+        Ein Heil- und Kostenplan liegt bei, die Neuversorgung ist geplant und
+        der Patient bestaetigt es im Fragebogen. Eindeutig.
+    ERSATZBEDARF:
+      wert: 85
+      begruendung: >-
+        Vier fehlende Zaehne, deckt sich mit fehlendeZaehne 4 in der Akte,
+        dazu ein fuenfter, akut nicht erhaltungswuerdiger Zahn.
+    SANIERUNGSGRAD:
+      wert: 60
+      begruendung: Eine Krone und eine Wurzelfuellung bei vier unversorgten Luecken und einem weiteren Extraktionsfall.
+    PARODONTALBEFUND:
+      wert: 70
+      begruendung: >-
+        Parodontitis Stadium III Grad C, die vorangegangene Therapie hat den
+        Attachmentverlust nicht gestoppt. Beurteilbar und schlecht.
+  erwartete_zone: rot
+  hinweis: >-
+    Das Vertragsverhaeltnis ist seit dem 30.06.2025 inaktiv — eine
+    Risikopruefung faende hier gar nicht erst statt, der Fall kaeme nie zu
+    einem Pruefer. Fachlich ist er trotzdem der eindeutigste rote Fall im
+    Bestand: nichts an den Merkmalen ist strittig.

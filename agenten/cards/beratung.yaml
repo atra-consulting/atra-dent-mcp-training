@@ -1,0 +1,290 @@
+
+name: atra.dent Beratungsagent
+
+description: |
+  Fuehrt das Beratungsgespraech zur Zahnzusatzversicherung atra.dent: klaert
+  den Bedarf, erklaert Leistungen entlang der Bedingungswerke und empfiehlt
+  einen Tarif.
+
+  ## Woher die Antworten kommen
+
+  Dieser Agent weiss von sich aus nichts. Jede Aussage stammt aus einem
+  Tool dreier Systeme:
+
+  - **Kernsystem** - was die aufrufende Kundin heute hat und was ein Wechsel
+    fuer sie kostet. Vertrag, Beitrag, Schadenhistorie.
+  - **Rechenkern** - Tarifuebersicht und Beitragsberechnung fuer Interessenten
+    ohne Akte: welche Tarife es gibt und was sie kosten.
+  - **Wissensdienst** - was das inhaltlich bedeutet. Bedingungswerke mit
+    zitierfaehiger Fundstelle, GOZ-Pruefung, Tarifempfehlung aus Regeln.
+
+  **Was er sagt, ist belegt.** Zu jeder Leistungsaussage nennt er die
+  Fundstelle im Bedingungswerk; sie steht im data-Part des Artefakts unter
+  `belege`. Findet er keinen Beleg, sagt er das, statt zu formulieren.
+
+  ## Was er nicht tut
+
+  Er **schliesst nichts ab**. Er wechselt keinen Tarif und reicht keinen
+  Schadensfall ein - er bekommt dafuer gar keine Tools. Ein
+  Beratungsgespraech endet mit einer Empfehlung; der Vollzug ist eine andere
+  Absicht mit anderer Tragweite und laeuft ueber die Sachbearbeitung.
+
+  Was er **schreibt**, sind die Kontaktdaten der angemeldeten Kundin -
+  Anschrift, E-Mail-Adresse, Telefonnummer - und auch die erst, nachdem er
+  sie zur Bestaetigung vorgelesen hat (Skill `kontaktdaten_aendern`). Name,
+  Geburtsdatum, Angabe zur Vorversicherung und fehlende Zaehne aendert er
+  nicht: Das sind Antragsangaben, an denen Beitrag, Wartezeit und
+  Ausschluesse haengen.
+
+  Er **rechnet keine Erstattung im Einzelfall**. Ob eine Leistung dem Grunde
+  nach versichert ist, kann er sagen; wie viel am Ende ausgezahlt wird, haengt
+  an Selbstbehalt, Zahnstaffel, Jahreshoechstgrenze und dem bisherigen
+  Verbrauch und entscheidet die Sachbearbeitung.
+
+  Er beantwortet **keine zahnmedizinische Sachfrage**. Ob eine Behandlung
+  sinnvoll ist, wie lange ein Implantat haelt, was ein Befund bedeutet - dafuer
+  ist er der falsche Agent.
+
+  ## Er fragt zurueck, statt zu raten
+
+  Fehlt eine Angabe, die die Antwort veraendern wuerde, steht der Task auf
+  `input-required` (im Wire-Format nach A2A 0.3), die Rueckfrage steht in
+  `status.message`, und die Antwort darauf traegt dieselbe `taskId`. Das ist der Regelfall und nicht
+  der Ausnahmefall: Ohne Eintrittsalter gibt es fuer eine Interessentin keine
+  Tarifempfehlung, und ein geratenes Alter ergaebe eine Empfehlung, die im
+  Antrag scheitert.
+
+  Zwei weitere Task-Zustaende sind Zustaende und keine Prosa: Nimmt der Agent
+  ein Anliegen nicht an - weil es nicht sein Fach ist oder er es nicht darf -,
+  steht der Task auf `rejected`, die Begruendung in `status.message`. Geht bei
+  der Bearbeitung etwas schief - eine verrannte Tool-Schleife, ein nicht
+  erreichbares Modell -, steht er auf `failed`. Beide sind final, anders als
+  `input-required`.
+
+  Eine angemeldete Kundin wird danach **nicht** gefragt. Was in ihrer Akte
+  steht - Geburtsdatum, Versicherungsbeginn, fehlende Zaehne, Vorversicherung -
+  schlaegt der Agent nach, statt es zu erfragen; ihren Vertrag liest er dafuer,
+  bevor er ueberhaupt zu antworten beginnt.
+
+  Genau das ist auch der Grund, warum dieser Agent ueber A2A angesprochen wird
+  und nicht als MCP-Tool: Ein Tool raet oder scheitert, ein Agent
+  fragt zurueck.
+
+  ## Wer fragt
+
+  Die Kundennummer ist **kein Teil der Nachricht**. Sie kommt aus der
+  Header `x-kunden-id` der HTTP-Anfrage, und es gibt keinen zweiten Weg an
+  sie heran - weder ueber einen data-Part noch ueber `metadata`. Ein Wert im
+  Text wird nicht ausgewertet.
+
+  Ohne diesen Header antwortet der Agent trotzdem, aber als sei niemand
+  angemeldet: Er kennt dann keinen Vertrag und keine Schadenhistorie und
+  beantwortet nur, was ohne Kundenbezug gilt - Tarifuebersicht,
+  Beitragsberechnung aus Geburtsdatum, Auskunft aus den Bedingungswerken. Das
+  ist der Fall "Interessent ohne Akte" und kein Fehler.
+
+  ## Zwei Fertigkeiten, eine Weiche
+
+  Dieser Agent fuehrt zwei Gespraeche, die nur von aussen dasselbe sind:
+  `bestandsberatung` fuer eine Kundin mit laufendem Vertrag,
+  `neuberatung` fuer eine Interessentin ohne Akte. Sie unterscheiden sich in
+  der Rolle, in den verfuegbaren Tools und darin, was erfragt statt
+  nachgeschlagen wird.
+
+  **Die Wahl trifft der Header `x-kunden-id` und kein Modell.** Wer angemeldet
+  ist, bekommt die Bestandsberatung; wer nicht, die Neuberatung. Ein
+  aufrufender Agent waehlt hier nichts aus und muss nichts mitgeben - er
+  reicht das Anliegen durch, und die Weiche faellt am Transport. Deshalb sind
+  es zwei Fertigkeiten eines Agenten und nicht zwei Agenten: Was
+  deterministisch feststeht, soll keine Routing-Entscheidung werden.
+
+  ## Eingabe und Ausgabe
+
+  Fuer beide Fertigkeiten gleich.
+
+  EINGABE: das Anliegen in natuerlicher Sprache als text-Part, Media Type
+  text/plain, hoechstens 2000 Zeichen. Ein data-Part `rechnung` (Extraktion
+  einer Zahnarztrechnung) wird ausgewertet - siehe Skill `rechnung_einreichen`.
+  Andere data-Parts werden ignoriert. Die Kundennummer gehoert NICHT hinein -
+  siehe "Wer fragt".
+
+  AUSGABE: ein Artefakt namens `beratung` mit zwei Teilen. Der text-Part
+  traegt die Antwort in Prosa, wie sie einer Kundin vorgelegt werden kann.
+  Der data-Part traegt:
+
+  - `belege` - die Fundstellen, auf die sich die Antwort stuetzt, je mit
+    Dokument, Abschnitt, zitierfaehiger Ueberschrift und Verweis auf die
+    HTML- und PDF-Fassung. Eine leere Liste heisst: Die Antwort enthaelt
+    keine belegpflichtige Leistungsaussage.
+  - `hinweise` - vorgesehen fuer das, was ungefragt anzusprechen war,
+    Vorrangiges zuerst; zum jetzigen Stand liefert der Agent hier immer eine
+    leere Liste, das Feld ist noch nicht befuellt.
+  - `tools` - die Namen der Tools, die in diesem Zug aufgerufen wurden, in
+    Aufrufreihenfolge - nachvollziehbar, ohne dass ein Aufrufer das Protocol
+    dieses Dienstes lesen muesste.
+  - `views` - hoechstens zwei Darstellungen zur Antwort, jede mit einem Feld
+    `kind`: `tarifvergleich` (das Produktmodell mehrerer Tarife
+    nebeneinander), `beitragsvergleich` (berechnete Monatsbeitraege je
+    Tarif), `tarifempfehlung` (die empfohlenen Tarife mit ihrem Platz),
+    `vertrag`, `schadensfaelle`, `kontaktdaten` (die Anschrift, E-Mail-Adresse
+    und Telefonnummer, wie sie nach einer Aenderung in der Akte stehen). Eine
+    leere Liste ist der Regelfall: Die meisten Antworten sind Prosa und sonst
+    nichts.
+
+    Stehen mehrere Tarife nebeneinander und gehoert einer davon der Kundin,
+    steht daneben `vertragstarif` mit Schluessel und - soweit ein Dienst ihn
+    genannt hat - Anzeigename. Wurde in diesem Zug kein Vertrag gelesen,
+    fehlt die Angabe: Sie wird nicht erschlossen, denn eine falsch markierte
+    Spalte waere schlimmer als eine unmarkierte.
+
+    Die Werte stammen aus den Rohergebnissen der aufgerufenen Tools und
+    nicht aus dem Antworttext - eine falsche Zahl in einer sauber gesetzten
+    Tabelle faellt niemandem auf.
+
+  Eine vollstaendige `tarifempfehlung` liefert der data-Teil weiterhin
+  NICHT. Die Darstellung `tarifempfehlung` traegt ausschliesslich Platz,
+  Tarifschluessel und Anzeigename; Begruendung, Kurzformel, Bedarfsgruende
+  und Hinweispflicht stammen aus dem internen Beratungsleitfaden und gehen
+  an keine Kundin. Auch der `reihenfolgeplatz` bleibt draussen - er ist die
+  Empfehlungsreihenfolge des Leitfadens und nicht das Ergebnis der
+  Bedarfsanalyse. Wer eine gerechnete Empfehlung samt Begruendung
+  strukturiert braucht, findet sie hier nicht.
+
+  WICHTIG FUER AUFRUFENDE AGENTEN: Der text-Part fuehrt auf eine Darstellung
+  hin und wiederholt ihre Zahlen nicht. Wer den text-Part ohne die `views`
+  weiterreicht, liefert eine Antwort, der die Haelfte fehlt.
+
+  WICHTIG FUER AUFRUFENDE AGENTEN: Der text-Part ist fuer Menschen gedacht
+  und darf einer Kundin unveraendert vorgelegt werden. Er ist belegt - anders
+  als die Auskunft des Arztservice, die aus einem Sprachmodell ohne Quelle
+  stammt. Wer beide weiterreicht, sollte den Unterschied nicht einebnen.
+
+  ## Konventionen
+
+  Fachliche Bezeichner sind durchgaengig deutsch, Umlaute als ae/oe/ue -
+  dieselbe Konvention wie im Kernsystem und im Produktmodell. Die Felder
+  dieser Karte folgen dagegen A2A 0.3 (SDK-Generation, siehe Spike-Befunde
+  2026-08-12) und bleiben englisch. Die Antwort an die Kundin ist
+  gewoehnliches Deutsch mit Umlauten.
+
+  ## Alles erfunden
+
+  atra.dent ist eine erfundene Zahnzusatzversicherung. Tarife, Leistungen,
+  Grenzen, Beitraege und Kunden sind frei erfunden; es besteht kein Bezug zu
+  realen Produkten oder Anbietern.
+
+version: "1.0.0"
+
+provider:
+  organization: atra.consulting
+  url: https://atra.consulting/
+
+capabilities:
+  streaming: true
+  pushNotifications: false
+
+defaultInputModes:
+  - text/plain
+defaultOutputModes:
+  - text/plain
+  - application/json
+
+skills:
+
+  - id: bestandsberatung
+    name: Beratung im laufenden Vertrag
+    description: |
+      Beraet eine Kundin MIT laufendem Vertrag: was ihr Tarif leistet, ob er
+      noch der richtige ist, was ein Wechsel braechte und was er kostet.
+
+      Was in der Akte steht, wird nachgeschlagen und nicht erfragt:
+      Geburtsdatum, Eintrittsalter, Versicherungsbeginn, fehlende Zaehne,
+      Vorversicherung, bisheriger Verbrauch.
+
+      Eine Tariffrage ist hier IMMER eine Wechselfrage. "Welcher Tarif passt
+      zu mir" heisst bei einer Versicherten nicht "welchen soll ich waehlen",
+      sondern "ist meiner noch der richtige" - die Antwort beginnt deshalb bei
+      dem Tarif, den sie hat. Passt er bereits, ist genau das die Auskunft.
+
+      Ein Wechsel nach oben ist eine Nachversicherung: erneute
+      Gesundheitspruefung, erneut laufende Wartezeit, neu beginnende
+      Zahnstaffel. Der Agent spricht das von sich aus an und vollzieht den
+      Wechsel nicht - das tut die Sachbearbeitung.
+
+      Der Agent gibt keine Zusage ueber eine Erstattungshoehe und keine
+      Rechtsauskunft. "Dem Grunde nach versichert" und "wird ausgezahlt" sind
+      zwei verschiedene Aussagen, und er trifft nur die erste.
+    tags:
+      - beratung
+      - bestandskunde
+      - tarifwechsel
+      - vertrag
+      - zahnzusatzversicherung
+      - belegt
+    examples:
+      - Welcher Tarif passt zu mir?
+      - Lohnt sich fuer mich ein Wechsel in einen besseren Tarif?
+      - Was zahlt mein Tarif bei Implantaten?
+      - Warum ist meine Erstattung geringer ausgefallen als gedacht?
+      - Gilt bei mir noch eine Wartezeit?
+
+  - id: neuberatung
+    name: Beratung ohne Vertrag
+    description: |
+      Beraet eine Interessentin OHNE Akte: welche Tarife es gibt, was sie
+      leisten, was sie kosten und welcher zum Bedarf passt.
+
+      Es gibt hier keinen Vertrag, keine Schadenhistorie und keinen laufenden
+      Beitrag - der Agent behauptet nichts dergleichen.
+
+      Was der Vertrag im Bestandsfall liefert, muss hier erfragt werden: Ohne
+      Eintrittsalter gibt es keine Empfehlung, fuer einen Beitrag braucht es
+      zusaetzlich den gewuenschten Beginn, und fehlende Zaehne wie eine
+      Vorversicherung entscheiden ueber Annahme und Wartezeit. Der Task steht
+      dann auf `input-required`.
+
+      Wer nach "meinem Tarif" fragt, ist nicht angemeldet: Der Agent sagt das
+      und verweist auf die Anmeldung, statt einen Vertrag zu erfinden.
+    tags:
+      - beratung
+      - interessent
+      - tarifauswahl
+      - beitrag
+      - zahnzusatzversicherung
+      - belegt
+    examples:
+      - Welche Tarife bietet atra.dent an?
+      - Ich brauche bald Zahnersatz - welcher Tarif passt zu mir?
+      - Was kostet der Tarif Premium fuer einen 40-Jaehrigen?
+      - Zahlt der Basistarif eine professionelle Zahnreinigung?
+      - Gibt es eine Wartezeit, bevor ich Leistungen bekomme?
+
+  - id: rechnung_einreichen
+    name: Rechnung einreichen
+    description: |
+      Nimmt eine hochgeladene Zahnarztrechnung entgegen und legt sie als
+      Schadensfall in der Akte der angemeldeten Kundin an. Voraussetzung:
+      die Anmeldung der Kundin (siehe oben) und ein data-Part `rechnung` mit
+      der Extraktion des Kernsystems (rechnungsnummer, rechnungsdatum,
+      absender, patient, positionen[] mit ziffer/leistung/betrag/datum,
+      gesamtbetrag). Ohne Anmeldung wird nichts eingereicht; der Skill
+      bittet dann um Anmeldung.
+
+      Der Skill prueft nichts und sagt nichts zu: keine Erstattungshoehe,
+      keine Einschaetzung, ob etwas versichert ist. Er vergleicht nur den
+      Patientennamen mit der Kundin (Rueckfrage bei Abweichung) und bestimmt
+      das Behandlungsdatum aus dem Beleg. Die Pruefung uebernimmt danach der
+      Schadensfallagent; ueber den Stand gibt der Skill `bestandsberatung`
+      Auskunft (Fallkarte).
+
+      Ausgabe: Artefakt `beratung` mit Fallnummer und Status `eingereicht` in
+      der Prosa und der Fallkarte (View `schadensfaelle`) im data-Part.
+    tags:
+      - schadensfall
+      - rechnung
+      - annahme
+      - zahnzusatzversicherung
+    examples:
+      - Hier ist meine Zahnarztrechnung.
+      - Ich moechte diese Rechnung einreichen.
+# TODO Workshop

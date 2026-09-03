@@ -1,0 +1,67 @@
+meta {
+  name: Agent Card lesen
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{schadensfallagentUrl}}/.well-known/agent-card.json
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+  res.body.protocolVersion: eq 0.3.0
+  res.body.capabilities.streaming: eq true
+  res.body.skills: length 1
+  res.body.skills[0].id: eq fall_pruefen
+}
+
+tests {
+  test("die Karte nennt ihre eigene Adresse", function() {
+    // Der AgentCardLoader baut sie aus agenten.base-url und haengt den
+    // JSON-RPC-Pfad "/" an -- die Karte traegt selbst keine URL, damit
+    // dieselbe Datei lokal und im Container gilt.
+    expect(res.getBody().url).to.equal(`${bru.getEnvVar("schadensfallagentUrl")}/`);
+  });
+
+  test("die Fertigkeit sagt, was der Agent NICHT setzt", function() {
+    const skill = res.getBody().skills[0];
+    expect(skill.description).to.contain("genehmigt");
+    expect(skill.description).to.contain("abgelehnt");
+    expect(skill.description).to.contain("ausgezahlt");
+  });
+
+  test("der Poller steht in der Beschreibung, aber nicht als Fertigkeit", function() {
+    const karte = res.getBody();
+    expect(karte.description).to.contain("Takt");
+    karte.skills.forEach(function(skill) {
+      expect(skill.id).to.not.contain("poll");
+    });
+  });
+}
+
+docs {
+  Der einzige Kontrakt dieses Agenten — `http://localhost:8087/.well-known/agent-card.json`,
+  gebaut aus `agenten/cards/schadensfall.yaml`. Kein API-Schlüssel: Wer den
+  Agenten ansprechen darf, entscheidet nicht diese Datei.
+
+  Zwei Dinge lohnen den Blick, und beide sind Weglassungen.
+
+  **Genau eine Fertigkeit.** Der Regelbetrieb dieses Agenten — der Poller,
+  der sich eingereichte Fälle selbst holt — steht ausdrücklich **nicht**
+  darin. Was niemand aufrufen kann, gehört nicht in einen Kontrakt. Er steht
+  in der `description`, weil ein Aufrufer wissen muss, dass ein Fall auch
+  ohne sein Zutun geprüft wird — sonst wundert er sich über Request 04.
+
+  **Die Karte sagt, was der Agent nicht kann.** `genehmigt`, `abgelehnt` und
+  `ausgezahlt` setzt er nie. Das ist keine technische Einschränkung, sondern
+  der Punkt: Ein Agent, der auszahlen darf, ist keine Vorprüfung mehr. Eine
+  Karte, die nur Fähigkeiten aufzählt, wäre für ein fremdes Modell die
+  halbe Wahrheit.
+
+  `protocolVersion` und die Feldnamen sind englisch und camelCase — das ist
+  A2A 0.3 und die einzige Stelle dieses Dienstes, an der die Konvention des
+  Labs nicht gilt.
+}

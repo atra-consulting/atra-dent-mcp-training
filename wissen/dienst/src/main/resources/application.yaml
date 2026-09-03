@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: wissensdienst
+
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: atra-dent-wissen
+        version: 1.0.0
+        type: sync
+        protocol: stateless
+        stdio: false
+        streamable-http:
+          mcp-endpoint: /mcp
+        capabilities:
+          tool: true
+          resource: false
+          prompt: false
+          completion: false
+        instructions: >
+          Beantwortet Fragen zur fiktiven Zahnzusatzversicherung atra.dent.
+          bedingungen_suchen und goz_pruefen verlangen einen Tarif, weil sich
+          die vier Tarife in Quoten, Wartezeiten und Ausschluessen
+          unterscheiden und eine Antwort ohne Tarif beliebig waere.
+          Drei Arten von Wissen, die nicht vermischt werden duerfen:
+          bedingungen_suchen und goz_pruefen antworten aus den
+          veroeffentlichten Bedingungswerken und sind gegenueber dem Kunden
+          zitierfaehig; beratungsleitfaden_suchen und tarifempfehlung
+          antworten aus internem Steuerungswissen, das den Berater fuehrt,
+          dem Kunden nicht vorgelegt und nicht zitiert wird und dem
+          Bedingungswerk weicht, sobald beide sich widersprechen;
+          tarife_vergleichen antwortet aus dem Produktmodell und faellt in
+          keines der beiden Faecher: Es darf dem Kunden unveraendert gezeigt
+          werden und ist trotzdem keine Fundstelle. Wer in Prosa behauptet,
+          was ein Tarif leistet, belegt das ueber bedingungen_suchen; zu
+          jedem Tarif steht der Verweis auf sein Bedingungswerk im Ergebnis.
+
+    embedding:
+      transformer:
+        onnx:
+          model-uri: https://huggingface.co/intfloat/multilingual-e5-small/resolve/main/onnx/model.onnx
+        tokenizer:
+          uri: https://huggingface.co/intfloat/multilingual-e5-small/resolve/main/tokenizer.json
+          options:
+            padding: 'true'
+        cache:
+          enabled: true
+
+server:
+  port: 8082
+  tomcat:
+    connection-timeout: 60s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+wissen:
+  api:
+    base-path: /api/v1
+  data:
+    directory: ../daten
+  documents:
+    directory: ../generated
+
+logging:
+  level:
+    consulting.atra.wissen: INFO

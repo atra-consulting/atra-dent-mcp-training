@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Debug: Alle" type="CompoundRunConfigurationType">
+    <toRun name="Debug: Rechenkern" type="Remote" />
+    <toRun name="Debug: Kernsystem" type="Remote" />
+    <toRun name="Debug: Wissensdienst" type="Remote" />
+    <toRun name="Debug: Beratungsagent" type="Remote" />
+    <toRun name="Debug: Schadensfallagent" type="Remote" />
+    <toRun name="Debug: Orchestrator" type="Remote" />
+    <toRun name="Debug: Sachbearbeiter-UI" type="ChromiumRemoteDebugType" />
+    <toRun name="Debug: Kunden-Chat" type="ChromiumRemoteDebugType" />
+    <method v="2" />
+  </configuration>
+</component>

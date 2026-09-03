@@ -1,0 +1,50 @@
+meta {
+  name: 400 - Unbekannter Kunde im Rumpf
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{basisUrl}}/schadensfaelle
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "kundenId": 99999,
+    "behandlungsdatum": "2026-08-07",
+    "positionen": [
+      {
+        "goz": "1040",
+        "leistungsbereich": "PZR",
+        "betrag": "118.00",
+        "beschreibung": "Professionelle Zahnreinigung, 28 Zaehne"
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 400
+  res.body.status: eq 400
+  res.body.detail: contains kundenId
+  res.body.detail: contains 99999
+}
+
+docs {
+  Dieselbe unbekannte Kundennummer wie in "404 - Kunde unbekannt", diesmal als
+  Feld im Rumpf — und deshalb **400** statt 404.
+
+  Der Unterschied ist keine Spitzfindigkeit. Ein 404 sagt "diese Ressource
+  gibt es nicht"; hier existiert die adressierte Ressource aber sehr wohl, es
+  ist die Sammlung `/schadensfaelle`. Falsch ist der Inhalt der Anfrage, also
+  ist es ein Validierungsfehler. Für den Aufrufer macht das den Unterschied
+  zwischen "Pfad korrigieren" und "Rumpf korrigieren".
+
+  Eingereicht wird nichts — die Prüfung läuft vor dem Schreiben.
+}

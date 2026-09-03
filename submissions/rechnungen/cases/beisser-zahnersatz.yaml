@@ -1,0 +1,25 @@
+
+rechnungsnummer: "2026-04711"
+rechnungsdatum: 2026-03-14
+praxis: beisser
+patient:
+  name: Katrin Vogel
+  anschrift:
+    strasse: Lindenweg 14
+    plz: "34117"
+    ort: Kassel
+  geburtsdatum: 1979-06-02
+positionen:
+  - { datum: 2026-01-08, art: goz, nummer: "0010", zahn: null, leistung: Eingehende Untersuchung, anzahl: 1, faktor: 2.3, betrag: 10.72 }
+  - { datum: 2026-01-08, art: goz, nummer: "0030", zahn: null, leistung: Heil- und Kostenplan, anzahl: 1, faktor: 2.3, betrag: 16.08 }
+  - { datum: 2026-01-22, art: goz, nummer: "9010", zahn: "36", leistung: Implantatinsertion, anzahl: 1, faktor: 2.8, betrag: 410.20 }
+  - { datum: 2026-01-22, art: goz, nummer: "0090", zahn: "36", leistung: Intraorale Infiltrationsanästhesie, anzahl: 2, faktor: 2.3, betrag: 12.44 }
+  - { datum: 2026-02-19, art: goz, nummer: "9050", zahn: "36", leistung: Auswechseln des Aufbauelements, anzahl: 1, faktor: 2.3, betrag: 38.60 }
+  - { datum: 2026-02-27, art: goz, nummer: "2197", zahn: "36", leistung: Adhäsive Befestigung der Krone, anzahl: 1, faktor: 2.3, betrag: 17.85 }
+  - { datum: 2026-02-27, art: goz, nummer: "5170", zahn: "36", leistung: Anatomische Abformung mit individuellem Löffel, anzahl: 1, faktor: 2.3, betrag: 44.10 }
+  - { datum: 2026-01-22, art: goae, nummer: "5000", zahn: null, leistung: Röntgenaufnahme Zahnfilm, anzahl: 2, faktor: 1.8, betrag: 17.48 }
+  - { datum: 2026-02-27, art: labor, nummer: null, zahn: "36", leistung: Zahntechnische Leistungen laut Anlage, anzahl: 1, faktor: null, betrag: 612.30 }
+  - { datum: 2026-01-22, art: material, nummer: null, zahn: "36", leistung: Implantatkörper und Verschlussschraube, anzahl: 1, faktor: null, betrag: 289.00 }
+zahlung:
+  frist_tage: 30
+  bereits_gezahlt: 0

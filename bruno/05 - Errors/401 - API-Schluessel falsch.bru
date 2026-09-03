@@ -1,0 +1,32 @@
+meta {
+  name: 401 - API-Schluessel falsch
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{basisUrl}}/kunden
+  body: none
+  auth: none
+}
+
+headers {
+  x-api-key: falscher-schluessel
+}
+
+assert {
+  res.status: eq 401
+  res.body.status: eq 401
+  res.body.detail: contains x-api-key
+}
+
+docs {
+  Header vorhanden, Wert falsch — für die API nicht zu unterscheiden vom
+  fehlenden Header, und das ist Absicht. `detail` nennt nur, dass
+  `x-api-key` fehlt oder ungültig ist, und verrät nicht, welcher der beiden
+  Fälle vorliegt.
+
+  Der gültige Schlüssel steht in der Umgebung `Lokal` als `{{apiKey}}`
+  und ist im Kernsystem über `kernsystem.api-key` konfigurierbar,
+  Vorgabe `atra-lab-2026`.
+}

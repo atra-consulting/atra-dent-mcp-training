@@ -1,0 +1,157 @@
+meta {
+  name: Warten und lesen
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{basisUrl}}/schadensfaelle/{{agentFallId}}
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body.kundenId: eq 10001
+  res.body.status: in [geprueft_freigabe, geprueft_eskalation]
+  res.body.bewertung.agent: eq schadensfall
+  res.body.bewertung.empfehlung: in [freigabe, eskalation]
+  res.body.erstattungsbetrag: isNull
+}
+
+tests {
+  test("Status und Empfehlung sagen dasselbe", function() {
+    const fall = res.getBody();
+    const erwartet = fall.bewertung.empfehlung === "freigabe"
+      ? "geprueft_freigabe"
+      : "geprueft_eskalation";
+    expect(fall.status).to.equal(erwartet);
+  });
+
+  test("eine Eskalation nennt Gruende, eine Freigabe einen Vorschlag", function() {
+    const bewertung = res.getBody().bewertung;
+    if (bewertung.empfehlung === "eskalation") {
+      expect(bewertung.eskalationsgruende).to.have.length.above(0);
+      bewertung.eskalationsgruende.forEach(function(grund) {
+        expect(grund.code).to.be.a("string");
+        expect(grund.text).to.have.length.above(0);
+      });
+    } else {
+      expect(bewertung.eskalationsgruende).to.have.lengthOf(0);
+      expect(bewertung.erstattungsvorschlag).to.be.a("string");
+    }
+  });
+
+  test("jede eingereichte Position hat eine Einordnung bekommen", function() {
+    // Zugeordnet wird ueber den index und nicht ueber die Nummer: Die
+    // Materialposition traegt keine, und dieselbe Nummer kann mehrfach auf
+    // einer Rechnung stehen. Ueber `goz` verglichen liesse dieser Test eine
+    // Bewertung durchgehen, die zwei Positionen denselben Befund gibt.
+    const fall = res.getBody();
+    const stellen = fall.positionen.map((_, index) => index);
+    // Numerisch sortieren, nicht lexikografisch: .sort() ohne Vergleicher
+    // ordnet ueber Zeichenketten, und ab elf Positionen stuende 10 vor 2.
+    // papadakis-implantat hat dreizehn.
+    const bewertet = fall.bewertung.positionen
+      .map((position) => position.index)
+      .sort((a, b) => a - b);
+    expect(bewertet).to.deep.equal(stellen);
+    fall.bewertung.positionen.forEach(function(position) {
+      expect(position.zustand, String(position.index)).to.be.oneOf(
+        ["ENTHALTEN", "NICHT_ENTHALTEN", "NICHT_BESTIMMBAR", "UNBEKANNT"]);
+    });
+  });
+
+  test("das Bearbeitungsprotokoll zeigt Uebernahme, Pruefung und Schreibvorgang", function() {
+    const protokoll = res.getBody().bearbeitungsprotokoll ?? [];
+    const schritte = protokoll.map((eintrag) => eintrag.schritt).join(" | ");
+    expect(schritte).to.contain("eingereicht -> in_pruefung");
+    expect(schritte).to.contain("Freigabewächter");
+    expect(schritte).to.contain("in_pruefung -> geprueft_");
+    // Die Aufrufe selbst haengen als calls an den Schritten -- Modell, Tool,
+    // A2A. Vollstaendig stehen sie bei --tracelog in
+    // tracelog/schadensfall.jsonl.
+    const aufrufe = protokoll.flatMap((eintrag) => eintrag.calls ?? []);
+    expect(aufrufe).to.have.length.above(0);
+    aufrufe.forEach(function(aufruf) {
+      expect(aufruf.art, aufruf.name).to.be.oneOf(["modell", "tool", "a2a"]);
+    });
+    expect(aufrufe.map((aufruf) => aufruf.name)).to.include("goz_pruefen");
+  });
+}
+
+docs {
+  Das Ergebnis am Fall — dieselbe Ressource wie in Ordner 04, nur trägt sie
+  jetzt eine `bewertung` und ein gefülltes `bearbeitungsprotokoll`.
+
+  ## Bruno kennt kein `sleep`
+
+  Und dieser Request braucht eines. Request 04 kommt nach 30 Sekunden zurück,
+  die Prüfung dauert aber rund 35 — und läuft der Poller, hat sie überhaupt
+  erst mit ihm angefangen. Wer den Ordner am Stück fährt, setzt die Pause
+  deshalb von außen:
+
+  ```bash
+  npx @usebruno/cli run "08 - Schadensfallagent" --env Lokal --delay 60000
+  ```
+
+  `--delay` wartet vor **jedem** Request der Ausführung, nicht nur vor
+  diesem; der ganze Ordner dauert damit gemessene 271 Sekunden. Eine gezielte
+  Pause kennt Bruno nicht, und dieser Ordner erfindet auch keine — ein
+  Wartebefehl im Pre-Request-Script wäre ein Vorwand, sich nicht zu
+  entscheiden.
+
+  Wer den Ordner in der Oberfläche fährt, hat das Problem nicht: Dort dauert
+  der Weg von Request 04 zum Mausklick auf 05 länger als die Prüfung. Und
+  wenn dieser Request doch einmal `in_pruefung` sieht, ist er nicht kaputt —
+  dann noch einmal abschicken; die Fallnummer steht in `{{agentFallId}}`.
+
+  ## Was hier steht und was nicht
+
+  **`status` ist `geprueft_freigabe` oder `geprueft_eskalation`** — beides
+  eine Empfehlung, keine Entscheidung. `genehmigt`, `abgelehnt` und
+  `ausgezahlt` setzt der Agent nie; das MCP-Tool `schadensfall_bewerten`
+  kennt diese Zustände nicht einmal.
+
+  **`erstattungsbetrag` bleibt `null`.** Der Agent schlägt einen Betrag vor
+  (`bewertung.erstattungsvorschlag`), gesetzt wird er von der
+  Sachbearbeitung per PATCH. Zwei Felder, weil es zwei verschiedene Dinge
+  sind: ein Vorschlag und eine Zusage.
+
+  **`bewertung.positionen` tragen jetzt einen `leistungsbereich`** — den, den
+  die eingereichte Rechnung nicht kannte (Request 01). Bei `0010` und `0090`
+  steht dabei `zustand: NICHT_BESTIMMBAR` **und trotzdem** ein Bereich: Der
+  Wissensdienst kann diese Nummern nicht selbst zuordnen, das Modell hat sie
+  an die Hauptbehandlung gehängt, und der Freigabewächter hat geprüft, dass
+  diese Hauptbehandlung **am selben Zahn** steht und `ENTHALTEN` ist. Ohne
+  diese Regel wäre jede gewöhnliche Zahnarztrechnung eine Eskalation. Für die
+  Materialposition ohne Ziffer gilt genau dasselbe.
+
+  **Jeder Befund trägt einen `index`** — die Stelle der Position in
+  `positionen`. Die Gebührennummer taugt nicht als Schlüssel: Material, Labor
+  und Verlangensleistungen tragen keine, und dieselbe Nummer kann mehrfach auf
+  einer Rechnung stehen (`weiss-implantat-doppelt` führt 9010 an zwei
+  Behandlungstagen). `goz` steht weiterhin daneben, aber nur als Beschriftung.
+
+  **`bewertung.eskalationsgruende` sind Codes des Freigabewächters**, nicht des
+  Modells — deterministisch vergeben, nachdem das Modell seinen Vorschlag
+  über das Signal-Tool `bewertung_abgeben` abgegeben hat. Der Wächter
+  verschärft dabei nur: Aus einer Modell-Eskalation wird nie eine Freigabe.
+
+  **`bearbeitungsprotokoll` sind die gekürzten Aufrufe.** Je Schritt ein Eintrag
+  mit `akteur` und `schritt`, und daran hängen unter `calls` die einzelnen
+  Aufrufe — `modell`, `tool`, `a2a`. Vollständig stehen sie bei
+  `./start.sh --tracelog` in `tracelog/schadensfall.jsonl`.
+
+  ## Warum die Zusicherung beide Ausgänge zulässt
+
+  Welcher eintritt, hängt an der Fachlichkeit — und an der Auskunft des
+  fremd gehosteten Arztservice, einer Blackbox mit einem Modell darin, die
+  zu derselben Rechnung nicht jedes Mal dasselbe sagt. Für die Kompositfüllung aus Request
+  01 ist `geprueft_freigabe` der erwartete Ausgang (Erstattungsvorschlag
+  31,79 EUR, so gemessen am 2026-08-19 und im Kalibrierungslauf davor); eine
+  Eskalation mit `ARZT_FLAGGED` ist dieselbe Kette und kein Fehlschlag. Was
+  diese Zusicherung festhält, ist die Naht: Der Fall steht nicht mehr auf
+  `eingereicht`, die Bewertung stammt vom Agenten, und Status und Empfehlung
+  sagen dasselbe.
+}

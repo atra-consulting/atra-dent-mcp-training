@@ -1,0 +1,33 @@
+meta {
+  name: Kunde lesen
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{basisUrl}}/kunden/{{kundenId}}
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body.id: eq 10001
+  res.body.nachname: eq Müller
+  res.body.tarifId: eq ATRA_DENT_B
+  res.body.erstelltAm: isDefined
+}
+
+docs {
+  Ein Kunde über seine Nummer. `{{kundenId}}` steht in der Umgebung `Lokal` auf
+  10001 (Anna Mueller).
+
+  Die Antwort enthält drei Felder, die nur gelesen werden können und in keinem
+  Schreib-Request vorkommen: `id`, `erstelltAm` und `geaendertAm`. Die ID
+  vergibt das Kernsystem beim Anlegen, die Zeitstempel führt es selbst mit.
+
+  `versicherungsbeginn` ist das Feld, an dem alles Zeitliche hängt: das
+  Versicherungsjahr sind 12 Monate ab diesem Datum, nicht das Kalenderjahr.
+  Wartezeit, Staffeljahr und Jahresselbstbehalt rechnen von hier aus — die
+  Regeln dazu stehen im Produktmodell, nicht in dieser API.
+}

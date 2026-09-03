@@ -1,0 +1,26 @@
+meta {
+  name: Schadensfaelle auflisten
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{basisUrl}}/schadensfaelle
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+  res.body.length: gte 14
+}
+
+docs {
+  Die vollständige Schadenhistorie über alle Kunden — im Ausgangszustand 14
+  Fälle.
+
+  Ein guter erster Blick auf das `Schadensfall`-Schema: `positionen` als Liste,
+  `rechnungsbetrag` als vom System gebildete Summe, `erstattungsbetrag` und
+  `ablehnungsgrund` als `null`, solange der Fall unbearbeitet ist.
+}
