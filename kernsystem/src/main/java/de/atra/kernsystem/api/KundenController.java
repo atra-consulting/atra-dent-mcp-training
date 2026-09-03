@@ -72,7 +72,7 @@ public class KundenController implements KundenApi {
         return ResponseEntity.ok(service.replace(kundenId, kundeSchreiben));
     }
 
-    //TODO Workshop
+    //TODO Workshop (Aufgabe: Adressänderung)
 
     // Update Kunde (Rest)
     @Override

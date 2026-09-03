@@ -34,7 +34,7 @@ agenten:
     card-timeout: ${AGENTEN_SUBAGENT_CARD_TIMEOUT:60s}
     # api-key wird nur gesetzt, wenn die Karte des Agenten einen verlangt --
     # in welchem Header, sagt sie selbst. Leer heisst: kein Header.
-    # TODO Workshop
+    # TODO Workshop (Aufgabe: A2A Arztservice)
     # catalog:
 
   mcp:

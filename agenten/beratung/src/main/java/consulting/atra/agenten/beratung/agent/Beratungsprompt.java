@@ -313,7 +313,7 @@ final class Beratungsprompt {
                 } else {
                     parts.add(VERTRAG_READ_OWN);
                 }
-                // TODO Workshop
+                // TODO Workshop (Aufgabe: Adressänderung)
 //                parts.add(KONTAKTDATEN);
             }
             case NEUBERATUNG -> {

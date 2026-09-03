@@ -43,7 +43,7 @@ agenten:
       schadensfall:
         url: ${AGENTEN_SCHADENSFALL_URL:http://localhost:8087}
         api-key:
-#     TODO Workshop
+#     TODO Workshop (Aufgabe: A2A Arztservice)
 
 logging:
   level:

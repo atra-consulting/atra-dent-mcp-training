@@ -14,14 +14,14 @@ public final class ToolSelection {
 
     static final Set<String> MANDANT_REQUIRED = Set.of(
             VERTRAG_READ,
-            //TODO Workshop
+            //TODO Workshop (Aufgabe: Adressänderung)
             "mein_beitrag_berechnen",
             "meine_schadensfaelle_auflisten",
             "schadensfall_einreichen");
 
     static final Set<String> KERNSYSTEM = Set.of(
             VERTRAG_READ,
-            //TODO Workshop
+            //TODO Workshop (Aufgabe: Adressänderung)
             "mein_beitrag_berechnen",
             "meine_schadensfaelle_auflisten",
             "schadensfall_einreichen");
