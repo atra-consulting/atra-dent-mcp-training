@@ -128,6 +128,21 @@ by working directory for what has no port left. `./stop.sh --hilfe` explains the
 three steps. Both scripts read the building blocks and their ports from
 `components.sh`, which also loads `.env`; a port belongs in that one file.
 
+**Every one of these scripts has a PowerShell twin beside it** — `setup.ps1`,
+`start.ps1`, `stop.ps1`, `components.ps1`, `wissen/*.ps1`, the `generator/`
+scripts — with the same options, the same output and the same ports out of
+`components.ps1`. Windows PowerShell 5.1 is enough; nothing there needs
+`pwsh` 7. What it does need is one command per machine —
+`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` — because Windows starts
+out `Restricted` and none of these scripts is signed; see
+[README.md](README.md#quickstart) for the two cases where that is not enough. A change to one of the shell scripts belongs in its twin in the same
+commit, and two of them have to stay bit-identical in what they compute rather
+than merely equivalent: `wissen/stand.ps1` has to arrive at the same
+fingerprint as `wissen/stand.sh`, because `wissen/generated/stand.txt` is
+versioned and both `start.sh` and `start.ps1` compare against it. The `.ps1`
+files carry a UTF-8 BOM on purpose: without it PowerShell 5.1 reads them as the
+machine's ANSI codepage and every umlaut in their output turns to mojibake.
+
 `--debug` gives the six JVMs a JDWP agent and runs the two user interfaces
 under the Node inspector, each on its own port plus 1000 (Kernsystem 9080,
 Sachbearbeiter-UI 6173, …), bound to `127.0.0.1`. The script only opens the

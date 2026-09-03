@@ -85,6 +85,42 @@ cp .env.beispiel .env        # enter the Gemini key
 ./start.sh
 ```
 
+**On Windows**, every `.sh` script in the repository has a `.ps1` twin next to it
+(`start.ps1`, `stop.ps1`, `setup.ps1`, `wissen/build.ps1`, the `generator/`
+scripts, …) — same options, same output, run from PowerShell:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned   # once per machine
+Copy-Item .env.beispiel .env      # enter the Gemini key
+.\setup.ps1                       # optional: check and pre-install everything
+.\start.ps1
+```
+
+Windows PowerShell 5.1 (preinstalled on Windows 10/11) is enough; no separate
+install required.
+
+**The first line is not optional.** Windows ships with the execution policy set
+to `Restricted`, and every `.ps1` in this repository is unsigned, so without it
+the very first command fails with *"kann nicht geladen werden, da die Ausführung
+von Skripts auf diesem System deaktiviert ist"*. `RemoteSigned` in the
+`CurrentUser` scope needs no administrator and no reboot, and it still refuses
+unsigned scripts that carry the mark of the web — which is the case that matters:
+
+- **Cloned with git**, as above: nothing carries that mark, everything runs.
+- **Downloaded as a ZIP** from GitHub: every extracted file does. Either strip it
+  with `Get-ChildItem -Recurse *.ps1 | Unblock-File`, or clone instead.
+- **A machine whose policy is locked down by group policy**, where the command
+  above is refused: bypass it per call, without changing anything permanently —
+  `powershell -ExecutionPolicy Bypass -File .\setup.ps1`.
+
+**Maven is the one prerequisite `winget` has no package for.** Node.js has one
+(`winget install OpenJS.NodeJS.LTS`), and so do Typst and Python; Apache Maven
+does not. Take the binary ZIP from
+[maven.apache.org](https://maven.apache.org/download.cgi), unpack it somewhere
+permanent and put its `bin\` directory on the `PATH` — `mvn -v` in a freshly
+opened PowerShell confirms it. `.\setup.ps1` says the same when it finds no
+`mvn`.
+
 **Three services need the Gemini key** and will not start without it:
 Orchestrator, Beratungsagent and Schadensfallagent. In all three, every incoming
 message goes through a model call — in the Schadensfallagent even every case its
@@ -125,7 +161,29 @@ On the first run the script installs the npm dependencies and downloads the
 embedding model of the Wissensdienst (around 490 MB, once). Nothing is built:
 Bedingungswerke and search indexes ship ready under `wissen/generated/` in the
 repository — change a source under `wissen/` and rebuild with
-`./wissen/build.sh`. After that:
+`./wissen/build.sh`.
+
+**If that download is interrupted, the Wissensdienst will not start again.**
+The cache under `wissen/modell/` is keyed by the source URI, not by the
+completeness of what arrived, so a run cut short by Ctrl+C leaves a truncated
+`model.onnx` behind that every later start happily reuses. ONNX Runtime then
+fails while opening it, with a message that says nothing about downloads:
+
+```
+Error code - ORT_RUNTIME_EXCEPTION - message: Exception during initialization: bad allocation
+        at ai.onnxruntime.OrtSession.createSession(Native Method)
+```
+
+Two files are expected under `wissen/modell/<uuid>/`, and their sizes are the
+whole diagnosis — `model.onnx` at 470,268,510 bytes and `tokenizer.json` at
+17,082,730. Anything shorter is a partial download. The cure is to throw the
+cache away and let the next start fetch it again:
+
+```bash
+rm -rf wissen/modell            # PowerShell: Remove-Item -Recurse -Force wissen\modell
+```
+
+After that:
 
 | Address | What is there |
 |---|---|
