@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
-	import { Button } from '$lib/components/ui/button';
+	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import * as Alert from '$lib/components/ui/alert';
@@ -138,24 +138,22 @@
 					<div class="mt-3 flex flex-wrap items-center justify-between gap-2">
 						<span class="text-xs text-muted-foreground">{hit.dokumentId} · {hit.abschnittId}</span>
 						<div class="flex gap-2">
-							<Button
-								variant="outline"
-								size="sm"
+							<a
+								class={buttonVariants({ variant: 'outline', size: 'sm' })}
 								href="/wissen{hit.htmlUrl}"
 								target="_blank"
-								rel="noopener"
+								rel="noopener external"
 							>
 								Im Volltext öffnen
-							</Button>
-							<Button
-								variant="outline"
-								size="sm"
+							</a>
+							<a
+								class={buttonVariants({ variant: 'outline', size: 'sm' })}
 								href="/wissen{hit.pdfUrl}"
 								target="_blank"
-								rel="noopener"
+								rel="noopener external"
 							>
 								PDF
-							</Button>
+							</a>
 						</div>
 					</div>
 				</Card.Content>
@@ -183,24 +181,22 @@
 						{doc.tarif ? tarifName(doc.tarif) : 'tarifübergreifend'}
 					</span>
 					<div class="flex gap-2">
-						<Button
-							variant="outline"
-							size="sm"
+						<a
+							class={buttonVariants({ variant: 'outline', size: 'sm' })}
 							href="/wissen{doc.pdfUrl}"
 							target="_blank"
-							rel="noopener"
+							rel="noopener external"
 						>
 							PDF
-						</Button>
-						<Button
-							variant="outline"
-							size="sm"
+						</a>
+						<a
+							class={buttonVariants({ variant: 'outline', size: 'sm' })}
 							href="/wissen{doc.htmlUrl}"
 							target="_blank"
-							rel="noopener"
+							rel="noopener external"
 						>
 							HTML
-						</Button>
+						</a>
 					</div>
 				</Card.Content>
 			</Card.Root>

@@ -1,4 +1,3 @@
-
 const ESCAPES: Record<string, string> = {
 	'&': '&amp;',
 	'<': '&lt;',
@@ -45,14 +44,10 @@ function blocks(text: string): Block[] {
 }
 
 function dropIncompleteMarkup(text: string): string {
-	return (
-		text
-			.replace(/\[([^\]]*)\](\([^)]*)?$/, '$1')
-			.replace(/\[([^\]]*)$/, '$1')
-			.replace(/(\*\*|\*|`)(?=\S)[^`*]*$/, (match, marker: string) =>
-				match.slice(marker.length)
-			)
-	);
+	return text
+		.replace(/\[([^\]]*)\](\([^)]*)?$/, '$1')
+		.replace(/\[([^\]]*)$/, '$1')
+		.replace(/(\*\*|\*|`)(?=\S)[^`*]*$/, (match, marker: string) => match.slice(marker.length));
 }
 
 function inline(text: string): string {

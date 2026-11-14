@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { displayName, duration, offset, panelFields, transport, unpack, withElapsed } from '$lib/trace';
+	import {
+		displayName,
+		duration,
+		offset,
+		panelFields,
+		transport,
+		unpack,
+		withElapsed
+	} from '$lib/trace';
 	import type { Protocol, TracePoint } from '$lib/types/chat';
 
 	let {

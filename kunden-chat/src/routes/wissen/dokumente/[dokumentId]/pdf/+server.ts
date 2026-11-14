@@ -2,7 +2,6 @@ import { error } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import type { RequestHandler } from './$types';
 
-
 const base = () => env.WISSEN_URL ?? 'http://localhost:8082/api/v1';
 
 const ID_PATTERN = /^[a-z0-9-]{1,64}$/;

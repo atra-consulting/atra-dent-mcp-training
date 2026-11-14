@@ -1,5 +1,6 @@
 <script lang="ts">
 	import './layout.css';
+	import { resolve } from '$app/paths';
 	import { Button } from '$lib/components/ui/button';
 
 	let { data, children } = $props();
@@ -7,7 +8,7 @@
 
 <div class="flex h-screen flex-col">
 	<header class="flaeche-navy flex items-center justify-between gap-3 px-4 py-3">
-		<a href="/" class="flex shrink-0 items-center gap-3">
+		<a href={resolve('/')} class="flex shrink-0 items-center gap-3">
 			<img src="/atra-dent-logo.svg" alt="atra.dent" class="h-9 w-auto rounded bg-white p-1" />
 		</a>
 		{#if data.signedInCustomer}
@@ -27,7 +28,9 @@
 				</form>
 			</div>
 		{:else}
-			<Button href="/login" variant="secondary" size="sm" class="shrink-0">Anmelden</Button>
+			<Button href={resolve('/login')} variant="secondary" size="sm" class="shrink-0"
+				>Anmelden</Button
+			>
 		{/if}
 	</header>
 	<div class="min-h-0 flex-1 overflow-y-auto">{@render children()}</div>

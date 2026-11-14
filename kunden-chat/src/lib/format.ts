@@ -1,4 +1,3 @@
-
 import type { Geldbetrag } from './types/view';
 
 const CURRENCY = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
 	import PageHeader from '$lib/components/page-header.svelte';
@@ -125,7 +126,7 @@
 
 <PageHeader eyebrow="Bestand" title="Kunden" subline={summary}>
 	{#snippet actions()}
-		<Button href="/kunden/neu" variant="secondary">
+		<Button href={resolve('/kunden/neu')} variant="secondary">
 			<UserPlus aria-hidden="true" />
 			Kunde anlegen
 		</Button>
@@ -250,7 +251,10 @@
 				<Table.Row class="cursor-pointer" onclick={(event) => openKunde(event, kunde.id)}>
 					<Table.Cell class="tabular-nums">{kunde.id}</Table.Cell>
 					<Table.Cell class="font-medium">
-						<a href="/kunden/{kunde.id}" class="flex items-center gap-2.5 hover:underline">
+						<a
+							href={resolve('/kunden/[id]', { id: String(kunde.id) })}
+							class="flex items-center gap-2.5 hover:underline"
+						>
 							<img src={kunde.avatar} alt="" class="size-8 shrink-0 rounded-full" loading="lazy" />
 							{kunde.nachname}, {kunde.vorname}
 						</a>

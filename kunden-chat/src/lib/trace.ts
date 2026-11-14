@@ -1,6 +1,5 @@
 import type { ChatUIMessage, TracePoint } from '$lib/types/chat';
 
-
 export type DisplayPart =
 	| { kind: 'text'; text: string }
 	| {
@@ -164,9 +163,7 @@ export function displayParts(message: ChatUIMessage): DisplayPart[] {
 		);
 		const open = traces.findLast(
 			(part) =>
-				part.result === undefined &&
-				part.failed === undefined &&
-				isReturnHop(part.trace, trace)
+				part.result === undefined && part.failed === undefined && isReturnHop(part.trace, trace)
 		);
 		if (open) {
 			open.result = trace.data?.result;

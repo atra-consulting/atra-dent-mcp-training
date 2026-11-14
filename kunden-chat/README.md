@@ -23,12 +23,12 @@ so far. What comes of that is decided on the other side.
 SvelteKit with Svelte 5 and Tailwind 4; the chat is wired up through the Vercel
 AI SDK (`ai`, `@ai-sdk/svelte`).
 
-| Route                                | Content                                                                     |
-| ------------------------------------ | --------------------------------------------------------------------------- |
-| `/login`                             | Demo login: pick one of three Kunden, cookie `demo-kunde`                   |
-| `/`                                  | The chat                                                                    |
-| `/api/chat`                          | Server route to the agent, the answer as a UI message stream                |
-| `/api/beleg`                         | Takes a Rechnung as a PDF and streams it on for extraction                  |
+| Route                                | Content                                                                        |
+| ------------------------------------ | ------------------------------------------------------------------------------ |
+| `/login`                             | Demo login: pick one of three Kunden, cookie `demo-kunde`                      |
+| `/`                                  | The chat                                                                       |
+| `/api/chat`                          | Server route to the agent, the answer as a UI message stream                   |
+| `/api/beleg`                         | Takes a Rechnung as a PDF and streams it on for extraction                     |
 | `/wissen/dokumente/[dokumentId]/pdf` | Passes a Bedingungswerk through — the browser never talks to the Wissensdienst |
 
 The demo login is not authentication and is not meant to be. What it establishes
@@ -41,10 +41,10 @@ on offer, so that the same question visibly gets different answers.
 `AgentClient` (`src/lib/types/chat.ts`) is the interface towards the back. There
 are two implementations, and `AGENT_CLIENT` picks one:
 
-| Value             | Adapter         | What is behind it                                                          |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `a2a` (default)   | `agent/a2a.ts`  | the **Orchestrator** on 8084, A2A 1.0 over JSON-RPC, the answer as SSE      |
-| `mock`            | `agent/mock.ts` | nothing — answers out of `wissen/daten/tarife.yaml`, no model, no network   |
+| Value           | Adapter         | What is behind it                                                         |
+| --------------- | --------------- | ------------------------------------------------------------------------- |
+| `a2a` (default) | `agent/a2a.ts`  | the **Orchestrator** on 8084, A2A 1.0 over JSON-RPC, the answer as SSE    |
+| `mock`          | `agent/mock.ts` | nothing — answers out of `wissen/daten/tarife.yaml`, no model, no network |
 
 **The surface addresses exactly one agent.** The Orchestrator classifies and
 forwards; the Beratungsagent on 8085 cannot be reached from here, and is not
@@ -86,7 +86,7 @@ reads the customer record itself over MCP; the surface knows only the number.
 
 A dental Rechnung goes to `/api/beleg` as a PDF. The route hands the body on
 unchanged to `extractRechnung` in the Kernsystem — no intermediate buffer,
-the browser's stream *is* the stream to the Kernsystem. Back comes what the
+the browser's stream _is_ the stream to the Kernsystem. Back comes what the
 Rechnung says: header, Patient, Positionen, amounts.
 
 Why not straight from the browser? The Kernsystem checks `x-api-key` on every
@@ -274,12 +274,12 @@ Wissensdienst:
 If 8084 is not running, every message comes back as a refusal — the surface
 invents nothing. Anyone working on the surface alone takes `AGENT_CLIENT=mock`.
 
-| Environment variable | Default                         | Effect                                        |
-| -------------------- | ------------------------------- | --------------------------------------------- |
+| Environment variable | Default                         | Effect                                         |
+| -------------------- | ------------------------------- | ---------------------------------------------- |
 | `AGENT_CLIENT`       | `a2a`                           | `mock` switches to the adapter without network |
-| `AGENT_URL`          | `http://localhost:8084/a2a/rpc` | JSON-RPC path of the Orchestrator             |
-| `TARIFE_YAML_PATH`   | `../wissen/daten/tarife.yaml`   | Path to the Produktmodell (mock only)         |
-| `WISSEN_URL`         | `http://localhost:8082/api/v1`  | For passing the Bedingungswerke through       |
+| `AGENT_URL`          | `http://localhost:8084/a2a/rpc` | JSON-RPC path of the Orchestrator              |
+| `TARIFE_YAML_PATH`   | `../wissen/daten/tarife.yaml`   | Path to the Produktmodell (mock only)          |
+| `WISSEN_URL`         | `http://localhost:8082/api/v1`  | For passing the Bedingungswerke through        |
 
 ## Decided, and why
 

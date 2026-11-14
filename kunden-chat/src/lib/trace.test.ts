@@ -178,13 +178,7 @@ describe('displayParts', () => {
 		back.timestamp = '2026-08-13T10:00:14.600Z';
 
 		const parts = displayParts(
-			message(
-				call,
-				hop('orchestrator', 'beratung'),
-				between,
-				betweenResult,
-				back
-			)
+			message(call, hop('orchestrator', 'beratung'), between, betweenResult, back)
 		);
 
 		expect(parts[0]).toMatchObject({ result: 'Beratungsagent' });
@@ -376,11 +370,7 @@ describe('panelFields', () => {
 	it('puts what came back before what was asked, and the transport last', () => {
 		const fields = panelFields(point, '{"monatsbeitrag":"20.90"}', undefined);
 
-		expect(fields.map(([field]) => field)).toEqual([
-			'result',
-			'arguments',
-			'header x-kunden-id'
-		]);
+		expect(fields.map(([field]) => field)).toEqual(['result', 'arguments', 'header x-kunden-id']);
 	});
 
 	it('puts a failure where the result would have stood', () => {

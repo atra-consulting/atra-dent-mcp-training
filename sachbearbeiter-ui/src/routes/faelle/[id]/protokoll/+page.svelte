@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import Brain from '@lucide/svelte/icons/brain';
 	import Wrench from '@lucide/svelte/icons/wrench';
 	import ArrowLeftRight from '@lucide/svelte/icons/arrow-left-right';
@@ -47,7 +48,7 @@
 
 <PageHeader
 	eyebrow="Fall {schadensfall.id}"
-	eyebrowHref="/faelle/{schadensfall.id}"
+	eyebrowHref={resolve('/faelle/[id]', { id: String(schadensfall.id) })}
 	title="Bearbeitungsprotokoll"
 />
 

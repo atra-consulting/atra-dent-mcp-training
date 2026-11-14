@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import TrendingDown from '@lucide/svelte/icons/trending-down';
 	import TrendingUp from '@lucide/svelte/icons/trending-up';
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
-	import { Button } from '$lib/components/ui/button';
+	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import { date, euro } from '$lib/format';
 	import PageHeader from '$lib/components/page-header.svelte';
 	import SchadensfallTable from '$lib/components/schadensfall-table.svelte';
@@ -39,7 +40,7 @@
 
 <PageHeader
 	eyebrow="Bestand"
-	eyebrowHref="/kunden"
+	eyebrowHref={resolve('/kunden')}
 	title="{kunde.vorname} {kunde.nachname}"
 	subline="Kundennummer {kunde.id}"
 >
@@ -47,7 +48,9 @@
 		<img src={data.avatar} alt="" class="size-14 shrink-0 rounded-full ring-2 ring-white/25" />
 	{/snippet}
 	{#snippet actions()}
-		<Button variant="secondary" href="/kunden/{kunde.id}/bearbeiten">Bearbeiten</Button>
+		<Button variant="secondary" href={resolve('/kunden/[id]/bearbeiten', { id: String(kunde.id) })}
+			>Bearbeiten</Button
+		>
 	{/snippet}
 
 	<div class="mt-5 flex flex-wrap items-center gap-2">
@@ -178,15 +181,14 @@
 				{/if}
 				<p class="text-xs text-muted-foreground">{kunde.tarifId}</p>
 				{#if data.bedingungswerkDocument}
-					<Button
-						variant="outline"
-						size="sm"
+					<a
+						class={buttonVariants({ variant: 'outline', size: 'sm' })}
 						href="/wissen{data.bedingungswerkDocument.pdfUrl}"
 						target="_blank"
-						rel="noopener"
+						rel="noopener external"
 					>
 						Bedingungswerk (PDF)
-					</Button>
+					</a>
 				{/if}
 			</Card.Content>
 		</Card.Root>
@@ -259,7 +261,10 @@
 					{#if data.openSchadensfaelleCount > 0}&nbsp;· {data.openSchadensfaelleCount} offen{/if}
 				</Card.Description>
 			</div>
-			<Button variant="outline" href="/kunden/{kunde.id}/schadensfaelle/neu">
+			<Button
+				variant="outline"
+				href={resolve('/kunden/[id]/schadensfaelle/neu', { id: String(kunde.id) })}
+			>
 				Schadensfall erfassen
 			</Button>
 		</Card.Header>

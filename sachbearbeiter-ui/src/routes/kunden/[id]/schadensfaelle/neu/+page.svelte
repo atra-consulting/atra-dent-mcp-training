@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
@@ -41,7 +42,7 @@
 <PageHeader
 	variant="slim"
 	eyebrow="Akte {data.kunde.id}"
-	eyebrowHref="/kunden/{data.kunde.id}"
+	eyebrowHref={resolve('/kunden/[id]', { id: String(data.kunde.id) })}
 	title="Schadensfall erfassen"
 	subline="Für {data.kunde.nachname}, {data.kunde.vorname}"
 />
@@ -167,7 +168,11 @@
 		<Button type="submit" formaction="?/gozPruefen" formnovalidate variant="secondary">
 			Positionen gegen Tarif prüfen
 		</Button>
-		<Button type="button" variant="outline" href="/kunden/{data.kunde.id}">Abbrechen</Button>
+		<Button
+			type="button"
+			variant="outline"
+			href={resolve('/kunden/[id]', { id: String(data.kunde.id) })}>Abbrechen</Button
+		>
 	</div>
 	{#if findings}
 		<p class="text-xs text-muted-foreground">

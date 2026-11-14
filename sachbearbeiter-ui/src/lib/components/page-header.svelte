@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
+	import type { ResolvedPathname } from '$app/types';
 	import type { Snippet } from 'svelte';
 
 	let {
@@ -15,7 +16,7 @@
 		class: className
 	}: {
 		eyebrow: string;
-		eyebrowHref?: string;
+		eyebrowHref?: ResolvedPathname;
 		title: string;
 		subline?: string | Snippet;
 		variant?: 'default' | 'slim';

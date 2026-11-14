@@ -94,7 +94,8 @@ function tariffAnswer(text: string): string {
 			if (!benefit?.versichert) return `${tariff.anzeigename}: nicht versichert`;
 			let detail = `${tariff.anzeigename}: ${benefit.quote} %`;
 			if (benefit.limit_pro_jahr != null) detail += ` bis ${currency(benefit.limit_pro_jahr)}/Jahr`;
-			if (benefit.limit_gesamt != null) detail += ` (gesamt max. ${currency(benefit.limit_gesamt)})`;
+			if (benefit.limit_gesamt != null)
+				detail += ` (gesamt max. ${currency(benefit.limit_gesamt)})`;
 			if (benefit.max_faelle != null)
 				detail += `, max. ${benefit.max_faelle} Fälle in ${benefit.zeitraum_jahre} Jahren`;
 			return detail;
@@ -138,10 +139,7 @@ function answer(text: string, context: CustomerContext | undefined): string {
 	) {
 		return contractAnswer(context);
 	}
-	if (
-		/(erstattung|back|zurück|bekomme|bekaeme|bekäme|rechnung)/.test(lower) &&
-		/\d/.test(lower)
-	) {
+	if (/(erstattung|back|zurück|bekomme|bekaeme|bekäme|rechnung)/.test(lower) && /\d/.test(lower)) {
 		return reimbursementBoundaryAnswer(lower);
 	}
 	if (/(empfehl|welcher tarif|passt zu mir|was soll ich)/.test(lower)) {

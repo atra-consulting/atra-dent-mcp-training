@@ -72,7 +72,7 @@
 								<a
 									href="/wissen{data.bedingungswerkPdfs[tarif.schluessel]}"
 									target="_blank"
-									rel="noopener"
+									rel="noopener external"
 									class="mt-auto pt-1 text-xs font-normal text-primary hover:underline"
 								>
 									Bedingungswerk (PDF)
