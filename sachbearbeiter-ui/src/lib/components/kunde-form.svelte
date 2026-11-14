@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
@@ -132,7 +133,10 @@
 	</div>
 	<div class="flex gap-3">
 		<Button type="submit">Speichern</Button>
-		<Button type="button" variant="outline" href={kunde ? `/kunden/${kunde.id}` : '/kunden'}
+		<Button
+			type="button"
+			variant="outline"
+			href={kunde ? resolve('/kunden/[id]', { id: String(kunde.id) }) : resolve('/kunden')}
 			>Abbrechen</Button
 		>
 	</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import KundeForm from '$lib/components/kunde-form.svelte';
 	import PageHeader from '$lib/components/page-header.svelte';
 
@@ -8,7 +9,7 @@
 <PageHeader
 	variant="slim"
 	eyebrow="Bestand"
-	eyebrowHref="/kunden"
+	eyebrowHref={resolve('/kunden')}
 	title="Kunde anlegen"
 	subline="Die Kundennummer vergibt das Kernsystem beim Speichern."
 />

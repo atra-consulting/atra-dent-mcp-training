@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { Button } from '$lib/components/ui/button';
 </script>
@@ -8,5 +9,5 @@
 	<h1 class="mt-4 text-xl font-semibold">
 		{page.status === 404 ? 'Diese Seite gibt es nicht' : 'Es ist ein Fehler aufgetreten'}
 	</h1>
-	<Button href="/" class="mt-6">Zurück zum Chat</Button>
+	<Button href={resolve('/')} class="mt-6">Zurück zum Chat</Button>
 </div>

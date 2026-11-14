@@ -249,6 +249,7 @@
 			input = '';
 			inputElement?.focus();
 		} catch {
+			return;
 		} finally {
 			clearing = false;
 		}

@@ -93,7 +93,12 @@
 	· Behandlung am {date(schadensfall.behandlungsdatum)}
 {/snippet}
 
-<PageHeader eyebrow="Arbeitsvorrat" eyebrowHref="/faelle" title="Fall {schadensfall.id}" {subline}>
+<PageHeader
+	eyebrow="Arbeitsvorrat"
+	eyebrowHref={resolve('/faelle')}
+	title="Fall {schadensfall.id}"
+	{subline}
+>
 	<div class="mt-5 flex flex-wrap items-center gap-2">
 		<StatusBadge status={schadensfall.status} />
 	</div>
@@ -254,7 +259,11 @@
 			<Bearbeitungsprotokoll entries={schadensfall.bearbeitungsprotokoll} />
 		</Card.Content>
 		<Card.Footer class="justify-end">
-			<Button variant="link" size="sm" href="/faelle/{schadensfall.id}/protokoll">
+			<Button
+				variant="link"
+				size="sm"
+				href={resolve('/faelle/[id]/protokoll', { id: String(schadensfall.id) })}
+			>
 				Vollständige Agentenaufrufe →
 			</Button>
 		</Card.Footer>

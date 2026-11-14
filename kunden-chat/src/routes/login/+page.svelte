@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
@@ -38,5 +39,7 @@
 			</Card.Root>
 		{/each}
 	</div>
-	<a href="/" class="mt-6 inline-block text-sm text-primary hover:underline">Zurück zum Chat</a>
+	<a href={resolve('/')} class="mt-6 inline-block text-sm text-primary hover:underline"
+		>Zurück zum Chat</a
+	>
 </div>

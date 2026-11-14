@@ -10,10 +10,12 @@ import type { GozBefund } from '$lib/types/wissen';
 export async function load({ params }) {
 	const kunde = await backofficeApi().readKunde(Number(params.id));
 	if (!kunde) error(404, 'Kunde nicht gefunden');
-	let gozEntries: ReturnType<typeof gozCatalog> = [];
+	let gozEntries: ReturnType<typeof gozCatalog>;
 	try {
 		gozEntries = gozCatalog();
-	} catch {}
+	} catch {
+		gozEntries = [];
+	}
 	return { kunde, leistungsbereiche: tarifwerk().leistungsbereiche, gozEntries };
 }
 

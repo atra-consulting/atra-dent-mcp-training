@@ -107,8 +107,9 @@
 								</a>
 							</Table.Cell>
 							<Table.Cell class="font-medium">
-								<a href="/kunden/{schadensfall.kundenId}" class="hover:underline"
-									>{schadensfall.kundenName}</a
+								<a
+									href={resolve('/kunden/[id]', { id: String(schadensfall.kundenId) })}
+									class="hover:underline">{schadensfall.kundenName}</a
 								>
 							</Table.Cell>
 							<Table.Cell>{dateTime(schadensfall.eingereichtAm)}</Table.Cell>
