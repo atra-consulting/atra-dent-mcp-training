@@ -1,0 +1,124 @@
+# Automatic dependency updates via Dependabot (modelled on atra-academy).
+#
+# Two ecosystems:
+#   - npm: weekly for the two user interfaces (kunden-chat, sachbearbeiter-ui).
+#   - maven: weekly for every building block that is built on its own
+#     (produktmodell, rechenkern, kernsystem, wissen/dienst, agenten; agenten is
+#     the parent of its six modules and covers them).
+# Minor and patch bumps arrive as ONE grouped PR per directory, security updates
+# likewise, majors one by one or as a family coupled through peer dependencies.
+#
+# There is no CI. Before merging a Dependabot PR run the checks of the building
+# block locally: `npm ci && npm run check && npm test && npm run build` in the
+# user interfaces, `mvn -f <block>/pom.xml verify` for the Java side (the root
+# reactor `mvn -pl <block> -am verify` resolves produktmodell without install).
+#
+# Why `cooldown`: the most common npm attack is a hijacked maintainer account
+#   publishing a malicious NEW version. Such versions are usually spotted and
+#   pulled within hours to days; with a cooldown they never show up as a PR.
+#   Applies to version updates only, security updates still arrive at once.
+#
+# Not covered: github-actions (the repository has no workflows) and the Docker
+#   base images in wissen/Dockerfile. Their tags (maven:3.9-eclipse-temurin-25,
+#   eclipse-temurin:25-jre) are not pinned by digest, so every build pulls the
+#   current patch level anyway; the Java major is raised by hand.
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directories:
+      - '/kunden-chat'
+      - '/sachbearbeiter-ui'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'Europe/Berlin'
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+      semver-patch-days: 5
+      semver-minor-days: 7
+      semver-major-days: 14
+    commit-message:
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+    ignore:
+      # typescript-eslint aborts under TypeScript 7 with "typescript-eslint
+      # does not support TS 7.0." (typescript-eslint#10940). Remove once its
+      # peer range includes 7.x.
+      - dependency-name: 'typescript'
+        versions: ['>=7.0.0']
+      # @types/node describes the runtime API (Node.js 20.19+ / 22.12+ per
+      # AGENTS.md). Types of a newer major let calls through the typecheck that
+      # do not exist at runtime. Whoever raises the runtime raises the major.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+    groups:
+      minor-und-patch:
+        applies-to: version-updates
+        update-types:
+          - 'minor'
+          - 'patch'
+      sicherheit:
+        applies-to: security-updates
+        patterns:
+          - '*'
+      # Coupled through peerDependencies, not installable one at a time.
+      sveltekit-vite-major:
+        applies-to: version-updates
+        update-types:
+          - 'major'
+        patterns:
+          - '@sveltejs/*'
+          - 'svelte'
+          - 'vite'
+          - 'vitest'
+          - '@vitest/*'
+      eslint-major:
+        applies-to: version-updates
+        update-types:
+          - 'major'
+        patterns:
+          - 'eslint'
+          - '@eslint/js'
+      # Majors outside the groups get a PR each.
+
+  - package-ecosystem: 'maven'
+    directories:
+      - '/produktmodell'
+      - '/rechenkern'
+      - '/kernsystem'
+      - '/wissen/dienst'
+      - '/agenten'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'Europe/Berlin'
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+      semver-patch-days: 5
+      semver-minor-days: 7
+      semver-major-days: 14
+    commit-message:
+      prefix: 'chore(deps)'
+    groups:
+      minor-und-patch:
+        applies-to: version-updates
+        update-types:
+          - 'minor'
+          - 'patch'
+      sicherheit:
+        applies-to: security-updates
+        patterns:
+          - '*'
+      # Spring AI is released against one Spring Boot line; raise both together.
+      spring-major:
+        applies-to: version-updates
+        update-types:
+          - 'major'
+        patterns:
+          - 'org.springframework.boot:*'
+          - 'org.springframework.ai:*'
+      # Majors outside the groups get a PR each.
