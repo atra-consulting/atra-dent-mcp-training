@@ -1,4 +1,3 @@
-
 export type TarifId = 'ATRA_DENT_S' | 'ATRA_DENT_B' | 'ATRA_DENT_X' | 'ATRA_DENT_X_SB';
 export type Kundenstatus = 'aktiv' | 'inaktiv';
 export type Schadensfallstatus =

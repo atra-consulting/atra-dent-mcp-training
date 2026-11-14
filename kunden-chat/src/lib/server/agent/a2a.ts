@@ -4,7 +4,6 @@ import { displayName } from '$lib/trace';
 import type { AgentClient, AgentEvent, AgentInput, TracePoint } from '$lib/types/chat';
 import { viewsFrom, type View } from '$lib/types/view';
 
-
 export const DEFAULT_URL = 'http://localhost:8084/';
 
 const KUNDEN_HEADER = 'x-kunden-id';
@@ -24,13 +23,11 @@ const MAX_CONVERSATIONS = 500;
 
 const CHUNK_LENGTH = 40;
 
-const UNAVAILABLE =
-	'Ich bin gerade nicht erreichbar — bitte versuchen Sie es gleich noch einmal.';
+const UNAVAILABLE = 'Ich bin gerade nicht erreichbar — bitte versuchen Sie es gleich noch einmal.';
 
 const SENDER = 'chat-ui';
 
 const PEER = 'orchestrator';
-
 
 interface Part {
 	kind?: string;
@@ -235,7 +232,6 @@ export class A2aAgentClient implements AgentClient {
 		this.#openTasks.delete(conversationId);
 	}
 }
-
 
 function isFinalState(state: string | undefined): boolean {
 	return (

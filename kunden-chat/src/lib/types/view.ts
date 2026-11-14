@@ -1,4 +1,3 @@
-
 import type { Schadensfallstatus } from './api';
 
 export type Geldbetrag = string | number;

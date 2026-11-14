@@ -2,7 +2,6 @@ import { appendFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { env } from '$env/dynamic/private';
 
-
 const target = (() => {
 	const directory = env.AGENTEN_TRACELOG?.trim();
 	if (!directory) return null;

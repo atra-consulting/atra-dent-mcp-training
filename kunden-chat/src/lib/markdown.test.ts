@@ -92,7 +92,6 @@ describe('blocks', () => {
 });
 
 describe('truncated', () => {
-
 	it('swallows a bold that has only been started', () => {
 		expect(markdownToHtml('Der **bril')).toBe('<p>Der bril</p>');
 	});

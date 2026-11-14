@@ -3,11 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { backofficeApi } from '$lib/server/backoffice';
 import { checkSchadensfall } from '$lib/server/schadensfallagent';
 import { geldbetragFromInput } from '$lib/format';
-import {
-	ApiError,
-	type Ablehnungsgrund,
-	type SchadensfallAendern
-} from '$lib/types/api';
+import { ApiError, type Ablehnungsgrund, type SchadensfallAendern } from '$lib/types/api';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const id = Number(params.id);

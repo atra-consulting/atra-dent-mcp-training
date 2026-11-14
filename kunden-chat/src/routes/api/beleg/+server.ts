@@ -2,7 +2,6 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { BelegNotReadableError, extractRechnung } from '$lib/server/kernsystem';
 
-
 const MAX_SIZE = 10 * 1024 * 1024;
 
 const TYPE = 'application/pdf';

@@ -19,17 +19,17 @@ SvelteKit with Svelte 5, Tailwind 4 and shadcn components over bits-ui. Fetching
 data is entirely the business of `+page.server.ts`; the components are handed
 finished data and fetch nothing themselves.
 
-| Route                             | Content                                                                                               |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `/kunden`                         | Customer list                                                                                         |
-| `/kunden/neu`                     | Create a Kunde                                                                                        |
-| `/kunden/[id]`                    | Customer record: master data, Vertrag, claim history                                                  |
-| `/kunden/[id]/bearbeiten`         | Edit master data                                                                                      |
-| `/kunden/[id]/schadensfaelle/neu` | Submit a Schadensfall                                                                                 |
-| `/faelle`                         | Work queue: cases across all Kunden, status filter, refreshes itself every 5 s (auto-refresh)         |
+| Route                             | Content                                                                                                     |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `/kunden`                         | Customer list                                                                                               |
+| `/kunden/neu`                     | Create a Kunde                                                                                              |
+| `/kunden/[id]`                    | Customer record: master data, Vertrag, claim history                                                        |
+| `/kunden/[id]/bearbeiten`         | Edit master data                                                                                            |
+| `/kunden/[id]/schadensfaelle/neu` | Submit a Schadensfall                                                                                       |
+| `/faelle`                         | Work queue: cases across all Kunden, status filter, refreshes itself every 5 s (auto-refresh)               |
 | `/faelle/[id]`                    | Case detail: Rechnung, Positionen with Zahn, date and GOZ status, Bewertung, Bearbeitungsprotokoll, actions |
-| `/faelle/[id]/protokoll`          | Every agent call on the case — each Protokolleintrag with all its model, tool and A2A steps           |
-| `/tarifvergleich`                 | The four Tarife side by side, with a Beitrag calculator                                               |
+| `/faelle/[id]/protokoll`          | Every agent call on the case — each Protokolleintrag with all its model, tool and A2A steps                 |
+| `/tarifvergleich`                 | The four Tarife side by side, with a Beitrag calculator                                                     |
 
 ## Three sources, three routes
 
@@ -60,13 +60,13 @@ starts on **5173**; `SACHBEARBEITER_UI_PORT` overrides the port.
 
 **On its own** — `npm install && npm run dev` in this directory.
 
-| Environment variable          | Default                        | Effect                                     |
-| ----------------------------- | ------------------------------ | ------------------------------------------ |
-| `KERNSYSTEM_URL`              | `http://localhost:8080/api/v1` | Base URL of the Kernsystem                 |
-| `KERNSYSTEM_API_KEY`          | `atra-lab-2026`                | sent along as `x-api-key`                  |
-| `RECHENKERN_URL`              | `http://localhost:8086/api/v1` | Base URL of the Rechenkern, no key         |
-| `TARIFE_YAML_PATH`            | `../wissen/daten/tarife.yaml`  | Path to the Produktmodell                  |
-| `SCHADENSFALLAGENT_URL`       | `http://localhost:8087`        | A2A address of the Schadensfallagent       |
+| Environment variable    | Default                        | Effect                               |
+| ----------------------- | ------------------------------ | ------------------------------------ |
+| `KERNSYSTEM_URL`        | `http://localhost:8080/api/v1` | Base URL of the Kernsystem           |
+| `KERNSYSTEM_API_KEY`    | `atra-lab-2026`                | sent along as `x-api-key`            |
+| `RECHENKERN_URL`        | `http://localhost:8086/api/v1` | Base URL of the Rechenkern, no key   |
+| `TARIFE_YAML_PATH`      | `../wissen/daten/tarife.yaml`  | Path to the Produktmodell            |
+| `SCHADENSFALLAGENT_URL` | `http://localhost:8087`        | A2A address of the Schadensfallagent |
 
 **Tests** — `npm test` (Vitest) covers the formatting and parsing helpers in
 `src/lib/format.ts`, the mapping of a finding to its Position and the findings
