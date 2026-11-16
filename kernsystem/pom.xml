@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.1.0</version>
+    <version>4.1.2</version>
     <relativePath/>
   </parent>
 
@@ -19,8 +19,8 @@
 
   <properties>
     <java.version>25</java.version>
-    <openapi-generator.version>7.24.0</openapi-generator.version>
-    <spring-ai.version>2.0.0</spring-ai.version>
+    <openapi-generator.version>7.27.0</openapi-generator.version>
+    <spring-ai.version>2.0.2</spring-ai.version>
   </properties>
 
   <dependencyManagement>
@@ -55,7 +55,7 @@
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>3.0.5</version>
+      <version>3.0.8</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
