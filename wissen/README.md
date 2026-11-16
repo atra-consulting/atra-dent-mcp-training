@@ -132,7 +132,7 @@ There was a trap to avoid along the way: Typst discards `grid` on HTML export, c
 
 **Typst stays outside the Docker build.** Producing the documents is preparatory work. That keeps the image free of the document toolchain and the build fast.
 
-**Java 25 and a plain Temurin image.** Deliberately no distroless and no jlink: the Dockerfile is meant to be read and understood in the lab, not optimised for bytes.
+**Java 25 and a distroless runtime image.** The build stage is `maven:3.9-eclipse-temurin-25`; the service runs on `gcr.io/distroless/java25-debian13:nonroot` as UID 65532, without a shell. Code, data, documents, model and the DJL native-library cache are copied in as root and are read-only for the service — it writes nothing but `/tmp`. The cache is filled by the trial run in the build stage, so no download happens at runtime. No jlink: the Dockerfile is meant to be read and understood in the lab, not optimised for bytes.
 
 **A multilingual embedding model.** The Spring AI default `all-MiniLM-L6-v2` is English-only and useless for German insurance conditions. `intfloat/multilingual-e5-small` is used instead, baked into the image at a pinned revision so the container starts without a network.
 

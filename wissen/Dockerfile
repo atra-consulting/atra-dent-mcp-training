@@ -24,15 +24,15 @@ RUN anzahl_pdf="$(find wissen/generated/pdf -name '*.pdf' 2>/dev/null | wc -l)" 
 RUN --mount=type=cache,target=/root/.m2 \
     mvn -B -f wissen/dienst/pom.xml package -DskipTests
 
-RUN WISSEN_DATEN_VERZEICHNIS=/bau/wissen/daten \
-    WISSEN_DOKUMENTE_VERZEICHNIS=/bau/wissen/generated \
+RUN WISSEN_DATA_DIRECTORY=/bau/wissen/daten \
+    WISSEN_DOCUMENTS_DIRECTORY=/bau/wissen/generated \
     SPRING_AI_EMBEDDING_TRANSFORMER_ONNX_MODEL_URI=file:/bau/modell/model.onnx \
     SPRING_AI_EMBEDDING_TRANSFORMER_TOKENIZER_URI=file:/bau/modell/tokenizer.json \
     SPRING_AI_EMBEDDING_TRANSFORMER_CACHE_ENABLED=false \
     java -jar wissen/dienst/target/wissensdienst-*.jar > /tmp/probelauf.log 2>&1 & \
     pid=$!; \
     versuche=0; \
-    until grep -q "Started WissenAnwendung" /tmp/probelauf.log 2>/dev/null; do \
+    until grep -q "Started WissenApplication" /tmp/probelauf.log 2>/dev/null; do \
       if ! kill -0 "$pid" 2>/dev/null || [ "$versuche" -ge 150 ]; then \
         echo "FEHLER: Der Probelauf des Dienstes ist gescheitert:" >&2; \
         cat /tmp/probelauf.log >&2; \
@@ -44,9 +44,12 @@ RUN WISSEN_DATEN_VERZEICHNIS=/bau/wissen/daten \
     kill "$pid"; \
     chmod -R a+rX /root/.djl.ai
 
-FROM eclipse-temurin:25-jre
+FROM gcr.io/distroless/java25-debian13:nonroot
 
-RUN useradd --system --home-dir /anwendung wissensdienst
+# The base image defaults to the unprivileged user (65532). Switch to root only
+# to create the working directory and copy the files in, so that code, data and
+# the model stay owned by root and are read-only for the service.
+USER root
 
 WORKDIR /anwendung
 
@@ -56,14 +59,14 @@ COPY --from=bau /bau/wissen/generated/ generated/
 COPY --from=bau /bau/modell/ modell/
 COPY --from=bau /root/.djl.ai/ djl-cache/
 
-ENV WISSEN_DATEN_VERZEICHNIS=/anwendung/daten \
-    WISSEN_DOKUMENTE_VERZEICHNIS=/anwendung/generated \
+ENV WISSEN_DATA_DIRECTORY=/anwendung/daten \
+    WISSEN_DOCUMENTS_DIRECTORY=/anwendung/generated \
     SPRING_AI_EMBEDDING_TRANSFORMER_ONNX_MODEL_URI=file:/anwendung/modell/model.onnx \
     SPRING_AI_EMBEDDING_TRANSFORMER_TOKENIZER_URI=file:/anwendung/modell/tokenizer.json \
     SPRING_AI_EMBEDDING_TRANSFORMER_CACHE_ENABLED=false \
     DJL_CACHE_DIR=/anwendung/djl-cache
 
-USER wissensdienst
+USER 65532:65532
 
 EXPOSE 8082
 
