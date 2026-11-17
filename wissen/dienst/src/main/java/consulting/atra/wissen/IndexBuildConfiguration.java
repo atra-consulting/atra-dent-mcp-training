@@ -13,8 +13,10 @@ import org.springframework.context.annotation.Profile;
 import java.nio.file.Path;
 
 @Configuration(proxyBeanMethods = false)
-@Profile("indexbau")
+@Profile(IndexBuildConfiguration.PROFILE)
 class IndexBuildConfiguration {
+
+    static final String PROFILE = "index-build";
 
     private static final Logger LOG = LoggerFactory.getLogger(IndexBuildConfiguration.class);
 
