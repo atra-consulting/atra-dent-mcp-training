@@ -33,8 +33,8 @@ fi
 
 mvn -B -q -f produktmodell/pom.xml install -DskipTests
 
-echo "Baue die Vektorindizes (Spring-Profil indexbau)."
-mvn -q -f wissen/dienst/pom.xml spring-boot:run -Dspring-boot.run.profiles=indexbau
+echo "Baue die Vektorindizes (Spring-Profil index-build)."
+mvn -q -f wissen/dienst/pom.xml spring-boot:run -Dspring-boot.run.profiles=index-build
 
 echo
 echo "Fertig. Indizes unter wissen/generated/index/:"

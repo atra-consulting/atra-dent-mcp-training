@@ -8,4 +8,4 @@ spring:
 
 wissen:
   index:
-    laden: false
+    load: false

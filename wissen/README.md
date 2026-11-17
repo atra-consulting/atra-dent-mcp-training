@@ -116,6 +116,8 @@ docker build -f wissen/Dockerfile -t atra-dent-wissen .
 
 The service loads the indexes at startup only if their ids, passage text and embedding dimension all match the documents and the model — otherwise it embeds afresh and warns in the log. A stale index is therefore refused rather than silently reused, so it makes the lab slower, but not wrong.
 
+`index-build.sh` runs the service under the Spring profile `index-build`, which sets `wissen.index.load: false`: the build never reuses the index it is about to replace but embeds every passage afresh. That matters because the check above compares ids, text and dimension, not the model — a different model of the same dimension only reaches the index through a fresh build.
+
 ## Decisions, and why
 
 **Tools instead of MCP resources.** The Bedingungswerke are 8 to 10 MB in size. Base64-encoded over JSON-RPC that would be roughly 13 MB per `resources/read` — not a workable route. The documents therefore go to the surface over REST, and MCP offers tools only. `resource: false` is set explicitly in the configuration.

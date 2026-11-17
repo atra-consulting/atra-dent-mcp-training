@@ -62,8 +62,8 @@ if (-not (Test-Path -LiteralPath 'wissen/modell') -or -not (Get-ChildItem -Liter
 & mvn -B -q -f produktmodell/pom.xml install -DskipTests
 Assert-LastExitCode 'mvn install von produktmodell'
 
-Write-Host "Baue die Vektorindizes (Spring-Profil indexbau)."
-& mvn -q -f wissen/dienst/pom.xml spring-boot:run '-Dspring-boot.run.profiles=indexbau'
+Write-Host "Baue die Vektorindizes (Spring-Profil index-build)."
+& mvn -q -f wissen/dienst/pom.xml spring-boot:run '-Dspring-boot.run.profiles=index-build'
 Assert-LastExitCode 'Der Indexbau'
 
 Write-Host ""

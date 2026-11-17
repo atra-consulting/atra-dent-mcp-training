@@ -10,7 +10,7 @@ public class WissenApplication {
 
     static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(WissenApplication.class, args);
-        if (context.getEnvironment().acceptsProfiles(Profiles.of("indexbau"))) {
+        if (context.getEnvironment().acceptsProfiles(Profiles.of(IndexBuildConfiguration.PROFILE))) {
             System.exit(SpringApplication.exit(context));
         }
     }
