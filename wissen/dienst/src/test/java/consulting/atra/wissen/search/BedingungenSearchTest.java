@@ -16,8 +16,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@EnabledIfSystemProperty(named = "wissen.modelltests", matches = "true",
-        disabledReason = "Braucht das Einbettungsmodell: mvn test -Dwissen.modelltests=true")
+@EnabledIfSystemProperty(named = "wissen.model-tests", matches = "true",
+        disabledReason = "Braucht das Einbettungsmodell: mvn test -Dwissen.model-tests=true")
 class BedingungenSearchTest {
 
     @Autowired
