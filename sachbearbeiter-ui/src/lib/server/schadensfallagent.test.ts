@@ -1,4 +1,7 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { parse } from 'yaml';
 
 const { environment } = vi.hoisted(() => ({
 	environment: {} as Record<string, string | undefined>
@@ -6,6 +9,21 @@ const { environment } = vi.hoisted(() => ({
 vi.mock('$env/dynamic/private', () => ({ env: environment }));
 
 const { checkSchadensfall, DEFAULT_URL } = await import('./schadensfallagent');
+
+function pollSwitchOfTheAgent(): string {
+	const path = resolve(
+		process.cwd(),
+		'../agenten/schadensfall/src/main/resources/application.yaml'
+	);
+	const configuration = parse(readFileSync(path, 'utf8')) as {
+		schadensfall: Record<string, string>;
+	};
+	const placeholder = /^\$\{([A-Z_]+):/.exec(configuration.schadensfall['poll-enabled']);
+	if (!placeholder) {
+		throw new Error(`schadensfall.poll-enabled in ${path} is not read from a variable`);
+	}
+	return placeholder[1];
+}
 
 function response(body: unknown, ok = true, status = 200) {
 	return { ok, status, json: async () => body } as Response;
@@ -168,7 +186,7 @@ describe('checkSchadensfall — the situations that look alike', () => {
 
 		expect(result.outcome).toBe('gestoert');
 		expect(result.text).toContain('eingereicht');
-		expect(result.text).toContain('SCHADENSFALL_POLL_AKTIV=false');
+		expect(result.text).toContain(`${pollSwitchOfTheAgent()}=false`);
 	});
 
 	it('where the timeout runs out it does NOT say the Schadensfall stands on eingereicht', async () => {

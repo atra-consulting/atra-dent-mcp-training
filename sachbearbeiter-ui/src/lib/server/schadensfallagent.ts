@@ -31,7 +31,7 @@ const TAKEN_OVER = 'Der Schadensfallagent hat den Fall übernommen und prüft ih
 const UNREACHABLE =
 	'Der Schadensfallagent hat nicht geantwortet. Der Fall steht auf eingereicht: Läuft der ' +
 	'Fallpoller, nimmt der Agent ihn beim nächsten Durchlauf von selbst auf — ist der Takt ' +
-	'abgeschaltet (SCHADENSFALL_POLL_AKTIV=false), bleibt er liegen, bis jemand erneut drückt.';
+	'abgeschaltet (SCHADENSFALL_POLL_ENABLED=false), bleibt er liegen, bis jemand erneut drückt.';
 
 const KNOWN_STATES: Schadensfallstatus[] = [
 	'in_pruefung',
